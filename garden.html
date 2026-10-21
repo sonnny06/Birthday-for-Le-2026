@@ -1,13 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#160f1b">
-  <meta name="description" content="Một khu vườn nhỏ dành riêng cho ngày sinh nhật của cậu.">
+  <meta name="description" content="Một khu vườn nhỏ rực rỡ và ấm áp dành riêng cho ngày sinh nhật của cậu.">
 
-  <title>Our Little Garden 🌹</title>
+  <title>Our Little Garden 🌹 · Happy Birthday</title>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -22,18 +21,36 @@
         Trang đầu
       </a>
 
-      <button
-        class="garden-sound-button"
-        id="sound-toggle"
-        type="button"
-        aria-pressed="false"
-      >
-        ♫ Bật nhạc
-      </button>
+      <div class="garden-header-actions">
+        <button
+          class="garden-action-btn"
+          id="replay-bloom"
+          type="button"
+          title="Xem lại hiệu ứng hoa nở từ từ"
+        >
+          🌸 Cho hoa nở lại
+        </button>
+        <button
+          class="garden-action-btn"
+          id="fireflies-toggle"
+          type="button"
+          title="Thả thêm đom đóm phép thuật"
+        >
+          ✨ Thêm đom đóm
+        </button>
+        <button
+          class="garden-sound-button"
+          id="sound-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          ♫ Nhạc sinh nhật
+        </button>
+      </div>
     </header>
 
     <section class="garden-intro">
-      <p class="garden-eyebrow">A GARDEN JUST FOR YOU</p>
+      <p class="garden-eyebrow">A MAGICAL BIRTHDAY GARDEN FOR YOU</p>
 
       <h1>
         Welcome to<br>
@@ -41,12 +58,11 @@
       </h1>
 
       <p class="garden-description">
-        Mỗi bông hoa ở đây đều mang theo một điều
-        mình muốn gửi đến cậu.
+        Mỗi đóa hoa trong khu vườn đêm nay đều cất giữ một lời chúc dịu dàng nhất dành riêng cho ngày sinh nhật của cậu.
       </p>
 
       <p class="garden-hint">
-        ✧ Chạm vào những bông hoa để khám phá nhé ✧
+        ✧ Chạm vào từng bông hoa để lắng nghe những điều ước ngọt ngào nhé ✧
       </p>
     </section>
 
@@ -56,7 +72,7 @@
     >
       <canvas
         id="garden-canvas"
-        aria-label="Những bông hoa hồng trong khu vườn"
+        aria-label="Những bông hoa hồng rực rỡ trong khu vườn đêm"
       ></canvas>
 
       <div
@@ -75,28 +91,18 @@
           ×
         </button>
 
-        <p class="garden-message-label">A LITTLE NOTE FOR YOU</p>
+        <p class="garden-message-label" id="message-badge">WISH FROM THE GARDEN</p>
 
         <p class="garden-message-text" id="message-text"></p>
+        
+        <p class="garden-message-sub">Chạm vào những bông hoa khác để đón thêm điều ước ♡</p>
       </div>
     </section>
 
-    
-    <div style="text-align: center; padding: 12px 0 24px;">
+    <div class="garden-bottom-actions">
       <a
+        class="garden-next-cake-btn"
         href="cake.html"
-        style="
-          display: inline-block;
-          padding: 14px 25px;
-          border: 1px solid rgba(255, 190, 220, 0.55);
-          border-radius: 30px;
-          color: #ffe5f0;
-          background: rgba(255, 190, 220, 0.10);
-          text-decoration: none;
-          font-family: Arial, sans-serif;
-          font-size: 14px;
-          transition: background 0.2s;
-        "
       >
         🎂 Đến chiếc bánh sinh nhật ♡
       </a>
@@ -113,4 +119,3 @@
   <script src="js/garden.js"></script>
 </body>
 </html>
-
