@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#160f1b">
+  <meta name="description" content="Một chiếc bánh sinh nhật nhỏ dành riêng cho cậu.">
+  <title>A Little Birthday Cake 🎂</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      color: #fff0f5;
+      font-family: Georgia, "Times New Roman", serif;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 45%, #48283f 0%, transparent 55%),
+        linear-gradient(145deg, #160f1b, #29192e 65%, #17251f);
+    }
+
+    .cake-page {
+      width: 100%;
+      max-width: 760px;
+      animation: appear 1s ease both;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 28px;
+      padding: 11px 20px;
+      color: #ffe6f0;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      border: 1px solid #ffffff30;
+      border-radius: 30px;
+      background: #ffffff08;
+      transition: background 0.2s;
+    }
+
+    .back-link:hover {
+      background: #ffffff18;
+    }
+
+    .eyebrow {
+      color: #f5a3c4;
+      font: 700 11px Arial, sans-serif;
+      letter-spacing: 4px;
+    }
+
+    h1 {
+      margin: 20px 0 12px;
+      font-size: clamp(36px, 7vw, 60px);
+      font-weight: normal;
+      line-height: 1.15;
+    }
+
+    h1 span {
+      color: #f4a2c1;
+      font-style: italic;
+    }
+
+    .description {
+      max-width: 460px;
+      margin: 0 auto;
+      color: #dfc9df;
+      font: 15px/1.8 Arial, sans-serif;
+    }
+
+    .cake-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 300px;
+      margin: 30px auto 20px;
+      padding-bottom: 22px;
+    }
+
+    .cake {
+      position: relative;
+      width: min(310px, 78vw);
+      height: 160px;
+      margin-top: 65px;
+    }
+
+    .cake-top {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 48px;
+      border: 2px solid #ffcedd;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ffe6ed, #f5a8c2);
+      box-shadow: 0 0 28px #ff9fc833;
+    }
+
+    .cake-body {
+      position: absolute;
+      top: 22px;
+      left: 0;
+      width: 100%;
+      height: 95px;
+      border-radius: 0 0 20px 20px;
+      background: linear-gradient(90deg, #d86d9b, #f3a5c0 45%, #cf6b98);
+      box-shadow: inset 0 -12px 0 #b95784;
+    }
+
+    .frosting {
+      position: absolute;
+      z-index: 3;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 35px;
+      border-radius: 0 0 18px 18px;
+      background: #fff0f4;
+      clip-path: polygon(
+        0 0, 100% 0, 100% 45%, 91% 55%, 85% 100%,
+        77% 55%, 66% 55%, 59% 90%, 50% 55%,
+        40% 55%, 34% 100%, 25% 55%, 15% 55%,
+        10% 85%, 5% 55%, 0 45%
+      );
+    }
+
+    .candle {
+      position: absolute;
+      z-index: 4;
+      top: -47px;
+      left: 50%;
+      width: 13px;
+      height: 48px;
+      transform: translateX(-50%);
+      border-radius: 4px 4px 2px 2px;
+      background: repeating-linear-gradient(
+        135deg, #fff0f5 0 7px, #e78bb0 7px 13px
+      );
+    }
+
+    .flame {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      width: 16px;
+      height: 23px;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 45% 45%;
+      background: radial-gradient(ellipse at 50% 70%, #fff8bd 0 20%, #ffc75e 45%, #ff885d 75%);
+      box-shadow: 0 0 18px #ffbe66, 0 0 38px #ffad5c88;
+      transform-origin: center bottom;
+      animation: flicker 0.8s ease-in-out infinite alternate;
+    }
+
+    .flame.out {
+      display: none;
+    }
+
+    .plate {
+      position: absolute;
+      bottom: 0;
+      left: -8%;
+      width: 116%;
+      height: 19px;
+      border-radius: 50%;
+      background: linear-gradient(#fff0f5, #d8a8c4);
+      box-shadow: 0 8px 30px #0004;
+    }
+
+    .cake-button {
+      margin-top: 8px;
+      padding: 14px 24px;
+      border: 1px solid #ffc3da;
+      border-radius: 30px;
+      color: #351b2b;
+      background: linear-gradient(135deg, #ffd9e7, #f2a4c3);
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 28px #ed91b522;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cake-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px #ed91b544;
+    }
+
+    .wish {
+      min-height: 58px;
+      margin: 22px auto 0;
+      color: #f7c2d7;
+      font-size: 19px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: #bca3bd;
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    @keyframes flicker {
+      from { rotate: -4deg; scale: 0.96 1.02; }
+      to { rotate: 4deg; scale: 1.04 0.98; }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+/* Khôi phục giao diện nút quà */
+.cake-gift-row a.gift-link,
+a.gift-link {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px !important;
+  border: none !important;
+  border-radius: 30px !important;
+  background: linear-gradient(135deg, #f4b8d0, #dba5e8) !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: 16px;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px #dba5e855;
+}
+
+.cake-gift-row a.gift-link:hover,
+a.gift-link:hover {
+  color: #fff !important;
+  text-decoration: none !important;
+  transform: translateY(-2px);
+}
+
+.gift-link[hidden] {
+  display: none !important;
+}
+
+.gift-link:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #f4b8d0, #dba5e8);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 6px 20px #dba5e855;
+}
+
+#gift-link[hidden] {
+  display: none !important;
+}
+  </style>
+</head>
+
+<body>
+  <main class="cake-page">
+    <a class="back-link" href="garden.html">← Trở về khu vườn</a>
+
+    <p class="eyebrow">A LITTLE WISH FOR YOU</p>
+
+    <h1>Make a <span>Wish</span> ♡</h1>
+
+    <p class="description">
+      Có một chiếc bánh nhỏ dành riêng cho cậu.
+      Hãy ước một điều thật đẹp nhé.
+    </p>
+
+    <div class="cake-gift-row">
+  <section class="cake-stage" aria-label="Bánh sinh nhật với một ngọn nến">
+      <div class="cake">
+        <div class="cake-body"></div>
+        <div class="cake-top"></div>
+        <div class="frosting"></div>
+        <div class="candle">
+          <div class="flame" id="flame"></div>
+        </div>
+        <div class="plate"></div>
+      </div>
+    </section>
+        
+    <a class="gift-link" id="gift-link" href="gift.html" hidden>
+        🎁 Mở món quà bí mật ♡
+    </a>
+
+  </div>
+
+    <button class="cake-button" id="wish-button" type="button">
+      ✨ Ước một điều và thổi nến
+    </button>
+
+    <p class="wish" id="wish-message" aria-live="polite"></p>
+
+    <p class="footer">May your new age be filled with love ♡</p>
+  </main>
+
+  <script>
+    const button = document.getElementById('wish-button');
+    const flame = document.getElementById('flame');
+    const message = document.getElementById('wish-message');
+
+    let audioContext = null;
+    let microphoneStream = null;
+    let analyser = null;
+    let microphoneSource = null;
+    let microphoneTimer = null;
+    let isListening = false;
+    let blowStartedAt = 0;
+
+    function stopMicrophone() {
+      isListening = false;
+      clearInterval(microphoneTimer);
+      microphoneTimer = null;
+
+      if (microphoneStream) {
+        microphoneStream.getTracks().forEach(track => track.stop());
+        microphoneStream = null;
+      }
+
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+
+      analyser = null;
+      microphoneSource = null;
+    }
+
+    function extinguishCandle() {
+      if (flame.classList.contains('out')) return;
+
+      flame.classList.add('out');
+      
+        const giftLink = document.getElementById('gift-link');
+
+        if (giftLink) {
+            giftLink.hidden = false;
+                }
+
+      message.textContent =
+        'Ước mong mọi điều tốt đẹp nhất sẽ đến với cậu. Chúc mừng sinh nhật! ♡';
+      button.textContent = '♡ Thắp nến lại';
+
+      stopMicrophone();
+    }
+
+    async function startMicrophone() {
+      if (!navigator.mediaDevices ||
+          !navigator.mediaDevices.getUserMedia) {
+        message.textContent =
+          'Trình duyệt chưa hỗ trợ micro. Cậu hãy dùng nút bên dưới để tắt nến nhé.';
+        return;
+      }
+
+      try {
+        button.disabled = true;
+        button.textContent = '🎙️ Đang bật micro...';
+
+        microphoneStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: false,
+            autoGainControl: false
+          }
+        });
+
+        audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+
+        await audioContext.resume();
+
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.15;
+
+        microphoneSource =
+          audioContext.createMediaStreamSource(microphoneStream);
+
+        microphoneSource.connect(analyser);
+
+        const samples = new Uint8Array(analyser.fftSize);
+        let noiseLevel = 0;
+        let calibrated = false;
+        let loudFrames = 0;
+        let listeningStartedAt = Date.now();
+        blowStartedAt = 0;
+        isListening = true;
+
+        button.textContent = '🌬️ Hãy thổi vào micro!';
+        message.textContent =
+          'Micro đã bật. Hãy thổi về phía micro trong khoảng 1 giây nhé!';
+
+        microphoneTimer = setInterval(() => {
+          if (!isListening || !analyser) return;
+
+          analyser.getByteTimeDomainData(samples);
+
+          let sum = 0;
+
+          for (let i = 0; i < samples.length; i++) {
+            const value = (samples[i] - 128) / 128;
+            sum += value * value;
+          }
+
+          const volume = Math.sqrt(sum / samples.length);
+          const elapsed = Date.now() - listeningStartedAt;
+
+          if (!calibrated) {
+            noiseLevel = volume;
+            calibrated = true;
+            return;
+          }
+
+          if (elapsed < 700) {
+            noiseLevel = noiseLevel * 0.9 + volume * 0.1;
+            return;
+          }
+
+          const threshold = Math.max(0.025, noiseLevel * 2.0);
+
+          if (volume > threshold) {
+            loudFrames++;
+
+            if (!blowStartedAt) {
+              blowStartedAt = Date.now();
+            }
+
+            if (Date.now() - blowStartedAt >= 700 &&
+                loudFrames >= 6) {
+              extinguishCandle();
+            }
+          } else {
+            loudFrames = 0;
+            blowStartedAt = 0;
+            noiseLevel = noiseLevel * 0.98 + volume * 0.02;
+          }
+        }, 50);
+
+      } catch (error) {
+        stopMicrophone();
+        message.textContent =
+          'Chưa bật được micro. Hãy cấp quyền micro cho trình duyệt hoặc dùng nút dự phòng nhé.';
+        button.textContent = '🌬️ Thử bật micro lại';
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    button.addEventListener('click', async () => {
+      if (flame.classList.contains('out')) {
+        stopMicrophone();
+        flame.classList.remove('out');
+        message.textContent = '';
+        button.textContent = '🌬️ Bật micro để thổi nến';
+        return;
+      }
+
+      if (isListening) {
+        extinguishCandle();
+        return;
+      }
+
+      await startMicrophone();
+    });
+
+    const fallbackButton = document.createElement('button');
+    fallbackButton.type = 'button';
+    fallbackButton.textContent = '🕯️ Tắt nến bằng cách bấm';
+    fallbackButton.style.cssText =
+      'display:block;margin:12px auto 0;padding:10px 18px;' +
+      'border:1px solid #ffffff40;border-radius:24px;' +
+      'background:#ffffff10;color:#ffe5f0;cursor:pointer;';
+
+    button.insertAdjacentElement('afterend', fallbackButton);
+
+    fallbackButton.addEventListener('click', extinguishCandle);
+
+    window.addEventListener('pagehide', stopMicrophone);
+  </script>
+
+</body>
+</html>

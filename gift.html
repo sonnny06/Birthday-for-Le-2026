@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f9dce8">
+  <title>Một món quà dành cho cậu ♡</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --pink: #f4b8d0;
+      --deep-pink: #b94e79;
+      --cream: #fff8ee;
+      --ink: #71465b;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at top, #fff3f7 0%, transparent 60%),
+        linear-gradient(135deg, #f8dce8, #e9dafa 55%, #fff0e4);
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .top {
+      text-align: center;
+      padding: 28px 16px 12px;
+    }
+
+    .top .eyebrow {
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #a66c88;
+    }
+
+    .top h1 {
+      font-size: clamp(27px, 4vw, 43px);
+      font-weight: normal;
+      margin: 12px 0 8px;
+    }
+
+    .top p {
+      margin: 0;
+      font-size: 15px;
+      color: #956d82;
+    }
+
+    .scene {
+      position: relative;
+      width: min(1180px, 100%);
+      min-height: 660px;
+      margin: 0 auto;
+      padding: 30px 22px 75px;
+      display: grid;
+      grid-template-columns: minmax(160px, 1fr) minmax(340px, 1.5fr) minmax(160px, 1fr);
+      align-items: center;
+      gap: 24px;
+    }
+
+    .photos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      z-index: 2;
+    }
+
+    .polaroid {
+      width: min(100%, 205px);
+      padding: 9px 9px 13px;
+      background: #fffdf9;
+      box-shadow: 0 10px 25px #87536c24;
+      transform: rotate(-5deg);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+      border: 0;
+      color: var(--ink);
+    }
+
+    .polaroid:nth-child(even) {
+      transform: rotate(5deg);
+    }
+
+    .polaroid:hover {
+      transform: rotate(0deg) translateY(-5px);
+      box-shadow: 0 15px 30px #87536c35;
+    }
+
+    .polaroid img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: #f5e1e8;
+    }
+
+    .polaroid span {
+      display: block;
+      padding-top: 10px;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .center {
+      position: relative;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .gift-button {
+      position: relative;
+      z-index: 3;
+      border: 0;
+      background: linear-gradient(145deg, #f7c2d9, #d98db5);
+      color: #fffafc;
+      padding: 15px 24px;
+      border-radius: 30px;
+      box-shadow: 0 8px 24px #b55c8d35;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .gift-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .gift-box {
+      position: relative;
+      width: 190px;
+      height: 145px;
+      margin: 12px auto 0;
+      filter: drop-shadow(0 15px 16px #a75d8330);
+    }
+
+    .box-body {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 105px;
+      border-radius: 5px 5px 12px 12px;
+      background: linear-gradient(90deg, #e99cbd, #f5bfd5 48%, #df8db2);
+      border: 1px solid #ffffff8a;
+    }
+
+    .box-body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 42%;
+      width: 18%;
+      background: #fff0c9;
+      opacity: .85;
+    }
+
+    .box-lid {
+      position: absolute;
+      z-index: 2;
+      top: 23px;
+      left: -9px;
+      width: calc(100% + 18px);
+      height: 34px;
+      border-radius: 7px;
+      background: linear-gradient(90deg, #f4b5d0, #ffdbeb, #e8a0c1);
+      border: 1px solid #ffffffa8;
+      transform-origin: 10% 90%;
+      transition: transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .ribbon {
+      position: absolute;
+      z-index: 3;
+      top: 23px;
+      left: 42%;
+      width: 18%;
+      height: 122px;
+      background: #fff0c9;
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    .bow {
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 50%;
+      width: 65px;
+      height: 35px;
+      transform: translateX(-50%);
+      transition: transform .8s;
+    }
+
+    .bow::before,
+    .bow::after {
+      content: "";
+      position: absolute;
+      width: 34px;
+      height: 25px;
+      border: 8px solid #fff0c9;
+      border-radius: 50% 50% 15% 50%;
+    }
+
+    .bow::before {
+      left: -2px;
+      transform: rotate(25deg);
+    }
+
+    .bow::after {
+      right: -2px;
+      transform: scaleX(-1) rotate(25deg);
+    }
+
+    .opened .box-lid {
+      transform: translate(-22px, -72px) rotate(-25deg);
+    }
+
+    .opened .bow {
+      transform: translate(-40px, -65px) rotate(-20deg);
+    }
+
+    .letter {
+      position: relative;
+      width: 100%;
+      padding: 35px 30px;
+      background:
+        radial-gradient(circle at 100% 0%, #f9e3eb 0, transparent 100px),
+        var(--cream);
+      border: 1px solid #e8c9b5;
+      box-shadow: 0 15px 35px #9d6a7620;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(25px) scale(.96);
+      max-height: 0;
+      overflow: hidden;
+      padding-top: 0;
+      padding-bottom: 0;
+      transition:
+        opacity .7s,
+        transform .7s,
+        max-height .8s,
+        padding .8s;
+    }
+
+    .opened .letter {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      max-height: 650px;
+      padding-top: 35px;
+      padding-bottom: 35px;
+    }
+
+    .letter .heart {
+      font-size: 25px;
+      color: #c66f98;
+    }
+
+    .letter h2 {
+      font-size: clamp(23px, 3vw, 32px);
+      font-weight: normal;
+      line-height: 1.35;
+      margin: 12px 0 20px;
+    }
+
+    .letter p {
+      font-size: 16px;
+      line-height: 1.9;
+      margin: 10px 0;
+    }
+
+    .signature {
+      margin-top: 25px !important;
+      font-style: italic;
+      color: #ad6385;
+    }
+
+    .hint {
+      color: #9e6b85;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: #25121edb;
+      padding: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.show {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: min(90vw, 650px);
+      max-height: 80vh;
+      object-fit: contain;
+      background: white;
+      padding: 10px 10px 45px;
+      box-shadow: 0 15px 50px #0005;
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 20px;
+      right: 22px;
+      color: white;
+      background: transparent;
+      border: 0;
+      font-size: 35px;
+      cursor: pointer;
+    }
+
+    .back {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 30px;
+      padding: 12px 20px;
+      color: #9c5478;
+      text-decoration: none;
+      border: 1px solid #dca5c1;
+      border-radius: 24px;
+      background: #ffffff80;
+    }
+
+    .back:hover {
+      background: white;
+    }
+
+    @media (max-width: 760px) {
+      .top {
+        padding-top: 24px;
+      }
+
+      .top .eyebrow {
+        letter-spacing: 2px;
+        font-size: 10px;
+      }
+
+      .top p {
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .scene {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        padding: 24px 16px 45px;
+        min-height: auto;
+      }
+
+      .center {
+        order: 1;
+        width: 100%;
+        max-width: 440px;
+      }
+
+      .photos {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 12px 8px 22px;
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+      }
+
+      .photos.left {
+        order: 2;
+      }
+
+      .photos.right {
+        order: 3;
+      }
+
+      .polaroid {
+        flex: 0 0 145px;
+        width: 145px;
+        scroll-snap-align: center;
+      }
+
+      .polaroid span {
+        font-size: 12px;
+      }
+
+      .gift-box {
+        width: 155px;
+        height: 125px;
+      }
+
+      .box-body {
+        height: 90px;
+      }
+
+      .ribbon {
+        height: 105px;
+      }
+
+      .letter {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .opened .letter {
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+
+      .letter p {
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .gift-button {
+        width: 100%;
+        min-height: 48px;
+      }
+
+      .hint {
+        line-height: 1.6;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+/* Hộp quà đung đưa khi chờ mở */
+.gift-box {
+  animation: giftFloat 2.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes giftFloat {
+  0%, 100% {
+    translate: 0 0;
+    rotate: -1deg;
+  }
+  50% {
+    translate: 0 -8px;
+    rotate: 1deg;
+  }
+}
+
+/* Hộp rung nhẹ khi được mở */
+#gift.opened .gift-box {
+  animation: giftShake .45s ease-in-out;
+}
+
+@keyframes giftShake {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -5deg; }
+  50% { rotate: 5deg; }
+  75% { rotate: -3deg; }
+}
+
+/* Ánh sáng dịu quanh khu vực bức thư */
+#gift.opened .letter {
+  animation: letterGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes letterGlow {
+  from {
+    box-shadow: 0 12px 30px #d98db522;
+  }
+  to {
+    box-shadow: 0 12px 38px #d98db588;
+  }
+}
+
+/* Tôn trọng cài đặt giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  .gift-box,
+  #gift.opened .gift-box,
+  #gift.opened .letter {
+    animation: none !important;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="eyebrow">A little surprise, made with love</div>
+    <h1>Gửi cậu một món quà ♡</h1>
+    <p>Một chiếc hộp nhỏ, cùng những điều tớ muốn gửi đến cậu.</p>
+  </header>
+
+  <main class="scene">
+    <div class="photos left">
+      <button class="polaroid" type="button"
+        data-caption="Một chút bình yên ♡">
+        <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=600&q=85"
+          alt="Ánh nắng bình minh">
+        <span>Một chút bình yên ♡</span>
+      </button>
+
+      <button class="polaroid" type="button"
+        data-caption="Những ngày thật đẹp">
+        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=85"
+          alt="Hồ nước giữa núi">
+        <span>Những ngày thật đẹp</span>
+      </button>
+    </div>
+
+    <section class="center" id="gift">
+
+      <div class="gift-box" aria-hidden="true">
+        <div class="box-body"></div>
+        <div class="ribbon"></div>
+        <div class="box-lid"></div>
+        <div class="bow"></div>
+      </div>
+
+      <article class="letter" id="letter" aria-live="polite">
+        <div class="heart">♡　✦　♡</div>
+        <h2>Chúc mừng sinh nhật cậu!</h2>
+        <p>
+          Hôm nay là một ngày thật đặc biệt,
+          vì thế giới đã có thêm một người thật đáng quý.
+        </p>
+        <p>
+          Mong tuổi mới sẽ dịu dàng với cậu,
+          mang đến thật nhiều niềm vui, những cơ hội đẹp
+          và những điều khiến cậu mỉm cười mỗi ngày.
+        </p>
+        <p>
+          Dù hành trình phía trước có thế nào,
+          mong cậu vẫn luôn tin vào bản thân
+          và nhớ rằng cậu xứng đáng với những điều tốt đẹp.
+        </p>
+        <p class="signature">
+          Chúc cậu một tuổi mới thật hạnh phúc ♡
+        </p>
+        <div class="heart">Happy Birthday ✧</div>
+      </article>
+
+      <p class="hint" id="hint">
+        Bấm nút phía trên để mở hộp quà nhé ♡
+      </p>
+    </section>
+
+    <div class="photos right">
+      <button class="polaroid" type="button"
+        data-caption="Một góc nhỏ đáng nhớ">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=85"
+          alt="Phong cảnh thiên nhiên">
+        <span>Một góc nhỏ đáng nhớ</span>
+      </button>
+
+      <button class="polaroid" type="button"
+        data-caption="Cứ luôn tỏa sáng nhé">
+        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=85"
+          alt="Những bông hoa">
+        <span>Cứ luôn tỏa sáng nhé</span>
+      </button>
+    </div>
+  </main>
+
+  <a class="back" href="cake.html">♡ Quay lại chiếc bánh sinh nhật</a>
+
+  <div class="lightbox" id="lightbox" role="dialog"
+    aria-modal="true" aria-label="Xem ảnh Polaroid">
+    <button class="close-lightbox" id="close-lightbox"
+      aria-label="Đóng ảnh" type="button">×</button>
+    <img id="large-image" src="" alt="">
+  </div>
+
+  <script>
+    const gift = document.getElementById('gift');
+    const giftBox = document.querySelector('.gift-box');
+    const hint = document.getElementById('hint');
+    const lightbox = document.getElementById('lightbox');
+    const largeImage = document.getElementById('large-image');
+    
+    
+const giftBox = document.querySelector('.gift-box');
+
+giftBox.style.cursor = 'pointer';
+giftBox.style.pointerEvents = 'auto';
+giftBox.setAttribute('role', 'button');
+giftBox.setAttribute('aria-label', 'Bấm để mở hộp quà');
+giftBox.setAttribute('tabindex', '0');
+
+function toggleGift() {
+  openButton.click();
+}
+
+giftBox.addEventListener('click', toggleGift);
+
+giftBox.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    toggleGift();
+  }
+});
+
+    
+    openButton.addEventListener('click', () => {
+      function toggleGift() {
+  const opened = gift.classList.toggle('opened');
+
+  hint.textContent = opened
+    ? 'Một bức thư nhỏ dành riêng cho cậu ♡'
+    : 'Bấm vào hộp quà để mở nhé ♡';
+}
+
+giftBox.addEventListener('click', toggleGift);
+
+giftBox.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    toggleGift();
+  }
+});
+
+    document.querySelectorAll('.polaroid').forEach((photo) => {
+      photo.addEventListener('click', () => {
+        const image = photo.querySelector('img');
+        largeImage.src = image.src;
+        largeImage.alt = photo.dataset.caption || image.alt;
+        lightbox.classList.add('show');
+      });
+    });
+
+    function closeImage() {
+      lightbox.classList.remove('show');
+      largeImage.src = '';
+    }
+
+    document.getElementById('close-lightbox')
+      .addEventListener('click', closeImage);
+
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeImage();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeImage();
+    });
+  </script>
+</body>
+</html>
