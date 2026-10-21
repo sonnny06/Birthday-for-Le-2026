@@ -598,47 +598,29 @@
     const hint = document.getElementById('hint');
     const lightbox = document.getElementById('lightbox');
     const largeImage = document.getElementById('large-image');
-    
-    
-const giftBox = document.querySelector('.gift-box');
-
 giftBox.style.cursor = 'pointer';
-giftBox.style.pointerEvents = 'auto';
-giftBox.setAttribute('role', 'button');
-giftBox.setAttribute('aria-label', 'Bấm để mở hộp quà');
-giftBox.setAttribute('tabindex', '0');
 
-function toggleGift() {
-  openButton.click();
-}
+    giftBox.style.cursor = 'pointer';
+    giftBox.style.pointerEvents = 'auto';
+    giftBox.setAttribute('role', 'button');
+    giftBox.setAttribute('aria-label', 'Bấm để mở hộp quà');
+    giftBox.setAttribute('tabindex', '0');
 
-giftBox.addEventListener('click', toggleGift);
+    function toggleGift() {
+      const opened = gift.classList.toggle('opened');
+      hint.textContent = opened
+        ? 'Một bức thư nhỏ dành riêng cho cậu ♡'
+        : 'Bấm vào hộp quà để mở nhé ♡';
+    }
 
-giftBox.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    toggleGift();
-  }
-});
+    giftBox.addEventListener('click', toggleGift);
 
-    
-    openButton.addEventListener('click', () => {
-      function toggleGift() {
-  const opened = gift.classList.toggle('opened');
-
-  hint.textContent = opened
-    ? 'Một bức thư nhỏ dành riêng cho cậu ♡'
-    : 'Bấm vào hộp quà để mở nhé ♡';
-}
-
-giftBox.addEventListener('click', toggleGift);
-
-giftBox.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    toggleGift();
-  }
-});
+    giftBox.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleGift();
+      }
+    });
 
     document.querySelectorAll('.polaroid').forEach((photo) => {
       photo.addEventListener('click', () => {

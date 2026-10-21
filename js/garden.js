@@ -58,7 +58,7 @@
 
     for (let i = 0; i < count; i++) {
       const depth = i / Math.max(1, count - 1);
-      const radius = random(19, 31) * (0.75 + depth * 0.45);
+      const radius = random(28, 38) * (0.8 + depth * 0.4);
 
       const sprite = GardenBotany.createRealisticRoseSprite({
         radius,
