@@ -1,1 +1,293 @@
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+:root {
+  --night: #160f1b;
+  --wine: #32172d;
+  --rose: #f1a5c1;
+  --rose-light: #ffe1eb;
+  --cream: #fff5f5;
+  --muted: #c8b3c5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  background: var(--night);
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--cream);
+}
+
+.welcome-screen {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100svh;
+  place-items: center;
+  overflow: hidden;
+  padding: 48px 24px;
+  background:
+    radial-gradient(
+      ellipse at 50% 40%,
+      rgba(104, 43, 86, 0.48) 0%,
+      transparent 48%
+    ),
+    linear-gradient(
+      145deg,
+      #120d18 0%,
+      #241326 52%,
+      #160f1b 100%
+    );
+}
+
+.welcome-screen::before,
+.welcome-screen::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  pointer-events: none;
+}
+
+.welcome-screen::before {
+  inset: 20px;
+  border: 1px solid rgba(255, 225, 235, 0.09);
+  border-radius: 24px;
+}
+
+.welcome-screen::after {
+  width: min(600px, 90vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(241, 165, 193, 0.09);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 45px rgba(241, 165, 193, 0.025),
+    0 0 0 90px rgba(241, 165, 193, 0.018);
+}
+
+.ambient {
+  position: absolute;
+  z-index: -1;
+  width: 280px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.3;
+  pointer-events: none;
+  animation: ambient-drift 9s ease-in-out infinite alternate;
+}
+
+.ambient-one {
+  top: 5%;
+  left: -100px;
+  background: #a64d83;
+}
+
+.ambient-two {
+  right: -100px;
+  bottom: 0;
+  background: #754ba4;
+  animation-delay: -4s;
+}
+
+.welcome-content {
+  width: 100%;
+  max-width: 660px;
+  text-align: center;
+  animation: content-appear 1.2s ease both;
+}
+
+.eyebrow,
+.date-label {
+  color: var(--rose);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  line-height: 1.8;
+}
+
+.eyebrow {
+  margin-bottom: 22px;
+}
+
+.hero-rose {
+  display: grid;
+  width: 138px;
+  height: 138px;
+  place-items: center;
+  margin: 0 auto 25px;
+  border: 1px solid rgba(255, 225, 235, 0.13);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(241, 165, 193, 0.15),
+    rgba(241, 165, 193, 0.015) 70%
+  );
+  box-shadow:
+    0 0 55px rgba(241, 165, 193, 0.1),
+    inset 0 0 30px rgba(241, 165, 193, 0.04);
+  font-size: 68px;
+  animation: rose-float 4s ease-in-out infinite;
+}
+
+.date-label {
+  margin-bottom: 18px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.welcome-content h1 {
+  color: var(--cream);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(35px, 7vw, 60px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.welcome-content h1 span {
+  color: var(--rose);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.welcome-description {
+  max-width: 400px;
+  margin: 22px auto 30px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.open-garden-button {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 0 27px;
+  border: 1px solid rgba(255, 225, 235, 0.45);
+  border-radius: 999px;
+  background: rgba(241, 165, 193, 0.1);
+  color: var(--cream);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 250ms ease,
+    border-color 250ms ease,
+    transform 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.open-garden-button span:last-child {
+  color: var(--rose);
+  font-size: 19px;
+  transition: transform 250ms ease;
+}
+
+.open-garden-button:hover {
+  transform: translateY(-3px);
+  border-color: var(--rose);
+  background: rgba(241, 165, 193, 0.19);
+  box-shadow: 0 8px 35px rgba(241, 165, 193, 0.12);
+}
+
+.open-garden-button:hover span:last-child {
+  transform: scale(1.2);
+}
+
+.open-garden-button:focus-visible {
+  outline: 2px solid var(--rose-light);
+  outline-offset: 5px;
+}
+
+.footer-note {
+  margin-top: 38px;
+  color: rgba(200, 179, 197, 0.65);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+@keyframes rose-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+}
+
+@keyframes ambient-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    transform: translate(30px, -20px) scale(1.12);
+  }
+}
+
+@keyframes content-appear {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-screen {
+    padding: 36px 24px;
+  }
+
+  .welcome-screen::before {
+    inset: 12px;
+    border-radius: 18px;
+  }
+
+  .hero-rose {
+    width: 116px;
+    height: 116px;
+    font-size: 58px;
+  }
+
+  .welcome-description {
+    max-width: 310px;
+    font-size: 13px;
+  }
+
+  .open-garden-button {
+    min-height: 50px;
+    padding: 0 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
