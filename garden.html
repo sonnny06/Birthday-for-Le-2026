@@ -1,1 +1,94 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#160f1b">
+  <meta name="description" content="Một khu vườn nhỏ dành riêng cho ngày sinh nhật của cậu.">
+
+  <title>Our Little Garden 🌹</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="garden-page">
+  <main class="garden-scene">
+    <div class="garden-glow" aria-hidden="true"></div>
+
+    <header class="garden-header">
+      <a class="garden-back-link" href="index.html">
+        <span aria-hidden="true">←</span>
+        Trang đầu
+      </a>
+
+      <button
+        class="garden-sound-button"
+        id="sound-toggle"
+        type="button"
+        aria-pressed="false"
+      >
+        ♫ Bật nhạc
+      </button>
+    </header>
+
+    <section class="garden-intro">
+      <p class="garden-eyebrow">A GARDEN JUST FOR YOU</p>
+
+      <h1>
+        Welcome to<br>
+        <span>Our Little Garden</span>
+      </h1>
+
+      <p class="garden-description">
+        Mỗi bông hoa ở đây đều mang theo một điều
+        mình muốn gửi đến cậu.
+      </p>
+
+      <p class="garden-hint">
+        ✧ Chạm vào những bông hoa để khám phá nhé ✧
+      </p>
+    </section>
+
+    <section
+      class="garden-visual"
+      aria-label="Khu vườn hoa hồng tương tác"
+    >
+      <canvas
+        id="garden-canvas"
+        aria-label="Những bông hoa hồng trong khu vườn"
+      ></canvas>
+
+      <div
+        class="garden-message"
+        id="garden-message"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
+        <button
+          class="garden-message-close"
+          id="close-message"
+          type="button"
+          aria-label="Đóng lời nhắn"
+        >
+          ×
+        </button>
+
+        <p class="garden-message-label">A LITTLE NOTE FOR YOU</p>
+
+        <p class="garden-message-text" id="message-text"></p>
+      </div>
+    </section>
+
+    <footer class="garden-footer">
+      <p>Take your time, there's no need to hurry ♡</p>
+      <p class="garden-footer-small">Grown with love, just for you.</p>
+    </footer>
+  </main>
+
+  <script src="js/garden-botany.js"></script>
+  <script src="js/garden.js"></script>
+</body>
+</html>
+
