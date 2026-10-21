@@ -80,7 +80,7 @@
         sway: random(0.025, 0.075),
         sprite,
         note: notes[i % notes.length],
-        scale: 0,
+        scale: reducedMotion.matches ? 1 : 0,
         targetScale: 1,
         index: i
       });
