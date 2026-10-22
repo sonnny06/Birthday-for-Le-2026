@@ -3,592 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#160f1b">
-  <meta name="description" content="Một chiếc bánh sinh nhật nhỏ lung linh dành riêng cho cậu.">
+  <meta name="theme-color" content="#1a122e">
+  <meta name="description" content="Chiếc bánh sinh nhật giấy 3D lung linh và ngọn nến ấm áp dành riêng cho cậu.">
+
   <title>Make a Wish 🎂 · Happy Birthday</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --night: #160f1b;
-      --wine: #28142b;
-      --rose: #f1a5c1;
-      --gold: #ebd5b3;
-      --cream: #fffaf5;
-      --text: #fceaf2;
-      --muted: #c9b4c4;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 20px;
-      overflow-x: hidden;
-      color: var(--text);
-      font-family: 'DM Sans', -apple-system, sans-serif;
-      text-align: center;
-      background:
-        radial-gradient(ellipse at 50% 35%, rgba(105, 42, 85, 0.38) 0%, transparent 60%),
-        radial-gradient(circle at 50% 65%, rgba(65, 25, 55, 0.45) 0%, transparent 65%),
-        linear-gradient(160deg, #120b17 0%, #201124 55%, #131916 100%);
-      position: relative;
-    }
-
-    #cake-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .cake-page {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 680px;
-      animation: appear 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-      padding: 10px 20px;
-      color: #ffeaf2;
-      text-decoration: none;
-      font-size: 13px;
-      border: 1px solid rgba(255, 225, 235, 0.18);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(10px);
-      transition: all 0.25s ease;
-    }
-
-    .back-link:hover {
-      background: rgba(241, 165, 193, 0.15);
-      border-color: rgba(241, 165, 193, 0.6);
-      transform: translateY(-2px);
-    }
-
-    .eyebrow {
-      color: var(--rose);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(34px, 6vw, 54px);
-      font-weight: 500;
-      line-height: 1.2;
-      color: var(--cream);
-      margin-bottom: 14px;
-    }
-
-    h1 span {
-      color: var(--rose);
-      font-style: italic;
-    }
-
-    .description {
-      max-width: 440px;
-      margin: 0 auto;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    /* ===== ARTISANAL CAKE STAGE ===== */
-    .cake-stage {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      min-height: 290px;
-      margin: 28px auto 20px;
-      padding-bottom: 24px;
-    }
-
-    /* Candle ambient glow illuminating surrounding space */
-    .candle-ambient-glow {
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 205, 120, 0.24) 0%, rgba(255, 160, 100, 0.08) 45%, transparent 70%);
-      filter: blur(20px);
-      pointer-events: none;
-      transition: opacity 1.2s ease, transform 1.2s ease;
-      animation: glowFlicker 3s ease-in-out infinite alternate;
-    }
-
-    .candle-ambient-glow.dimmed {
-      opacity: 0.05;
-      transform: translateX(-50%) scale(0.6);
-    }
-
-    @keyframes glowFlicker {
-      0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
-      50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
-    }
-
-    .cake-wrapper {
-      position: relative;
-      width: min(290px, 76vw);
-      height: 180px;
-      margin-top: 55px;
-      filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.55));
-    }
-
-    /* Porcelain plate */
-    .plate {
-      position: absolute;
-      bottom: -6px;
-      left: -9%;
-      width: 118%;
-      height: 28px;
-      border-radius: 50%;
-      background: linear-gradient(180deg, #fffcfb, #eddce5 65%, #c8b2c0);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-    }
-
-    /* Cake body */
-    .cake-tier {
-      position: absolute;
-      bottom: 12px;
-      left: 0;
-      width: 100%;
-      height: 110px;
-      border-radius: 0 0 24px 24px;
-      background: linear-gradient(135deg, #f6e8ec 0%, #edd4de 40%, #d8acc0 85%, #b5809a 100%);
-      box-shadow: inset 0 -8px 18px rgba(135, 55, 95, 0.35);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.4);
-    }
-
-    /* Rich chocolate / berry inner sponge layer peeking out */
-    .cake-sponge-line {
-      position: absolute;
-      top: 54px;
-      left: 0;
-      width: 100%;
-      height: 9px;
-      background: linear-gradient(90deg, #823658, #ab4f78 50%, #762f4f);
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
-    }
-
-    /* Cake top cream ellipse */
-    .cake-top-cream {
-      position: absolute;
-      top: 48px;
-      left: 0;
-      width: 100%;
-      height: 52px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse at 50% 40%, #fffefe 0%, #faedf3 60%, #eed4df 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 4px 15px rgba(120, 45, 80, 0.15);
-      z-index: 2;
-    }
-
-    /* Sculpted soft cream drip border */
-    .frosting-drips {
-      position: absolute;
-      top: 68px;
-      left: 0;
-      width: 100%;
-      height: 40px;
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    .frosting-drips svg {
-      width: 100%;
-      height: 100%;
-      fill: #fff9fb;
-      filter: drop-shadow(0 3px 5px rgba(125, 40, 75, 0.18));
-    }
-
-    /* Fresh decorative raspberries on top */
-    .berries-group {
-      position: absolute;
-      top: 56px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-      height: 35px;
-      z-index: 3;
-      pointer-events: none;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .berry {
-      width: 14px;
-      height: 15px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #e64574 0%, #aa1b44 75%, #640b24 100%);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
-    }
-
-    /* Artisanal Candle */
-    .candle-stem {
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 11px;
-      height: 68px;
-      border-radius: 5px 5px 3px 3px;
-      background: repeating-linear-gradient(
-        140deg,
-        #fffdf9 0px,
-        #fffdf9 7px,
-        #f4b0cb 7px,
-        #f4b0cb 13px,
-        #e093b1 13px,
-        #e093b1 15px
-      );
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset -1px 0 3px rgba(0, 0, 0, 0.15);
-      z-index: 4;
-    }
-
-    .candle-wick {
-      position: absolute;
-      top: -9px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      height: 10px;
-      background: #4a383b;
-      border-radius: 1px;
-      z-index: 4;
-    }
-
-    /* Realistic Dancing Candle Flame */
-    .flame-element {
-      position: absolute;
-      top: -32px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 28px;
-      border-radius: 50% 50% 35% 35%;
-      background: radial-gradient(ellipse at 50% 75%, #ffffff 0%, #fff7be 25%, #ffb648 60%, #ff6b3d 88%, rgba(255, 60, 40, 0) 100%);
-      box-shadow:
-        0 0 15px #ffcf68,
-        0 0 35px #ff9b44,
-        0 0 65px rgba(255, 120, 60, 0.6);
-      transform-origin: center bottom;
-      animation: flameFlicker 0.65s ease-in-out infinite alternate;
-      z-index: 5;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .flame-element.out {
-      opacity: 0;
-      transform: translateX(-50%) scale(0.2);
-      pointer-events: none;
-    }
-
-    @keyframes flameFlicker {
-      0% { transform: translateX(-50%) rotate(-2deg) scale(0.96, 1.03); }
-      50% { transform: translateX(-50%) rotate(1.5deg) scale(1.02, 0.98); }
-      100% { transform: translateX(-50%) rotate(-1deg) scale(1.04, 1.05); }
-    }
-
-    /* Gentle Smoke wisp when extinguished */
-    .smoke-wisp {
-      position: absolute;
-      top: -25px;
-      left: 50%;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(220, 210, 215, 0.65);
-      filter: blur(3px);
-      pointer-events: none;
-      opacity: 0;
-      z-index: 4;
-    }
-
-    .smoke-wisp.active {
-      animation: smokeRise 2.2s ease-out forwards;
-    }
-
-    @keyframes smokeRise {
-      0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
-      50% { opacity: 0.5; transform: translate(-70%, -35px) scale(3.5); }
-      100% { opacity: 0; transform: translate(-30%, -75px) scale(6); }
-    }
-
-    /* ===== CONTROLS & WISH SECTION ===== */
-    .controls-container {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .wish-main-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 52px;
-      padding: 0 30px;
-      border: 1px solid rgba(255, 210, 230, 0.45);
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(241, 165, 193, 0.22), rgba(184, 51, 90, 0.35));
-      color: #fffafc;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(184, 51, 90, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      transition: all 0.25s ease;
-      touch-action: manipulation;
-    }
-
-    .wish-main-button:hover {
-      background: linear-gradient(135deg, rgba(241, 165, 193, 0.35), rgba(184, 51, 90, 0.5));
-      border-color: rgba(255, 225, 240, 0.7);
-      box-shadow: 0 14px 40px rgba(241, 165, 193, 0.35);
-      transform: translateY(-2px);
-    }
-
-    .wish-main-button:active {
-      transform: translateY(0);
-    }
-
-    .wish-main-button.listening {
-      border-color: #ffd27d;
-      background: rgba(255, 210, 125, 0.25);
-      box-shadow: 0 0 25px rgba(255, 210, 125, 0.4);
-      animation: pulseMic 1.4s ease-in-out infinite;
-    }
-
-    @keyframes pulseMic {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-
-    .manual-tap-button {
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      opacity: 0.8;
-      transition: opacity 0.2s;
-    }
-
-    .manual-tap-button:hover {
-      opacity: 1;
-      color: var(--cream);
-    }
-
-    .wish-display-box {
-      min-height: 60px;
-      margin: 18px auto 0;
-      max-width: 460px;
-      color: #ffe6f0;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 18px;
-      font-style: italic;
-      line-height: 1.7;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-      transition: all 0.5s ease;
-    }
-
-    /* Secret Gift Navigation Button */
-    .gift-reveal-card {
-      margin-top: 14px;
-      animation: giftAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    @keyframes giftAppear {
-      from { opacity: 0; transform: translateY(18px) scale(0.94); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .gift-link-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px 32px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(244, 184, 208, 0.35), rgba(185, 78, 121, 0.45));
-      border: 1px solid rgba(255, 215, 235, 0.6);
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      box-shadow: 0 12px 35px rgba(219, 90, 140, 0.35), 0 0 25px rgba(244, 184, 208, 0.2);
-      backdrop-filter: blur(14px);
-      transition: all 0.3s ease;
-      animation: floatPill 3.5s ease-in-out infinite;
-    }
-
-    @keyframes floatPill {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    .gift-link-btn:hover {
-      transform: translateY(-2px);
-      border-color: #fff;
-      box-shadow: 0 16px 45px rgba(219, 90, 140, 0.5);
-      background: linear-gradient(135deg, rgba(244, 184, 208, 0.5), rgba(185, 78, 121, 0.6));
-    }
-
-    .footer {
-      margin-top: 32px;
-      color: rgba(200, 180, 195, 0.6);
-      font-size: 12px;
-      font-style: italic;
-      letter-spacing: 0.05em;
-    }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 500px) {
-      .cake-wrapper {
-        width: 250px;
-        height: 160px;
-      }
-      .cake-tier { height: 95px; }
-      .cake-top-cream { height: 46px; }
-      .wish-main-button {
-        width: 100%;
-        max-width: 320px;
-      }
-    }
-
-    .garden-sound-button,
-    #sound-toggle {
-      display: inline-flex;
-      min-height: 40px;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 0 18px;
-      border: 1px solid rgba(255, 225, 235, 0.28);
-      border-radius: 999px;
-      background: rgba(22, 12, 25, 0.72);
-      color: #fceaf1;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 500;
-      text-decoration: none;
-      cursor: pointer;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      pointer-events: auto;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-      transition: all 250ms ease;
-    }
-
-    .garden-sound-button:hover,
-    #sound-toggle:hover,
-    .garden-sound-button[aria-pressed="true"],
-    #sound-toggle[aria-pressed="true"],
-    .garden-sound-button.playing,
-    #sound-toggle.playing {
-      border-color: rgba(241, 165, 193, 0.85);
-      background: rgba(241, 165, 193, 0.24);
-      box-shadow: 0 0 20px rgba(241, 165, 193, 0.4);
-      transform: translateY(-1px);
-    }
-
-    .garden-sound-button[aria-pressed="true"],
-    #sound-toggle[aria-pressed="true"],
-    .garden-sound-button.playing,
-    #sound-toggle.playing {
-      color: #ffe1eb;
-      border-color: #f1a5c1;
-      background: rgba(241, 165, 193, 0.32);
-      box-shadow: 0 0 22px rgba(241, 165, 193, 0.5);
-    }
-  </style>
 </head>
 
 <body class="cake-page-body">
+  <!-- Global Reusable SVG Filters for 3D Papercut Depth & Fairy Glows -->
+  <svg class="paper-filters" aria-hidden="true" style="position: absolute; width: 0; height: 0; pointer-events: none;">
+    <defs>
+      <filter id="paper-cut-shadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="2" dy="5" stdDeviation="6" flood-color="#0a0514" flood-opacity="0.55" />
+        <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0a0514" flood-opacity="0.45" />
+      </filter>
+      <filter id="paper-glow-filter" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="8" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="shadowbox-vignette"></div>
+
+  <!-- Multi-layered Papercut Celestial Sky Background -->
+  <div class="shadowbox-portal-frame" aria-hidden="true" style="opacity: 0.7;">
+    <svg class="portal-svg-layer" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <!-- Distant Paper Hills -->
+      <path d="M0,900 L0,740 Q380,690 760,730 Q1140,770 1440,710 L1440,900 Z" fill="#2d1c44" />
+      <path d="M0,900 L0,790 Q340,760 720,780 Q1100,800 1440,760 L1440,900 Z" fill="#352042" />
+      <!-- Drifting Paper Clouds -->
+      <path d="M120,180 Q150,150 190,160 Q230,140 270,165 Q310,155 330,185 Q350,220 310,230 L130,230 Q100,210 120,180 Z" fill="#3d234a" opacity="0.6" style="filter: drop-shadow(0 4px 8px rgba(10,5,20,0.5));" />
+      <path d="M1100,220 Q1130,190 1170,200 Q1210,180 1250,205 Q1290,195 1310,225 Q1330,260 1290,270 L1110,270 Q1080,250 1100,220 Z" fill="#3d234a" opacity="0.6" style="filter: drop-shadow(0 4px 8px rgba(10,5,20,0.5));" />
+    </svg>
+  </div>
+
   <canvas id="cake-canvas" aria-hidden="true"></canvas>
 
   <main class="cake-page">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap;">
-      <a class="back-link" href="garden.html" style="margin-bottom: 0;">
+      <a class="back-link" href="garden.html">
         <span aria-hidden="true">←</span> Trở về khu vườn
       </a>
       <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
     </div>
 
-    <p class="eyebrow">A LITTLE WISH FOR YOU</p>
+    <p class="eyebrow">✧ A LITTLE WISH FOR YOU ✧</p>
 
     <h1>Make a <span>Wish</span> ♡</h1>
 
     <p class="description">
-      Có một chiếc bánh nhỏ và một ngọn nến lung linh dành riêng cho cậu.
+      Chiếc bánh sinh nhật giấy 3D và ngọn nến lung linh đã sẵn sàng dành riêng cho cậu.
       Hãy nhắm mắt lại ước một điều thật đẹp rồi thổi nến nhé.
     </p>
 
-    <div class="cake-stage" aria-label="Bánh sinh nhật và ngọn nến lung linh">
+    <!-- 3D PAPERCRAFT BIRTHDAY CAKE STAGE -->
+    <div class="cake-stage" aria-label="Bánh sinh nhật giấy 3D và ngọn nến lung linh">
       <div class="candle-ambient-glow" id="candle-glow"></div>
 
       <div class="cake-wrapper">
+        <!-- Scalloped Paper Cake Stand -->
         <div class="plate"></div>
+
+        <!-- Tier 1: Textured Pastel Cardstock Body with Paper Layer Ribbon -->
         <div class="cake-tier">
           <div class="cake-sponge-line"></div>
         </div>
+
+        <!-- Top Cream Paper Ellipse -->
         <div class="cake-top-cream"></div>
 
+        <!-- Laser-cut Scalloped Frosting Drips -->
         <div class="frosting-drips">
           <svg viewBox="0 0 290 40" preserveAspectRatio="none">
             <path d="M0,0 L290,0 L290,8 Q270,22 250,8 Q235,32 220,10 Q200,20 185,6 Q165,28 145,12 Q125,24 105,8 Q85,34 65,10 Q45,26 25,6 Q12,18 0,8 Z" />
           </svg>
         </div>
 
+        <!-- Origami Paper Berries -->
         <div class="berries-group">
           <div class="berry"></div>
           <div class="berry" style="transform: scale(0.85);"></div>
           <div class="berry"></div>
         </div>
 
+        <!-- Striped Rolled Paper Candle & Glowing Flame -->
         <div class="candle-stem">
           <div class="candle-wick"></div>
           <div class="flame-element" id="flame"></div>
@@ -606,6 +113,7 @@
         🕯️ Hoặc bấm vào đây để tắt nến
       </button>
 
+      <!-- Embossed Paper Invitation Reveal -->
       <div class="gift-reveal-card" id="gift-reveal" hidden>
         <a class="gift-link-btn" href="gift.html">
           <span>🎁 Mở món quà bí mật dành cho cậu</span>
@@ -651,7 +159,7 @@
         resizeCanvas();
 
         // Ambient floating golden embers
-        for (let i = 0; i < 28; i++) {
+        for (let i = 0; i < 30; i++) {
           floatingEmbers.push({
             x: Math.random() * width,
             y: Math.random() * height,
@@ -679,7 +187,7 @@
             }
 
             const pulse = 0.35 + 0.65 * Math.pow(Math.sin(time * 2 + e.phase), 2);
-            bCtx.fillStyle = `rgba(255, 215, 140, ${pulse * 0.7})`;
+            bCtx.fillStyle = `rgba(255, 216, 117, ${pulse * 0.75})`;
             bCtx.beginPath();
             bCtx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
             bCtx.fill();
@@ -695,7 +203,7 @@
             }
             p.x += p.vx * delta;
             p.y += p.vy * delta;
-            p.vy += 30 * delta; // gentle gravity
+            p.vy += 32 * delta; // gentle gravity
             p.vx *= 0.98;
 
             const alpha = 1 - p.age / p.life;
@@ -717,19 +225,19 @@
         const originX = rect.left + rect.width / 2;
         const originY = rect.top + rect.height / 2;
 
-        const colors = ['#ffe8af', '#ffd2de', '#f4a5c3', '#ffffff', '#e8b578'];
-        for (let i = 0; i < 45; i++) {
+        const colors = ['#ffd875', '#fff4b8', '#f2c7ce', '#dca2ae', '#ffffff', '#e8b578'];
+        for (let i = 0; i < 50; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = 40 + Math.random() * 110;
+          const speed = 40 + Math.random() * 120;
           sparks.push({
             x: originX,
             y: originY,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed - 35,
-            r: 1.5 + Math.random() * 2.8,
+            r: 1.5 + Math.random() * 3,
             color: colors[Math.floor(Math.random() * colors.length)],
             age: 0,
-            life: 1.2 + Math.random() * 0.8
+            life: 1.3 + Math.random() * 0.8
           });
         }
       }
@@ -785,13 +293,16 @@
           microphoneStream = null;
         }
 
+        if (microphoneSource) {
+          microphoneSource.disconnect();
+          microphoneSource = null;
+        }
+
         if (audioContext) {
-          audioContext.close();
+          audioContext.close().catch(() => {});
           audioContext = null;
         }
 
-        analyser = null;
-        microphoneSource = null;
         button.classList.remove('listening');
       }
 
@@ -799,51 +310,58 @@
         if (flame.classList.contains('out')) return;
 
         flame.classList.add('out');
+        smoke.classList.add('active');
         candleGlow.classList.add('dimmed');
 
-        // Smoke animation
-        smoke.classList.add('active');
-        setTimeout(() => smoke.classList.remove('active'), 2500);
-
-        // Particle burst & chime
         spawnCelebrationBurst();
-        playChime(523.25);
-        setTimeout(() => playChime(783.99), 120);
-
-        // Show gift reveal & message
-        giftReveal.hidden = false;
-        message.textContent = 'Ước mong mọi điều ngọt ngào và dịu dàng nhất sẽ luôn mỉm cười bên cậu. Chúc mừng sinh nhật! ♡';
-        button.textContent = '♡ Thắp nến lại';
-        manualBtn.style.display = 'none';
+        playChime(783.99); // G5 crystal note
 
         stopMicrophone();
+
+        button.textContent = '✨ Đã thổi nến thành công!';
+        button.disabled = true;
+        manualBtn.style.display = 'none';
+
+        message.textContent = 'Chúc cho mọi điều ước của cậu đều thành hiện thực thật rực rỡ và bình yên! ♡';
+        giftReveal.hidden = false;
       }
 
       function relightCandle() {
         flame.classList.remove('out');
+        smoke.classList.remove('active');
         candleGlow.classList.remove('dimmed');
+        button.textContent = '🌬️ Thổi nến bằng micro';
+        button.disabled = false;
+        manualBtn.style.display = 'inline-block';
         message.textContent = '';
         giftReveal.hidden = true;
-        button.textContent = '🌬️ Thổi nến bằng micro';
-        manualBtn.style.display = 'inline-block';
-        playChime(659.25);
+      }
+
+      function getAverageVolume(analyserNode) {
+        const buffer = new Uint8Array(analyserNode.frequencyBinCount);
+        analyserNode.getByteFrequencyData(buffer);
+        let sum = 0;
+        for (let i = 0; i < buffer.length; i++) {
+          sum += buffer[i];
+        }
+        return sum / buffer.length;
       }
 
       async function startMicrophone() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          message.textContent = 'Trình duyệt chưa hỗ trợ micro. Cậu hãy bấm nút bên dưới để tắt nến nhé.';
+          message.textContent = 'Trình duyệt không hỗ trợ micro, cậu bấm nút bên dưới để tắt nến nhé.';
           return;
         }
 
         try {
           button.disabled = true;
-          button.textContent = '🎙️ Đang kết nối micro...';
+          button.textContent = 'Đang kết nối micro...';
 
           microphoneStream = await navigator.mediaDevices.getUserMedia({
             audio: {
               echoCancellation: true,
               noiseSuppression: false,
-              autoGainControl: false
+              autoGainControl: true
             }
           });
 
@@ -851,51 +369,27 @@
           await audioContext.resume();
 
           analyser = audioContext.createAnalyser();
-          analyser.fftSize = 2048;
-          analyser.smoothingTimeConstant = 0.15;
+          analyser.fftSize = 512;
+          analyser.smoothingTimeConstant = 0.3;
 
           microphoneSource = audioContext.createMediaStreamSource(microphoneStream);
           microphoneSource.connect(analyser);
 
-          const samples = new Uint8Array(analyser.fftSize);
-          let noiseLevel = 0;
-          let calibrated = false;
-          let loudFrames = 0;
-          let listeningStartedAt = Date.now();
-          blowStartedAt = 0;
           isListening = true;
-
           button.classList.add('listening');
-          button.textContent = '🌬️ Hãy thổi mạnh vào micro!';
-          message.textContent = 'Micro đã sẵn sàng. Hãy thổi vào micro trong khoảng 1 giây nhé...';
+          button.textContent = '🌬️ Thổi mạnh vào micro để tắt nến nào!';
+          message.textContent = 'Cậu cứ ghé sát lại và thổi một hơi thật dài nhé...';
+
+          let noiseLevel = 12;
+          let loudFrames = 0;
 
           microphoneTimer = setInterval(() => {
-            if (!isListening || !analyser) return;
+            if (!isListening) return;
 
-            analyser.getByteTimeDomainData(samples);
-            let sum = 0;
-            for (let i = 0; i < samples.length; i++) {
-              const value = (samples[i] - 128) / 128;
-              sum += value * value;
-            }
+            const volume = getAverageVolume(analyser);
+            const dynamicThreshold = Math.max(30, noiseLevel + 16);
 
-            const volume = Math.sqrt(sum / samples.length);
-            const elapsed = Date.now() - listeningStartedAt;
-
-            if (!calibrated) {
-              noiseLevel = volume;
-              calibrated = true;
-              return;
-            }
-
-            if (elapsed < 600) {
-              noiseLevel = noiseLevel * 0.9 + volume * 0.1;
-              return;
-            }
-
-            const threshold = Math.max(0.024, noiseLevel * 2.0);
-
-            if (volume > threshold) {
+            if (volume > dynamicThreshold) {
               loudFrames++;
               if (!blowStartedAt) blowStartedAt = Date.now();
 

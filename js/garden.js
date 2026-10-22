@@ -361,47 +361,86 @@
   }
 
   /* -------------------------------------------------------------
-   * 6. RENDERING: FULLSCREEN SKY, MOON, STARS, GRASS
+   * 6. RENDERING: FULLSCREEN SKY, MOON, STARS, 3D PAPERCUT HILLS
    * ------------------------------------------------------------*/
   function drawSkyAndMoon(time) {
-    // 1. Deep Fairytale Twilight Gradient across full screen
+    // 1. Deep Midnight Indigo Twilight Sky
     const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
-    skyGrad.addColorStop(0, '#0e0814');
-    skyGrad.addColorStop(0.35, '#1b0e22');
-    skyGrad.addColorStop(0.70, '#2d142b');
-    skyGrad.addColorStop(1, '#0e1814');
+    skyGrad.addColorStop(0, '#120b22');
+    skyGrad.addColorStop(0.35, '#1a122e');
+    skyGrad.addColorStop(0.70, '#2d1c44');
+    skyGrad.addColorStop(1, '#1e112a');
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Cosmic Rose Aura in the center of the garden
+    // 2. Cosmic Rose Aura in the center of the shadowbox
     const galaxyGlow = ctx.createRadialGradient(
-      width * 0.5, height * 0.55, 30,
-      width * 0.5, height * 0.55, width * 0.7
+      width * 0.5, height * 0.52, 30,
+      width * 0.5, height * 0.52, width * 0.65
     );
-    galaxyGlow.addColorStop(0, 'rgba(214, 96, 158, 0.16)');
-    galaxyGlow.addColorStop(0.55, 'rgba(170, 70, 130, 0.06)');
-    galaxyGlow.addColorStop(1, 'rgba(170, 70, 130, 0)');
+    galaxyGlow.addColorStop(0, 'rgba(220, 162, 174, 0.18)');
+    galaxyGlow.addColorStop(0.55, 'rgba(184, 107, 126, 0.08)');
+    galaxyGlow.addColorStop(1, 'rgba(184, 107, 126, 0)');
     ctx.fillStyle = galaxyGlow;
     ctx.fillRect(0, 0, width, height);
 
-    // 3. Gentle Crescent Moon with Glowing Halo
+    // 3. 3D Layered Papercut Mountain Dunes / Rolling Terraces
+    ctx.save();
+    // Layer 1: Distant Mauve Silhouette Ridge with paper drop shadow
+    ctx.fillStyle = '#2d1c44';
+    ctx.shadowColor = 'rgba(10, 5, 20, 0.55)';
+    ctx.shadowBlur = 16;
+    ctx.shadowOffsetY = 6;
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.58);
+    ctx.bezierCurveTo(width * 0.25, height * 0.52, width * 0.55, height * 0.62, width, height * 0.54);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+
+    // Layer 2: Mid-ground Plum Hill Ridge with paper drop shadow
+    ctx.fillStyle = '#3d234a';
+    ctx.shadowColor = 'rgba(10, 5, 20, 0.65)';
+    ctx.shadowBlur = 18;
+    ctx.shadowOffsetY = 8;
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.68);
+    ctx.bezierCurveTo(width * 0.35, height * 0.62, width * 0.7, height * 0.72, width, height * 0.64);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+
+    // Layer 3: Foreground Velvety Paper Terrace with drop shadow
+    ctx.fillStyle = '#25152e';
+    ctx.shadowColor = 'rgba(10, 5, 20, 0.75)';
+    ctx.shadowBlur = 22;
+    ctx.shadowOffsetY = 10;
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.82);
+    ctx.bezierCurveTo(width * 0.45, height * 0.78, width * 0.8, height * 0.84, width, height * 0.79);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+    ctx.restore();
+
+    // 4. Glowing Golden Paper Crescent Moon with Halo
     const moonX = width * 0.85;
     const moonY = Math.max(70, height * 0.15);
     const moonR = Math.min(26, width * 0.04);
 
     const moonGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.5, moonX, moonY, moonR * 3.8);
-    moonGlow.addColorStop(0, 'rgba(255, 238, 210, 0.28)');
-    moonGlow.addColorStop(0.5, 'rgba(255, 220, 240, 0.08)');
-    moonGlow.addColorStop(1, 'rgba(255, 220, 240, 0)');
+    moonGlow.addColorStop(0, 'rgba(255, 216, 117, 0.35)');
+    moonGlow.addColorStop(0.5, 'rgba(255, 170, 66, 0.1)');
+    moonGlow.addColorStop(1, 'rgba(255, 170, 66, 0)');
     ctx.fillStyle = moonGlow;
     ctx.beginPath();
     ctx.arc(moonX, moonY, moonR * 3.8, 0, TAU);
     ctx.fill();
 
     ctx.save();
-    ctx.fillStyle = '#fff4e3';
-    ctx.shadowColor = 'rgba(255, 245, 230, 0.8)';
-    ctx.shadowBlur = 12;
+    ctx.fillStyle = '#fff4b8';
+    ctx.shadowColor = 'rgba(255, 216, 117, 0.9)';
+    ctx.shadowBlur = 14;
     ctx.beginPath();
     ctx.arc(moonX, moonY, moonR, 0, TAU);
     ctx.fill();
@@ -412,7 +451,7 @@
     ctx.fill();
     ctx.restore();
 
-    // 4. Twinkling Stars
+    // 5. Twinkling Stars
     stars.forEach(star => {
       const sx = star.x * width;
       const sy = star.y * height;
@@ -422,14 +461,14 @@
 
       ctx.save();
       ctx.globalAlpha = twinkle;
-      ctx.fillStyle = '#fff5fa';
+      ctx.fillStyle = '#fff6ea';
 
       ctx.beginPath();
       ctx.arc(sx, sy, star.radius, 0, TAU);
       ctx.fill();
 
       if (star.cross && twinkle > 0.75) {
-        ctx.strokeStyle = `rgba(255, 235, 245, ${twinkle * 0.5})`;
+        ctx.strokeStyle = `rgba(255, 235, 215, ${twinkle * 0.5})`;
         ctx.lineWidth = 0.8;
         ctx.beginPath();
         ctx.moveTo(sx - 4, sy); ctx.lineTo(sx + 4, sy);
@@ -438,6 +477,37 @@
       }
       ctx.restore();
     });
+  }
+
+  // Glowing Dotted Thread Paths connecting flowers across the pop-up map
+  function drawPaperStorybookPaths() {
+    if (flowers.length < 2) return;
+    ctx.save();
+    ctx.setLineDash([4, 8]);
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = 'rgba(255, 216, 117, 0.32)';
+    ctx.shadowColor = 'rgba(255, 216, 117, 0.45)';
+    ctx.shadowBlur = 8;
+
+    const pathFlowers = [...flowers].sort((a, b) => a.index - b.index);
+
+    ctx.beginPath();
+    for (let i = 0; i < pathFlowers.length; i++) {
+      const fx = pathFlowers[i].x;
+      const fy = pathFlowers[i].y + pathFlowers[i].radius * 0.4;
+      if (i === 0) {
+        ctx.moveTo(fx, fy);
+      } else {
+        const prev = pathFlowers[i - 1];
+        const pfx = prev.x;
+        const pfy = prev.y + prev.radius * 0.4;
+        const cx = (pfx + fx) / 2;
+        const cy = Math.max(pfy, fy) + 24;
+        ctx.quadraticCurveTo(cx, cy, fx, fy);
+      }
+    }
+    ctx.stroke();
+    ctx.restore();
   }
 
   function drawGardenGroundFoliage(time) {
@@ -552,8 +622,25 @@
     flower.offsetX += ((dx / (dist || 1)) * repulseDist - flower.offsetX) * 0.15;
     flower.offsetY += ((dy / (dist || 1)) * repulseDist - flower.offsetY) * 0.15;
 
+    const hoverLift = flower.hover * 10;
     const headX = flower.x + wind * 35 + flower.offsetX;
-    const headY = flower.y + flower.offsetY;
+    const headY = flower.y + flower.offsetY - hoverLift;
+
+    // 3D Pop-Up Paper Cast Shadow on ground beneath lifted flower
+    if (flower.hover > 0.04) {
+      ctx.save();
+      const shadowW = flower.radius * (1.15 - flower.hover * 0.15);
+      const shadowH = flower.radius * 0.32;
+      const sY = flower.y + flower.radius * 0.45 + hoverLift * 0.35;
+      const groundShadow = ctx.createRadialGradient(flower.x, sY, 0, flower.x, sY, shadowW);
+      groundShadow.addColorStop(0, `rgba(10, 5, 20, ${0.45 + flower.hover * 0.25})`);
+      groundShadow.addColorStop(1, 'rgba(10, 5, 20, 0)');
+      ctx.fillStyle = groundShadow;
+      ctx.beginPath();
+      ctx.ellipse(flower.x, sY, shadowW, shadowH, 0, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    }
 
     drawStemAndLeaves(flower, wind, headX, headY, p);
 
@@ -769,10 +856,13 @@
 
     ctx.clearRect(0, 0, width, height);
 
-    // 1. Fullscreen Sky, Moon, Stars
+    // 1. Fullscreen Sky, Moon, Stars, Layered Paper Hills
     drawSkyAndMoon(sceneTime);
 
-    // 2. Flowers by depth row
+    // 2. Glowing Dotted Paper Thread Paths
+    drawPaperStorybookPaths();
+
+    // 3. Flowers by depth row with 3D paper lift
     flowers.forEach(f => {
       drawSingleFlower(f, sceneTime, elapsedFromBloom);
     });

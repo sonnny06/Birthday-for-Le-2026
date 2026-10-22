@@ -3,22 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#160f1b">
-  <meta name="description" content="Một khu vườn nhỏ rực rỡ và ấm áp dành riêng cho ngày sinh nhật của cậu.">
+  <meta name="theme-color" content="#1a122e">
+  <meta name="description" content="Một cuốn sách cổ tích mở ra khu vườn hoa giấy 3D rực rỡ và ấm áp dành riêng cho ngày sinh nhật của cậu.">
 
   <title>Our Little Garden 🌹 · Happy Birthday</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="garden-page">
-  <!-- Immersive Fullscreen Garden Canvas -->
-  <canvas id="garden-canvas" aria-label="Khu vườn hoa hồng rực rỡ dưới bầu trời đêm"></canvas>
+  <!-- Global Reusable SVG Filters for 3D Papercut Depth & Fairy Glows -->
+  <svg class="paper-filters" aria-hidden="true" style="position: absolute; width: 0; height: 0; pointer-events: none;">
+    <defs>
+      <filter id="paper-cut-shadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="2" dy="5" stdDeviation="6" flood-color="#0a0514" flood-opacity="0.55" />
+        <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0a0514" flood-opacity="0.45" />
+      </filter>
+      <filter id="paper-glow-filter" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="8" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
 
-  <!-- Floating Wish Bubble (Bay lên từ bông hoa khi chạm, không che giữa màn hình) -->
+  <div class="shadowbox-vignette"></div>
+
+  <!-- 3D Pop-Up Storybook Vintage Book Corner Flourishes -->
+  <div class="storybook-book-frame" aria-hidden="true">
+    <div class="storybook-corner top-left"></div>
+    <div class="storybook-corner top-right"></div>
+    <div class="storybook-corner bottom-left"></div>
+    <div class="storybook-corner bottom-right"></div>
+  </div>
+
+  <!-- Immersive Fullscreen Garden Canvas (Pop-Up Paper Terrain & Botanicals) -->
+  <canvas id="garden-canvas" aria-label="Bản đồ câu chuyện cổ tích 3D và khu vườn hoa hồng lung linh dưới bầu trời đêm"></canvas>
+
+  <!-- Floating Wish Card (Vintage Parchment Note bay lên từ đóa hoa) -->
   <div class="floating-wish-bubble" id="floating-wish" role="status" aria-live="polite" hidden>
     <button class="wish-bubble-close" id="close-wish" type="button" aria-label="Đóng lời nhắn">×</button>
-    <p class="wish-bubble-badge" id="wish-badge"></p>
+    <div class="wish-bubble-badge" id="wish-badge"></div>
     <p class="wish-bubble-text" id="wish-text"></p>
     <p class="wish-bubble-sub">Chạm vào bông hoa khác để nhận thêm điều ước ♡</p>
   </div>
@@ -36,7 +66,7 @@
           class="garden-action-btn"
           id="replay-bloom"
           type="button"
-          title="Xem lại hiệu ứng hoa nở từ từ"
+          title="Xem lại hiệu ứng hoa giấy nở từ từ"
         >
           🌸 Cho hoa nở lại
         </button>
@@ -60,9 +90,9 @@
     </header>
 
     <section class="garden-floating-intro">
-      <p class="garden-eyebrow">A MAGICAL BIRTHDAY GARDEN FOR YOU</p>
+      <p class="garden-eyebrow">✧ A 3D POP-UP STORYBOOK GARDEN ✧</p>
       <h1>Our Little Garden <span>♡</span></h1>
-      <p class="garden-hint">✧ Chạm vào từng đóa hoa để điều ước bay lên nhé ✧</p>
+      <p class="garden-hint">✧ Lần theo từng vệt chỉ vàng để điều ước bay lên nhé ✧</p>
     </section>
 
     <div class="garden-bottom-actions">
