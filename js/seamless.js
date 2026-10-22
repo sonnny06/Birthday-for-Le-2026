@@ -1,6 +1,6 @@
 /**
  * Seamless Navigation & Persistent Audio Controller
- * Giữ nhạc nền phát liên tục không bị gián đoạn xuyên suốt tất cả các trang
+ * Giữ nhạc nền phát liên tục không bị ngắt quãng khi chuyển trang
  */
 (() => {
   'use strict';
@@ -17,7 +17,7 @@
   // 2. Synchronize all music toggle buttons across pages
   function syncMusicButtons() {
     const isPlaying = !bgMusic.paused;
-    const buttons = document.querySelectorAll('#sound-toggle, .music-toggle-btn');
+    const buttons = document.querySelectorAll('#sound-toggle, .garden-sound-button, .music-toggle-btn');
     buttons.forEach(btn => {
       btn.setAttribute('aria-pressed', String(isPlaying));
       btn.textContent = isPlaying ? '♫ Đang phát nhạc ♡' : '♫ Nhạc nền';
@@ -48,19 +48,23 @@
   window.toggleGlobalMusic = toggleMusic;
   window.syncGlobalMusicButtons = syncMusicButtons;
 
-  // Restore music if active
+  // Listen to native audio events so state is always 100% synchronized
+  bgMusic.addEventListener('play', syncMusicButtons);
+  bgMusic.addEventListener('pause', syncMusicButtons);
+
+  // Restore music if active from session
   const savedState = sessionStorage.getItem('birthday_bgm_state');
   const savedTime = parseFloat(sessionStorage.getItem('birthday_bgm_time') || '0');
 
   if (savedState === 'playing') {
     if (bgMusic.paused) {
       if (savedTime && Math.abs(bgMusic.currentTime - savedTime) > 2) {
-        bgMusic.currentTime = savedTime;
+        try { bgMusic.currentTime = savedTime; } catch (e) {}
       }
       const playPromise = bgMusic.play();
       if (playPromise) {
         playPromise.then(() => syncMusicButtons()).catch(() => {
-          // If browser policy blocks autoplay on initial visit, resume on first user touch
+          // If browser policy blocks autoplay on initial visit, resume on first user interaction
           const resumeOnTouch = () => {
             bgMusic.play().then(() => syncMusicButtons()).catch(() => {});
             document.removeEventListener('click', resumeOnTouch);
@@ -87,14 +91,14 @@
 
   // Attach click listeners to music buttons
   function bindMusicButtons() {
-    document.querySelectorAll('#sound-toggle, .music-toggle-btn').forEach(btn => {
+    document.querySelectorAll('#sound-toggle, .garden-sound-button, .music-toggle-btn').forEach(btn => {
       btn.removeEventListener('click', toggleMusic);
       btn.addEventListener('click', toggleMusic);
     });
     syncMusicButtons();
   }
 
-  // 3. Seamless SPA Page Transition Router (Không load lại trang, nhạc không bị ngắt)
+  // 3. Seamless SPA Page Transition Router (Không reload trang, nhạc không ngắt)
   let isNavigating = false;
 
   async function loadPage(url, push = true) {
@@ -102,32 +106,56 @@
     isNavigating = true;
 
     try {
-      // Notify active page to clean up loops (canvas, mic, timers)
+      // 1. Notify active page to clean up loops (canvas, mic, timers)
       document.dispatchEvent(new CustomEvent('page:before-exit'));
 
-      // Smooth subtle fade-out
-      document.body.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+      // 2. Smooth subtle fade-out
+      document.body.style.transition = 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
       document.body.style.opacity = '0';
 
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Network error loading page');
+      if (!response.ok) throw new Error('Network error loading page: ' + response.statusText);
       const htmlText = await response.text();
 
       const parser = new DOMParser();
       const newDoc = parser.parseFromString(htmlText, 'text/html');
 
-      // Update title and body styling
+      // 3. Update document title & body styling
       document.title = newDoc.title;
       document.body.className = newDoc.body.className;
 
-      // Extract script tags
+      // 4. Synchronize Head Styles and Stylesheets
+      // Remove previously injected page-specific head tags
+      document.head.querySelectorAll('[data-seamless-head]').forEach(el => el.remove());
+
+      // Get list of existing stylesheet links in document.head
+      const existingLinks = new Set(
+        Array.from(document.head.querySelectorAll('link[rel="stylesheet"]'))
+          .map(l => l.getAttribute('href'))
+          .filter(Boolean)
+      );
+
+      // Clone any page-specific <style> or new <link> tags from newDoc.head
+      newDoc.head.querySelectorAll('style, link[rel="stylesheet"]').forEach(el => {
+        if (el.tagName === 'LINK') {
+          const href = el.getAttribute('href');
+          if (href && existingLinks.has(href)) {
+            return; // Already present in head
+          }
+        }
+        const clone = el.cloneNode(true);
+        clone.setAttribute('data-seamless-head', 'true');
+        document.head.appendChild(clone);
+      });
+
+      // 5. Extract script tags from incoming body & head
       const scripts = Array.from(newDoc.querySelectorAll('script'));
       scripts.forEach(s => s.remove());
 
-      // Replace DOM content
+      // 6. Replace DOM content
       document.body.innerHTML = newDoc.body.innerHTML;
 
-      // Re-execute scripts sequentially
+      // 7. Re-execute scripts sequentially
       for (const oldScript of scripts) {
         if (oldScript.src && oldScript.src.includes('seamless.js')) {
           continue; // Keep the active seamless router running
@@ -148,7 +176,7 @@
         }
       }
 
-      // Re-bind music buttons & link handlers
+      // 8. Re-bind music buttons & link handlers
       bindMusicButtons();
       bindInternalLinks();
 
@@ -158,18 +186,17 @@
 
       window.scrollTo(0, 0);
 
-      // Smooth fade-in
+      // 9. Smooth fade-in
       requestAnimationFrame(() => {
         document.body.style.opacity = '1';
         setTimeout(() => {
           document.body.style.transition = '';
           isNavigating = false;
-        }, 250);
+        }, 220);
       });
 
     } catch (err) {
       console.warn('Seamless navigation fallback to native reload:', err);
-      // Fallback to normal navigation if fetch fails (e.g. file:// protocol restriction)
       isNavigating = false;
       window.location.href = url;
     }
@@ -179,7 +206,14 @@
     document.querySelectorAll('a[href]').forEach(link => {
       const href = link.getAttribute('href');
       if (!href) return;
-      if (href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      if (
+        href.startsWith('#') ||
+        href.startsWith('http://') ||
+        href.startsWith('https://') ||
+        href.startsWith('//') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+      ) return;
       if (!href.endsWith('.html') && !href.includes('.html')) return;
 
       link.removeEventListener('click', handleLinkClick);
@@ -197,8 +231,9 @@
   }
 
   // Handle browser back/forward buttons
-  window.addEventListener('popstate', e => {
-    loadPage(window.location.pathname.split('/').pop() || 'index.html', false);
+  window.addEventListener('popstate', () => {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    loadPage(currentPage, false);
   });
 
   // Initialize on load

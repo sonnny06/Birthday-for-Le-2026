@@ -931,15 +931,9 @@
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       cancelAnimationFrame(animationId);
-      if (isAudioPlaying) {
-        bgMusic.pause();
-      }
     } else {
       lastTime = performance.now();
       animationId = requestAnimationFrame(drawScene);
-      if (isAudioPlaying) {
-        bgMusic.play().catch(() => {});
-      }
     }
   });
 
