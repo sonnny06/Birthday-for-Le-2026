@@ -8,10 +8,10 @@
   }
 
   const ctx = canvas.getContext('2d');
-  const messageBox = document.getElementById('garden-message');
-  const messageBadge = document.getElementById('message-badge');
-  const messageText = document.getElementById('message-text');
-  const closeButton = document.getElementById('close-message');
+  const wishBubble = document.getElementById('floating-wish');
+  const wishBadge = document.getElementById('wish-badge');
+  const wishText = document.getElementById('wish-text');
+  const closeWishButton = document.getElementById('close-wish');
   const soundButton = document.getElementById('sound-toggle');
   const replayButton = document.getElementById('replay-bloom');
   const firefliesButton = document.getElementById('fireflies-toggle');
@@ -45,7 +45,7 @@
     },
     {
       badge: '✧ ĐÓA HOA TƯƠI ĐẸP #4 ✧',
-      text: 'Mỗi bông hoa trong khu vườn đêm nay tượng trưng cho một nụ cười rạng rỡ của cậu. Hôm nay nhớ cười thật nhiều nha! 🌹'
+      text: 'Mỗi đóa hoa trong khu vườn đêm nay tượng trưng cho một nụ cười rạng rỡ của cậu. Hôm nay nhớ cười thật nhiều nha! 🌹'
     },
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #5 ✧',
@@ -82,125 +82,79 @@
   ];
 
   /* -------------------------------------------------------------
-   * 2. CRYSTAL MUSIC BOX SYNTHESIZER (WEB AUDIO API)
+   * 2. BACKGROUND MUSIC & CRYSTAL CHIME AUDIO
    * ------------------------------------------------------------*/
-  let audioContext = null;
-  let isMusicPlaying = false;
-  let musicTimer = null;
-  let currentNoteIndex = 0;
+  const bgMusic = new Audio('assets/bg-music.mp3');
+  bgMusic.loop = true;
+  let isAudioPlaying = false;
 
-  // Happy Birthday melody in C major / F major (sweet high register)
-  const HAPPY_BIRTHDAY_MELODY = [
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 440.00, dur: 0.65, delay: 0.78 }, // A4
-    { freq: 392.00, dur: 0.65, delay: 0.78 }, // G4
-    { freq: 523.25, dur: 0.65, delay: 0.78 }, // C5
-    { freq: 493.88, dur: 1.10, delay: 1.35 }, // B4
-
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 440.00, dur: 0.65, delay: 0.78 }, // A4
-    { freq: 392.00, dur: 0.65, delay: 0.78 }, // G4
-    { freq: 587.33, dur: 0.65, delay: 0.78 }, // D5
-    { freq: 523.25, dur: 1.10, delay: 1.35 }, // C5
-
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 392.00, dur: 0.32, delay: 0.42 }, // G4
-    { freq: 783.99, dur: 0.65, delay: 0.78 }, // G5
-    { freq: 659.25, dur: 0.65, delay: 0.78 }, // E5
-    { freq: 523.25, dur: 0.65, delay: 0.78 }, // C5
-    { freq: 493.88, dur: 0.65, delay: 0.78 }, // B4
-    { freq: 440.00, dur: 1.10, delay: 1.35 }, // A4
-
-    { freq: 698.46, dur: 0.32, delay: 0.42 }, // F5
-    { freq: 698.46, dur: 0.32, delay: 0.42 }, // F5
-    { freq: 659.25, dur: 0.65, delay: 0.78 }, // E5
-    { freq: 523.25, dur: 0.65, delay: 0.78 }, // C5
-    { freq: 587.33, dur: 0.65, delay: 0.78 }, // D5
-    { freq: 523.25, dur: 1.40, delay: 1.95 }  // C5 (pause before loop)
-  ];
-
-  function getAudioContext() {
-    if (!audioContext) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (AudioCtx) {
-        audioContext = new AudioCtx();
-      }
+  function toggleMusic() {
+    if (isAudioPlaying) {
+      bgMusic.pause();
+      isAudioPlaying = false;
+      soundButton.setAttribute('aria-pressed', 'false');
+      soundButton.textContent = '♫ Bật nhạc';
+      sessionStorage.setItem('birthday_bgm', 'paused');
+    } else {
+      bgMusic.play().then(() => {
+        isAudioPlaying = true;
+        soundButton.setAttribute('aria-pressed', 'true');
+        soundButton.textContent = '♫ Đang phát nhạc ♡';
+        sessionStorage.setItem('birthday_bgm', 'playing');
+      }).catch(err => {
+        console.log('Audio playback waiting for gesture:', err);
+      });
     }
-    if (audioContext && audioContext.state === 'suspended') {
-      audioContext.resume();
-    }
-    return audioContext;
   }
 
-  function playMusicBoxTine(freq, duration = 1.2, volume = 0.22) {
-    const actx = getAudioContext();
-    if (!actx) return;
+  // Restore music if previously enabled
+  if (sessionStorage.getItem('birthday_bgm') === 'playing') {
+    const playAttempt = () => {
+      if (!isAudioPlaying) {
+        bgMusic.play().then(() => {
+          isAudioPlaying = true;
+          soundButton.setAttribute('aria-pressed', 'true');
+          soundButton.textContent = '♫ Đang phát nhạc ♡';
+        }).catch(() => {});
+      }
+      document.removeEventListener('click', playAttempt);
+      document.removeEventListener('touchstart', playAttempt);
+    };
+    document.addEventListener('click', playAttempt, { once: true });
+    document.addEventListener('touchstart', playAttempt, { once: true });
+  }
 
-    const t = actx.currentTime;
+  // Crystal Chime Sound Effects
+  let chimeContext = null;
+  function playChime(freq = 659.25, dur = 1.4) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!chimeContext) chimeContext = new AudioCtx();
+      if (chimeContext.state === 'suspended') chimeContext.resume();
 
-    // Fundamental chime tone
-    const osc1 = actx.createOscillator();
-    const gain1 = actx.createGain();
-    osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(freq, t);
+      const t = chimeContext.currentTime;
+      const osc = chimeContext.createOscillator();
+      const gain = chimeContext.createGain();
 
-    gain1.gain.setValueAtTime(0.0001, t);
-    gain1.gain.linearRampToValueAtTime(volume, t + 0.006);
-    gain1.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
 
-    osc1.connect(gain1);
-    gain1.connect(actx.destination);
-    osc1.start(t);
-    osc1.stop(t + duration);
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.linearRampToValueAtTime(0.22, t + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
 
-    // Overtone (2.0x octave harmonic for crystal music-box sheen)
-    const osc2 = actx.createOscillator();
-    const gain2 = actx.createGain();
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(freq * 2, t);
+      osc.connect(gain);
+      gain.connect(chimeContext.destination);
 
-    gain2.gain.setValueAtTime(0.0001, t);
-    gain2.gain.linearRampToValueAtTime(volume * 0.38, t + 0.004);
-    gain2.gain.exponentialRampToValueAtTime(0.0001, t + duration * 0.55);
-
-    osc2.connect(gain2);
-    gain2.connect(actx.destination);
-    osc2.start(t);
-    osc2.stop(t + duration * 0.55);
+      osc.start(t);
+      osc.stop(t + dur);
+    } catch (e) {}
   }
 
   function playChimeArpeggio(baseFreq = 587.33) {
-    playMusicBoxTine(baseFreq, 1.3, 0.24);
-    setTimeout(() => {
-      playMusicBoxTine(baseFreq * 1.5, 1.5, 0.18);
-    }, 70);
-  }
-
-  function playNextMelodyStep() {
-    if (!isMusicPlaying) return;
-
-    const step = HAPPY_BIRTHDAY_MELODY[currentNoteIndex];
-    playMusicBoxTine(step.freq, step.dur, 0.2);
-
-    currentNoteIndex = (currentNoteIndex + 1) % HAPPY_BIRTHDAY_MELODY.length;
-    musicTimer = setTimeout(playNextMelodyStep, step.delay * 1000);
-  }
-
-  function toggleMusic() {
-    isMusicPlaying = !isMusicPlaying;
-    soundButton.setAttribute('aria-pressed', String(isMusicPlaying));
-    soundButton.textContent = isMusicPlaying ? '♫ Đang phát nhạc...' : '♫ Nhạc sinh nhật';
-
-    if (isMusicPlaying) {
-      getAudioContext();
-      currentNoteIndex = 0;
-      clearTimeout(musicTimer);
-      playNextMelodyStep();
-    } else {
-      clearTimeout(musicTimer);
-    }
+    playChime(baseFreq, 1.2);
+    setTimeout(() => playChime(baseFreq * 1.5, 1.5), 80);
   }
 
   /* -------------------------------------------------------------
@@ -236,7 +190,6 @@
     'pearlWhite'
   ];
 
-  // Pre-cached sprite dictionary for buttery-smooth 60fps rendering
   const spriteCache = new Map();
 
   function getRoseSprite(paletteKey, variety, radius) {
@@ -250,7 +203,7 @@
       tiltX: (Math.random() - 0.5) * 0.4,
       tiltY: (Math.random() - 0.5) * 0.3,
       seed: Math.floor(Math.random() * 10000),
-      hasDewdrop: Math.random() < 0.4
+      hasDewdrop: Math.random() < 0.45
     });
 
     spriteCache.set(key, sprite);
@@ -267,16 +220,16 @@
   }
 
   /* -------------------------------------------------------------
-   * 4. GENERATING THE FLOWER GARDEN (3 DEPTH LAYERS)
+   * 4. GENERATING THE FULLSCREEN FLOWER GARDEN
    * ------------------------------------------------------------*/
   function initStars() {
     stars.length = 0;
-    const count = 48;
+    const count = 55;
     for (let i = 0; i < count; i++) {
       stars.push({
         x: (i * 97.31 + 17) % 1,
-        y: ((i * 43.19 + 7) % 1) * 0.65, // upper sky
-        radius: (i % 5 === 0) ? 1.8 : ((i % 2 === 0) ? 1.2 : 0.7),
+        y: ((i * 43.19 + 7) % 1) * 0.62, // upper night sky
+        radius: (i % 6 === 0) ? 2.0 : ((i % 2 === 0) ? 1.3 : 0.8),
         freq: 1.2 + (i % 7) * 0.4,
         phase: i * 1.7,
         cross: i % 8 === 0
@@ -284,14 +237,14 @@
     }
   }
 
-  function initFireflies(extraCount = 32) {
+  function initFireflies(extraCount = 36) {
     for (let i = 0; i < extraCount; i++) {
       fireflies.push({
         x: Math.random() * width,
-        y: height * (0.25 + Math.random() * 0.7),
-        vx: (Math.random() - 0.5) * 22,
-        vy: -10 - Math.random() * 25,
-        radius: 1.8 + Math.random() * 2.2,
+        y: height * (0.2 + Math.random() * 0.75),
+        vx: (Math.random() - 0.5) * 20,
+        vy: -8 - Math.random() * 22,
+        radius: 1.8 + Math.random() * 2.4,
         phase: Math.random() * TAU,
         pulseSpeed: 1.5 + Math.random() * 2.5,
         hue: Math.random() < 0.65 ? 'gold' : (Math.random() < 0.5 ? 'pink' : 'emerald'),
@@ -302,14 +255,14 @@
 
   function initFallingPetals() {
     fallingPetals.length = 0;
-    const count = 20;
+    const count = 22;
     for (let i = 0; i < count; i++) {
       fallingPetals.push({
         x: Math.random() * width,
         y: Math.random() * height,
         size: 3.5 + Math.random() * 4.5,
-        speedY: 20 + Math.random() * 30,
-        speedX: 10 + Math.random() * 22,
+        speedY: 20 + Math.random() * 28,
+        speedX: 10 + Math.random() * 20,
         flutterSpeed: 1.8 + Math.random() * 2.5,
         flutterPhase: Math.random() * TAU,
         rotation: Math.random() * TAU,
@@ -321,11 +274,11 @@
   function createGardenFlowers() {
     flowers.length = 0;
 
-    // Distribute 30-36 flowers across 3 depth rows
+    // Fullscreen scaling: distribute flowers smoothly across the entire width
     const rowCounts = [
-      Math.max(8, Math.min(14, Math.floor(width / 75))),  // Row 0: Background
-      Math.max(10, Math.min(16, Math.floor(width / 62))), // Row 1: Midground
-      Math.max(7, Math.min(12, Math.floor(width / 85)))   // Row 2: Foreground
+      Math.max(9, Math.min(16, Math.floor(width / 68))),  // Row 0: Distant background
+      Math.max(11, Math.min(18, Math.floor(width / 58))), // Row 1: Lush midground
+      Math.max(8, Math.min(14, Math.floor(width / 78)))   // Row 2: Prominent foreground
     ];
 
     let flowerGlobalIndex = 0;
@@ -338,36 +291,30 @@
         const paletteKey = PALETTE_KEYS[(i * 3 + row * 2) % PALETTE_KEYS.length];
         const variety = row === 2 ? (i % 2 === 0 ? 'peony' : 'classic') : 'garden';
 
-        // Staggered sizing and heights by depth
         let radius = 0;
         let yRatio = 0;
-        let stemLen = 0;
 
         if (row === 0) {
-          // Distant back layer
-          radius = 19 + Math.random() * 6;
-          yRatio = 0.44 + Math.random() * 0.12;
-          stemLen = height * (0.24 + Math.random() * 0.12);
+          // Row 0: Back horizon
+          radius = 20 + Math.random() * 6;
+          yRatio = 0.56 + Math.random() * 0.1;
         } else if (row === 1) {
-          // Midground lush layer
-          radius = 29 + Math.random() * 8;
-          yRatio = 0.56 + Math.random() * 0.12;
-          stemLen = height * (0.32 + Math.random() * 0.14);
+          // Row 1: Mid layer
+          radius = 30 + Math.random() * 8;
+          yRatio = 0.67 + Math.random() * 0.1;
         } else {
-          // Foreground hero layer
-          radius = 40 + Math.random() * 10;
-          yRatio = 0.68 + Math.random() * 0.12;
-          stemLen = height * (0.38 + Math.random() * 0.16);
+          // Row 2: Foreground (lush, prominent)
+          radius = 42 + Math.random() * 11;
+          yRatio = 0.78 + Math.random() * 0.1;
         }
 
         const x = (i + 0.5) * step + (Math.random() - 0.5) * step * 0.55;
         const y = height * yRatio;
+        const rootY = height + 10; // Rooted naturally at bottom of screen
 
         const noteObj = BIRTHDAY_NOTES[flowerGlobalIndex % BIRTHDAY_NOTES.length];
-
-        // Stagger bloom delay: ripples gracefully from center outward and from back to front
         const distFromCenter = Math.abs(x - width * 0.5) / (width * 0.5);
-        const bloomDelay = 0.15 + distFromCenter * 1.5 + (2 - row) * 0.35 + Math.random() * 0.35;
+        const bloomDelay = 0.15 + distFromCenter * 1.4 + (2 - row) * 0.35 + Math.random() * 0.35;
 
         let sprite = null;
         if (isBud) {
@@ -381,7 +328,7 @@
           row,
           x,
           y,
-          rootY: Math.min(height + 15, y + stemLen),
+          rootY,
           radius,
           paletteKey,
           variety,
@@ -389,7 +336,7 @@
           sprite,
           bend: (Math.random() - 0.5) * 55,
           phase: Math.random() * TAU,
-          swayAmp: 0.035 + (2 - row) * 0.02 + Math.random() * 0.025,
+          swayAmp: 0.035 + (2 - row) * 0.02 + Math.random() * 0.02,
           speed: 0.8 + Math.random() * 0.5,
           bloomDelay,
           bloomProgress: reducedMotion.matches ? 1 : 0,
@@ -404,16 +351,12 @@
       }
     });
 
-    // Sort by depth (row, then y) so closer flowers always draw on top
     flowers.sort((a, b) => a.row - b.row || a.y - b.y);
   }
 
   function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-
-    width = rect.width;
-    height = rect.height;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
     dpr = Math.min(window.devicePixelRatio || 1, 2.2);
 
     canvas.width = Math.round(width * dpr);
@@ -424,7 +367,7 @@
     initStars();
     initFallingPetals();
     fireflies.length = 0;
-    initFireflies(34);
+    initFireflies(36);
     createGardenFlowers();
 
     bloomStartTime = performance.now();
@@ -433,7 +376,7 @@
   /* -------------------------------------------------------------
    * 5. PARTICLES: SPARKLES & BURSTS ON TOUCH
    * ------------------------------------------------------------*/
-  function spawnFlowerSparkles(x, y, count = 16) {
+  function spawnFlowerSparkles(x, y, count = 18) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * TAU;
       const speed = 35 + Math.random() * 85;
@@ -442,7 +385,7 @@
         y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed - 20,
-        radius: 1.5 + Math.random() * 2.5,
+        radius: 1.5 + Math.random() * 2.8,
         color: Math.random() < 0.6 ? '#ffe4ae' : '#ffb8d4',
         alpha: 1,
         life: 0.8 + Math.random() * 0.5,
@@ -452,35 +395,34 @@
   }
 
   /* -------------------------------------------------------------
-   * 6. RENDERING: BACKGROUND, SKY, MOON, STARS, GRASS
+   * 6. RENDERING: FULLSCREEN SKY, MOON, STARS, GRASS
    * ------------------------------------------------------------*/
   function drawSkyAndMoon(time) {
-    // 1. Deep Fairytale Twilight Gradient
+    // 1. Deep Fairytale Twilight Gradient across full screen
     const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
-    skyGrad.addColorStop(0, '#110b17');
-    skyGrad.addColorStop(0.38, '#1e1126');
-    skyGrad.addColorStop(0.72, '#2f152d');
-    skyGrad.addColorStop(1, '#0f1a16');
+    skyGrad.addColorStop(0, '#0e0814');
+    skyGrad.addColorStop(0.35, '#1b0e22');
+    skyGrad.addColorStop(0.70, '#2d142b');
+    skyGrad.addColorStop(1, '#0e1814');
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, width, height);
 
     // 2. Cosmic Rose Aura in the center of the garden
     const galaxyGlow = ctx.createRadialGradient(
-      width * 0.5, height * 0.58, 20,
-      width * 0.5, height * 0.58, width * 0.65
+      width * 0.5, height * 0.55, 30,
+      width * 0.5, height * 0.55, width * 0.7
     );
-    galaxyGlow.addColorStop(0, 'rgba(214, 96, 158, 0.18)');
-    galaxyGlow.addColorStop(0.55, 'rgba(170, 70, 130, 0.08)');
+    galaxyGlow.addColorStop(0, 'rgba(214, 96, 158, 0.16)');
+    galaxyGlow.addColorStop(0.55, 'rgba(170, 70, 130, 0.06)');
     galaxyGlow.addColorStop(1, 'rgba(170, 70, 130, 0)');
     ctx.fillStyle = galaxyGlow;
     ctx.fillRect(0, 0, width, height);
 
     // 3. Gentle Crescent Moon with Glowing Halo
-    const moonX = width * 0.82;
-    const moonY = height * 0.16;
-    const moonR = Math.min(26, width * 0.045);
+    const moonX = width * 0.85;
+    const moonY = Math.max(70, height * 0.15);
+    const moonR = Math.min(26, width * 0.04);
 
-    // Moon outer glow
     const moonGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.5, moonX, moonY, moonR * 3.8);
     moonGlow.addColorStop(0, 'rgba(255, 238, 210, 0.28)');
     moonGlow.addColorStop(0.5, 'rgba(255, 220, 240, 0.08)');
@@ -490,7 +432,6 @@
     ctx.arc(moonX, moonY, moonR * 3.8, 0, TAU);
     ctx.fill();
 
-    // Crescent moon shape
     ctx.save();
     ctx.fillStyle = '#fff4e3';
     ctx.shadowColor = 'rgba(255, 245, 230, 0.8)';
@@ -499,7 +440,6 @@
     ctx.arc(moonX, moonY, moonR, 0, TAU);
     ctx.fill();
 
-    // Subtract inner circle to form crescent
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
     ctx.arc(moonX - moonR * 0.45, moonY - moonR * 0.25, moonR * 0.92, 0, TAU);
@@ -522,9 +462,8 @@
       ctx.arc(sx, sy, star.radius, 0, TAU);
       ctx.fill();
 
-      // Subtle 4-point cross shine on prominent stars
       if (star.cross && twinkle > 0.75) {
-        ctx.strokeStyle = 'rgba(255, 235, 245, ' + (twinkle * 0.5) + ')';
+        ctx.strokeStyle = `rgba(255, 235, 245, ${twinkle * 0.5})`;
         ctx.lineWidth = 0.8;
         ctx.beginPath();
         ctx.moveTo(sx - 4, sy); ctx.lineTo(sx + 4, sy);
@@ -536,14 +475,13 @@
   }
 
   function drawGardenGroundFoliage(time) {
-    // Elegant silhouettes of wild grass and ground foliage at the base
     ctx.save();
-    const bladeCount = Math.floor(width / 18);
+    const bladeCount = Math.floor(width / 15);
     const wind = Math.sin(time * 1.2) * 8;
 
     for (let i = 0; i <= bladeCount; i++) {
       const bx = (i / bladeCount) * width;
-      const bladeH = 28 + Math.sin(i * 1.7) * 14;
+      const bladeH = 34 + Math.sin(i * 1.7) * 16;
       const sway = Math.sin(time * 1.5 + i * 0.4) * 6 + wind * 0.4;
 
       ctx.beginPath();
@@ -552,8 +490,8 @@
       ctx.quadraticCurveTo(bx + sway * 0.3, height - bladeH * 0.4, bx + 3, height);
 
       const grassGrad = ctx.createLinearGradient(bx, height, bx, height - bladeH);
-      grassGrad.addColorStop(0, 'rgba(15, 28, 18, 0.92)');
-      grassGrad.addColorStop(0.7, 'rgba(38, 62, 36, 0.65)');
+      grassGrad.addColorStop(0, 'rgba(15, 28, 18, 0.95)');
+      grassGrad.addColorStop(0.7, 'rgba(38, 62, 36, 0.68)');
       grassGrad.addColorStop(1, 'rgba(68, 102, 64, 0.25)');
 
       ctx.fillStyle = grassGrad;
@@ -569,7 +507,6 @@
     const baseX = flower.x + flower.bend * 0.35;
     const rootY = flower.rootY;
 
-    // Control points for a graceful organic stem curve
     const c1x = flower.x - flower.bend * 0.2 + sway * 8;
     const c1y = rootY - (rootY - headY) * 0.45;
     const c2x = headX + sway * 4;
@@ -578,7 +515,6 @@
     ctx.save();
     ctx.globalAlpha = Math.min(1, 0.4 + p * 0.6);
 
-    // Stem stroke with gradient
     const stemGrad = ctx.createLinearGradient(baseX, rootY, headX, headY);
     stemGrad.addColorStop(0, '#243c26');
     stemGrad.addColorStop(0.5, '#4f724a');
@@ -593,7 +529,6 @@
     ctx.bezierCurveTo(c1x, c1y, c2x, c2y, headX, headY);
     ctx.stroke();
 
-    // Attached leaves moving naturally on the stem (at parametric t = 0.38 & t = 0.65)
     if (p > 0.2) {
       const leafTValues = [0.38, 0.65];
       leafTValues.forEach((t, idx) => {
@@ -619,7 +554,6 @@
   }
 
   function drawSingleFlower(flower, time, elapsed) {
-    // 1. Calculate blooming progress
     if (!reducedMotion.matches) {
       if (elapsed >= flower.bloomDelay) {
         const t = (elapsed - flower.bloomDelay) / 1.7;
@@ -635,12 +569,10 @@
 
     const p = easeOutBack(flower.bloomProgress);
 
-    // 2. Breeze and stem sway
     const wind = reducedMotion.matches
       ? 0
       : Math.sin(time * flower.speed + flower.phase + flower.x * 0.01) * flower.swayAmp;
 
-    // 3. Mouse hover proximity physics
     const dx = flower.x - pointerX;
     const dy = flower.y - pointerY;
     const dist = Math.hypot(dx, dy);
@@ -650,7 +582,6 @@
     const targetHover = isNearby ? clamp(1 - dist / hitRadius) : 0;
     flower.hover += (targetHover - flower.hover) * 0.15;
 
-    // Gentle repulsion when mouse is near
     const repulseDist = flower.radius * 0.22 * flower.hover;
     flower.offsetX += ((dx / (dist || 1)) * repulseDist - flower.offsetX) * 0.15;
     flower.offsetY += ((dy / (dist || 1)) * repulseDist - flower.offsetY) * 0.15;
@@ -658,10 +589,8 @@
     const headX = flower.x + wind * 35 + flower.offsetX;
     const headY = flower.y + flower.offsetY;
 
-    // 4. Draw stem & leaves
     drawStemAndLeaves(flower, wind, headX, headY, p);
 
-    // 5. Draw flower sprite
     ctx.save();
     ctx.translate(headX, headY);
     ctx.rotate(wind * 0.7 + (flower.offsetX * 0.02));
@@ -670,16 +599,14 @@
     const currentScale = p * hoverScale;
     ctx.scale(currentScale, currentScale);
 
-    // Subtle breathing pulsing
     const breath = 1 + Math.sin(time * 1.5 + flower.phase) * 0.012;
     ctx.scale(breath, breath);
 
-    // A. Soft luminous aura when hovered or selected
     if (flower.hover > 0.05 || flower.index === selectedFlowerIndex) {
       const glowAlpha = flower.index === selectedFlowerIndex ? 0.45 : flower.hover * 0.35;
       const aura = ctx.createRadialGradient(0, 0, flower.radius * 0.4, 0, 0, flower.radius * 1.9);
-      aura.addColorStop(0, 'rgba(255, 215, 235, ' + glowAlpha + ')');
-      aura.addColorStop(0.6, 'rgba(241, 165, 193, ' + (glowAlpha * 0.4) + ')');
+      aura.addColorStop(0, `rgba(255, 215, 235, ${glowAlpha})`);
+      aura.addColorStop(0.6, `rgba(241, 165, 193, ${glowAlpha * 0.4})`);
       aura.addColorStop(1, 'rgba(241, 165, 193, 0)');
 
       ctx.fillStyle = aura;
@@ -687,15 +614,13 @@
       ctx.arc(0, 0, flower.radius * 1.9, 0, TAU);
       ctx.fill();
 
-      // Delicate golden ring
       ctx.beginPath();
       ctx.arc(0, 0, flower.radius * 1.45, 0, TAU);
-      ctx.strokeStyle = 'rgba(255, 230, 245, ' + (glowAlpha * 1.5) + ')';
+      ctx.strokeStyle = `rgba(255, 230, 245, ${glowAlpha * 1.5})`;
       ctx.lineWidth = 1.2;
       ctx.stroke();
     }
 
-    // B. Draw bud or full rose layers
     if (flower.isBud) {
       const bud = flower.sprite;
       const size = bud.logicalSize * (flower.radius / bud.radius);
@@ -705,17 +630,13 @@
       const size = rose.logicalSize * (flower.radius / rose.radius);
       const half = size / 2;
 
-      // Base calyx & ambient drop shadow
       ctx.drawImage(rose.baseCanvas, -half, -half, size, size);
 
-      // Concentric petal whorls (unfurl progressively during bloom)
       if (p >= 0.99) {
-        // Fully bloomed: draw all layers crisp and fast
         for (let l = 0; l < rose.whorlCanvases.length; l++) {
           ctx.drawImage(rose.whorlCanvases[l], -half, -half, size, size);
         }
       } else {
-        // Dynamic unfolding rotation during opening
         const whorlDelays = [0, 0.12, 0.25, 0.38];
         const twistAngles = [0.4, -0.6, 0.8, -1.1];
 
@@ -743,11 +664,9 @@
     ctx.save();
 
     fireflies.forEach(f => {
-      // Gentle sinusoidal drifting
       f.x += f.vx * delta + Math.sin(time * 1.2 + f.phase) * 12 * delta;
       f.y += f.vy * delta + Math.cos(time * 0.9 + f.phase) * 10 * delta;
 
-      // Wrap around screen edges
       if (f.x < -30) f.x = width + 20;
       if (f.x > width + 30) f.x = -20;
       if (f.y < -30) {
@@ -756,7 +675,6 @@
       }
       if (f.y > height + 40) f.y = 0;
 
-      // Repulsion from pointer
       if (isPointerInside) {
         const dx = f.x - pointerX;
         const dy = f.y - pointerY;
@@ -767,11 +685,9 @@
         }
       }
 
-      // Smooth pulsing glow
       const pulse = reducedMotion.matches ? 0.75 : 0.35 + 0.65 * Math.pow(Math.sin(time * f.pulseSpeed + f.phase), 2);
       f.alpha = pulse;
 
-      // Draw glowing sphere
       const r = f.radius;
       const glow = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, r * 4.2);
 
@@ -794,7 +710,6 @@
       ctx.arc(f.x, f.y, r * 4.2, 0, TAU);
       ctx.fill();
 
-      // Sharp bright core
       ctx.fillStyle = `rgba(255, 255, 255, ${pulse * 0.95})`;
       ctx.beginPath();
       ctx.arc(f.x, f.y, r * 0.85, 0, TAU);
@@ -857,7 +772,7 @@
 
       s.x += s.vx * delta;
       s.y += s.vy * delta;
-      s.vy += 35 * delta; // gentle gravity
+      s.vy += 35 * delta;
       s.vx *= 0.98;
 
       const progress = s.age / s.life;
@@ -888,7 +803,7 @@
 
     ctx.clearRect(0, 0, width, height);
 
-    // 1. Sky, Moon, Stars
+    // 1. Fullscreen Sky, Moon, Stars
     drawSkyAndMoon(sceneTime);
 
     // 2. Flowers by depth row
@@ -914,37 +829,58 @@
   }
 
   /* -------------------------------------------------------------
-   * 10. INTERACTION: CLICK, TOUCH, HOVER & MODAL
+   * 10. FLOATING WISH BUBBLE (BAY LÊN TỪ BÔNG HOA, KHÔNG CHE GIỮA MÀN HÌNH)
    * ------------------------------------------------------------*/
-  function showNote(flower) {
+  function showFloatingWish(flower) {
     selectedFlowerIndex = flower.index;
-    messageBadge.textContent = flower.badge;
-    messageText.textContent = flower.note;
-    messageBox.hidden = false;
+    wishBadge.textContent = flower.badge;
+    wishText.textContent = flower.note;
 
-    // Harmonious musical chime
-    const baseFreqs = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
-    const pickedFreq = baseFreqs[flower.index % baseFreqs.length];
-    playChimeArpeggio(pickedFreq);
+    const flowerScreenX = flower.x + flower.offsetX;
+    const flowerScreenY = flower.y + flower.offsetY;
 
-    // Spawn celebratory sparkles
-    spawnFlowerSparkles(flower.x, flower.y - flower.radius * 0.4, 20);
+    // Width of card is around 320-340px
+    const cardWidth = Math.min(340, window.innerWidth - 32);
+    const halfW = cardWidth / 2;
+
+    // Clamp X so it stays comfortably inside screen margins
+    const clampedX = Math.max(halfW + 16, Math.min(window.innerWidth - halfW - 16, flowerScreenX));
+
+    // Dynamic caret position pointing right at flower
+    const caretOffset = ((flowerScreenX - (clampedX - halfW)) / cardWidth) * 100;
+    const caretClamped = Math.max(14, Math.min(86, caretOffset));
+    wishBubble.style.setProperty('--caret-left', `${caretClamped}%`);
+
+    // Target Y: slightly above the flower head
+    const targetY = flowerScreenY - flower.radius - 24;
+    // If flower is too high up, place bubble below flower
+    const finalY = (targetY < 180) ? (flowerScreenY + flower.radius + 36) : targetY;
+
+    wishBubble.style.left = `${clampedX}px`;
+    wishBubble.style.top = `${finalY}px`;
+
+    wishBubble.hidden = false;
+    wishBubble.classList.remove('animate-in');
+    void wishBubble.offsetWidth; // force reflow for smooth rise-up animation
+    wishBubble.classList.add('animate-in');
+
+    // Chime & Sparkles right from this flower
+    playChimeArpeggio(587.33);
+    spawnFlowerSparkles(flowerScreenX, flowerScreenY - flower.radius * 0.4, 25);
   }
 
-  function hideNote() {
-    messageBox.hidden = true;
+  function hideFloatingWish() {
+    wishBubble.hidden = true;
     selectedFlowerIndex = -1;
   }
 
   function handleCanvasClick(event) {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x = event.clientX;
+    const y = event.clientY;
 
     let closestFlower = null;
     let minDistance = Infinity;
 
-    // Prioritize foreground flowers first (reverse order)
     for (let i = flowers.length - 1; i >= 0; i--) {
       const f = flowers[i];
       if (f.bloomProgress <= 0.1) continue;
@@ -952,7 +888,7 @@
       const dx = x - (f.x + f.offsetX);
       const dy = y - (f.y + f.offsetY);
       const dist = Math.hypot(dx, dy);
-      const hitRadius = f.radius * 1.5 + 16;
+      const hitRadius = f.radius * 1.6 + 18;
 
       if (dist < hitRadius && dist < minDistance) {
         closestFlower = f;
@@ -961,14 +897,15 @@
     }
 
     if (closestFlower) {
-      showNote(closestFlower);
+      showFloatingWish(closestFlower);
+    } else {
+      hideFloatingWish();
     }
   }
 
   function handlePointerMove(event) {
-    const rect = canvas.getBoundingClientRect();
-    pointerX = event.clientX - rect.left;
-    pointerY = event.clientY - rect.top;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
     isPointerInside = true;
   }
 
@@ -983,16 +920,15 @@
     flowers.forEach(f => {
       f.bloomProgress = 0;
     });
-    hideNote();
+    hideFloatingWish();
     playChimeArpeggio(523.25);
   }
 
   function addMoreFireflies() {
     initFireflies(16);
-    playMusicBoxTine(880, 1.2, 0.2);
+    playChime(880, 1.2);
 
-    // Spawn gentle sparkles around the top of the canvas
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 14; i++) {
       spawnFlowerSparkles(Math.random() * width, height * (0.3 + Math.random() * 0.4), 3);
     }
   }
@@ -1004,15 +940,18 @@
   canvas.addEventListener('pointermove', handlePointerMove);
   canvas.addEventListener('pointerleave', handlePointerLeave);
 
-  closeButton.addEventListener('click', hideNote);
+  closeWishButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideFloatingWish();
+  });
+
   soundButton.addEventListener('click', toggleMusic);
   replayButton.addEventListener('click', replayBloom);
   firefliesButton.addEventListener('click', addMoreFireflies);
 
-  // Keyboard accessibility
   window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !messageBox.hidden) {
-      hideNote();
+    if (e.key === 'Escape' && !wishBubble.hidden) {
+      hideFloatingWish();
     }
   });
 
@@ -1021,19 +960,18 @@
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       cancelAnimationFrame(animationId);
-      if (isMusicPlaying) {
-        clearTimeout(musicTimer);
+      if (isAudioPlaying) {
+        bgMusic.pause();
       }
     } else {
       lastTime = performance.now();
       animationId = requestAnimationFrame(drawScene);
-      if (isMusicPlaying) {
-        playNextMelodyStep();
+      if (isAudioPlaying) {
+        bgMusic.play().catch(() => {});
       }
     }
   });
 
-  // Start initialization
   resizeCanvas();
   animationId = requestAnimationFrame(drawScene);
 })();

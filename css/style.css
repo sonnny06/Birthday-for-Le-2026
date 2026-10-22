@@ -290,78 +290,84 @@ body {
   }
 }
 
-/* ===== INTERACTIVE ROSE GARDEN ===== */
+/* ===== IMMERSIVE FULLSCREEN ROSE GARDEN ===== */
 
 .garden-page {
-  background: #160f1b;
-}
-
-.garden-scene {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  min-height: 100vh;
-  min-height: 100svh;
-  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
-  padding: 24px clamp(20px, 5vw, 64px) 20px;
-  background:
-    radial-gradient(
-      ellipse at 50% 55%,
-      rgba(103, 49, 88, 0.28),
-      transparent 65%
-    ),
-    linear-gradient(180deg, #160f1b, #24172b 65%, #111d1b);
+  position: relative;
+  background: #110b17;
+  color: #fff5f5;
+  font-family: 'DM Sans', sans-serif;
+  user-select: none;
 }
 
-.garden-glow {
-  position: absolute;
-  z-index: -1;
-  top: 25%;
-  left: 50%;
-  width: min(600px, 90vw);
-  aspect-ratio: 1;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: rgba(196, 104, 153, 0.08);
-  filter: blur(80px);
+#garden-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Glassmorphic UI Overlays Floating over the Garden */
+.garden-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px clamp(16px, 4vw, 42px) 24px;
 }
 
 .garden-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
+  pointer-events: none;
 }
 
 .garden-header-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  pointer-events: auto;
 }
 
 .garden-back-link,
 .garden-action-btn,
 .garden-sound-button {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
-  border: 1px solid rgba(255, 225, 235, 0.18);
+  border: 1px solid rgba(255, 225, 235, 0.22);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(22, 12, 25, 0.65);
   color: #fceaf1;
   font: inherit;
   font-size: 12px;
+  font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  user-select: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: auto;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
   transition: all 250ms ease;
 }
 
@@ -369,16 +375,16 @@ body {
 .garden-action-btn:hover,
 .garden-sound-button:hover,
 .garden-sound-button[aria-pressed="true"] {
-  border-color: rgba(241, 165, 193, 0.7);
-  background: rgba(241, 165, 193, 0.16);
-  box-shadow: 0 0 18px rgba(241, 165, 193, 0.28);
+  border-color: rgba(241, 165, 193, 0.75);
+  background: rgba(241, 165, 193, 0.22);
+  box-shadow: 0 0 20px rgba(241, 165, 193, 0.35);
   transform: translateY(-1px);
 }
 
 .garden-sound-button[aria-pressed="true"] {
   color: #ffe1eb;
   border-color: #f1a5c1;
-  background: rgba(241, 165, 193, 0.24);
+  background: rgba(241, 165, 193, 0.28);
 }
 
 .garden-action-btn:active,
@@ -386,179 +392,173 @@ body {
   transform: translateY(0);
 }
 
-.garden-intro {
-  z-index: 1;
-  margin: 24px auto 0;
+/* Floating Intro Header (Unobtrusive & Ethereal) */
+.garden-floating-intro {
+  margin: 10px auto 0;
   text-align: center;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }
 
 .garden-eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   color: #f1a5c1;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.28em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-.garden-intro h1 {
+.garden-floating-intro h1 {
   color: #fff5f5;
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(31px, 5vw, 49px);
+  font-size: clamp(26px, 4vw, 42px);
   font-weight: 500;
   line-height: 1.2;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.7), 0 0 25px rgba(241, 165, 193, 0.3);
 }
 
-.garden-intro h1 span {
+.garden-floating-intro h1 span {
   color: #f1a5c1;
   font-style: italic;
 }
 
-.garden-description {
-  max-width: 440px;
-  margin: 14px auto 8px;
-  color: #c8b3c5;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
 .garden-hint {
-  margin-top: 10px;
+  margin-top: 8px;
   color: #e7b5cd;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.04em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
 }
 
-.garden-visual {
-  position: relative;
-  width: 100%;
-  max-width: 1020px;
-  height: clamp(380px, 55vh, 540px);
-  min-height: 380px;
-  margin: 18px auto 0;
-  overflow: hidden;
-  border: 1px solid rgba(255, 225, 235, 0.15);
-  border-radius: 26px;
-  background: #140d1a;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(184, 51, 90, 0.12),
-    inset 0 0 20px rgba(255, 225, 235, 0.03);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-.garden-visual:hover {
-  border-color: rgba(255, 225, 235, 0.28);
-  box-shadow: 
-    0 24px 70px rgba(0, 0, 0, 0.5),
-    0 0 50px rgba(241, 165, 193, 0.22),
-    inset 0 0 30px rgba(255, 225, 235, 0.05);
-}
-
-#garden-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.garden-message {
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  width: min(390px, calc(100% - 32px));
-  padding: 30px 26px 26px;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(255, 225, 235, 0.45);
-  border-radius: 22px;
-  background: rgba(26, 14, 28, 0.95);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 30px rgba(241, 165, 193, 0.2);
-  text-align: center;
+/* Floating Wish Card (Bay lên từ bông hoa, KHÔNG chiếm giữa màn hình) */
+.floating-wish-bubble {
+  position: fixed;
+  z-index: 100;
+  width: min(340px, calc(100vw - 32px));
+  padding: 22px 24px 20px;
+  border-radius: 20px;
+  background: rgba(22, 11, 26, 0.94);
   backdrop-filter: blur(20px);
-  animation: modal-appear 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 235, 0.48);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(241, 165, 193, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-align: center;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes modal-appear {
-  from {
+.floating-wish-bubble[hidden] {
+  display: none !important;
+}
+
+.floating-wish-bubble.animate-in {
+  animation: wishRiseUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both, etherealBob 3.5s ease-in-out 0.6s infinite alternate;
+}
+
+@keyframes wishRiseUp {
+  0% {
     opacity: 0;
-    transform: translate(-50%, -46%) scale(0.92);
+    transform: translate(-50%, 25px) scale(0.92);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, 0) scale(1);
   }
 }
 
-.garden-message[hidden] {
-  display: none;
+@keyframes etherealBob {
+  0% { transform: translate(-50%, 0); }
+  100% { transform: translate(-50%, -6px); }
 }
 
-.garden-message-close {
+.floating-wish-bubble::after {
+  content: "";
   position: absolute;
-  top: 10px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
+  bottom: -8px;
+  left: var(--caret-left, 50%);
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: rgba(22, 11, 26, 0.96);
+  border-right: 1px solid rgba(255, 215, 235, 0.48);
+  border-bottom: 1px solid rgba(255, 215, 235, 0.48);
+}
+
+.wish-bubble-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
   border: 0;
   background: transparent;
   color: #fceaf1;
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.75;
   transition: opacity 0.2s, transform 0.2s;
 }
 
-.garden-message-close:hover {
+.wish-bubble-close:hover {
   opacity: 1;
   transform: scale(1.15);
 }
 
-.garden-message-label {
-  margin-bottom: 14px;
+.wish-bubble-badge {
+  margin-bottom: 10px;
   color: #f1a5c1;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
-.garden-message-text {
-  color: #fff5f5;
+.wish-bubble-text {
+  color: #ffffff;
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 17px;
-  line-height: 1.85;
+  font-size: 15.5px;
+  line-height: 1.8;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
-.garden-message-sub {
-  margin-top: 15px;
+.wish-bubble-sub {
+  margin-top: 10px;
   color: rgba(241, 165, 193, 0.7);
   font-size: 11px;
   font-style: italic;
   font-family: 'Playfair Display', Georgia, serif;
 }
 
+/* Bottom floating cake button */
 .garden-bottom-actions {
   text-align: center;
-  padding: 20px 0 14px;
-  z-index: 1;
+  pointer-events: none;
+  padding-bottom: 8px;
 }
 
 .garden-next-cake-btn {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 28px;
-  border: 1px solid rgba(255, 190, 220, 0.5);
+  padding: 13px 26px;
+  border: 1px solid rgba(255, 190, 220, 0.55);
   border-radius: 35px;
   color: #fff0f5;
-  background: rgba(255, 190, 220, 0.12);
+  background: rgba(26, 12, 28, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   text-decoration: none;
   font-family: 'DM Sans', Arial, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  box-shadow: 0 8px 30px rgba(184, 51, 90, 0.15);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(184, 51, 90, 0.25);
+  pointer-events: auto;
   transition: all 0.3s ease;
   animation: soft-float 3.5s ease-in-out infinite;
 }
@@ -569,61 +569,19 @@ body {
 }
 
 .garden-next-cake-btn:hover {
-  background: rgba(255, 190, 220, 0.24);
-  border-color: rgba(255, 210, 235, 0.8);
-  box-shadow: 0 10px 35px rgba(241, 165, 193, 0.35);
+  background: rgba(241, 165, 193, 0.28);
+  border-color: rgba(255, 215, 235, 0.85);
+  box-shadow: 0 10px 35px rgba(241, 165, 193, 0.45);
   transform: translateY(-2px);
 }
 
-.garden-footer {
-  margin-top: auto;
-  padding-top: 16px;
-  color: #d5b9ce;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 12px;
-  font-style: italic;
-  text-align: center;
-}
-
-.garden-footer-small {
-  margin-top: 7px;
-  color: rgba(200, 179, 197, 0.55);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-style: normal;
-  letter-spacing: 0.06em;
-}
-
 @media (max-width: 600px) {
-  .garden-scene {
-    padding: 18px 16px;
+  .garden-overlay {
+    padding: 16px 14px 20px;
   }
-
-  .garden-intro {
-    margin-top: 24px;
-  }
-
-  .garden-intro h1 {
-    font-size: clamp(28px, 8vw, 38px);
-  }
-
-  .garden-description {
-    max-width: 320px;
-    font-size: 12px;
-  }
-
-  .garden-visual {
-    height: 48vh;
-    min-height: 350px;
-    max-height: 460px;
-    margin-top: 16px;
-    border-radius: 20px;
-  }
-
   .garden-header-actions {
     gap: 6px;
   }
-
   .garden-back-link,
   .garden-action-btn,
   .garden-sound-button {
@@ -631,14 +589,20 @@ body {
     padding: 0 12px;
     font-size: 11px;
   }
-
-  .garden-footer {
-    padding-top: 14px;
+  .garden-floating-intro h1 {
+    font-size: 24px;
+  }
+  .floating-wish-bubble {
+    width: calc(100vw - 28px);
+    padding: 18px 20px 16px;
+  }
+  .wish-bubble-text {
+    font-size: 14.5px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .garden-message,
+  .floating-wish-bubble,
   .garden-next-cake-btn {
     animation: none;
   }

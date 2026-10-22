@@ -12,9 +12,19 @@
 </head>
 
 <body class="garden-page">
-  <main class="garden-scene">
-    <div class="garden-glow" aria-hidden="true"></div>
+  <!-- Immersive Fullscreen Garden Canvas -->
+  <canvas id="garden-canvas" aria-label="Khu vườn hoa hồng rực rỡ dưới bầu trời đêm"></canvas>
 
+  <!-- Floating Wish Bubble (Bay lên từ bông hoa khi chạm, không che giữa màn hình) -->
+  <div class="floating-wish-bubble" id="floating-wish" role="status" aria-live="polite" hidden>
+    <button class="wish-bubble-close" id="close-wish" type="button" aria-label="Đóng lời nhắn">×</button>
+    <p class="wish-bubble-badge" id="wish-badge"></p>
+    <p class="wish-bubble-text" id="wish-text"></p>
+    <p class="wish-bubble-sub">Chạm vào bông hoa khác để nhận thêm điều ước ♡</p>
+  </div>
+
+  <!-- Transparent Floating UI Overlay -->
+  <div class="garden-overlay">
     <header class="garden-header">
       <a class="garden-back-link" href="index.html">
         <span aria-hidden="true">←</span>
@@ -44,76 +54,23 @@
           type="button"
           aria-pressed="false"
         >
-          ♫ Nhạc sinh nhật
+          ♫ Nhạc nền
         </button>
       </div>
     </header>
 
-    <section class="garden-intro">
+    <section class="garden-floating-intro">
       <p class="garden-eyebrow">A MAGICAL BIRTHDAY GARDEN FOR YOU</p>
-
-      <h1>
-        Welcome to<br>
-        <span>Our Little Garden</span>
-      </h1>
-
-      <p class="garden-description">
-        Mỗi đóa hoa trong khu vườn đêm nay đều cất giữ một lời chúc dịu dàng nhất dành riêng cho ngày sinh nhật của cậu.
-      </p>
-
-      <p class="garden-hint">
-        ✧ Chạm vào từng bông hoa để lắng nghe những điều ước ngọt ngào nhé ✧
-      </p>
-    </section>
-
-    <section
-      class="garden-visual"
-      aria-label="Khu vườn hoa hồng tương tác"
-    >
-      <canvas
-        id="garden-canvas"
-        aria-label="Những bông hoa hồng rực rỡ trong khu vườn đêm"
-      ></canvas>
-
-      <div
-        class="garden-message"
-        id="garden-message"
-        role="status"
-        aria-live="polite"
-        hidden
-      >
-        <button
-          class="garden-message-close"
-          id="close-message"
-          type="button"
-          aria-label="Đóng lời nhắn"
-        >
-          ×
-        </button>
-
-        <p class="garden-message-label" id="message-badge">WISH FROM THE GARDEN</p>
-
-        <p class="garden-message-text" id="message-text"></p>
-        
-        <p class="garden-message-sub">Chạm vào những bông hoa khác để đón thêm điều ước ♡</p>
-      </div>
+      <h1>Our Little Garden <span>♡</span></h1>
+      <p class="garden-hint">✧ Chạm vào từng đóa hoa để điều ước bay lên nhé ✧</p>
     </section>
 
     <div class="garden-bottom-actions">
-      <a
-        class="garden-next-cake-btn"
-        href="cake.html"
-      >
+      <a class="garden-next-cake-btn" href="cake.html">
         🎂 Đến chiếc bánh sinh nhật ♡
       </a>
     </div>
-
-    <footer class="garden-footer">
-      <p>Take your time, there's no need to hurry ♡</p>
-      <p class="garden-footer-small">Grown with love, just for you.</p>
-    </footer>
-
-  </main>
+  </div>
 
   <script src="js/garden-botany.js"></script>
   <script src="js/garden.js"></script>
