@@ -501,9 +501,12 @@
   <canvas id="cake-canvas" aria-hidden="true"></canvas>
 
   <main class="cake-page">
-    <a class="back-link" href="garden.html">
-      <span aria-hidden="true">←</span> Trở về khu vườn
-    </a>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap;">
+      <a class="back-link" href="garden.html" style="margin-bottom: 0;">
+        <span aria-hidden="true">←</span> Trở về khu vườn
+      </a>
+      <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
+    </div>
 
     <p class="eyebrow">A LITTLE WISH FOR YOU</p>
 
@@ -881,20 +884,12 @@
       manualBtn.addEventListener('click', extinguishCandle);
       window.addEventListener('pagehide', stopMicrophone);
 
-      // Seamless background music continuation
-      if (sessionStorage.getItem('birthday_bgm') === 'playing') {
-        const bgMusic = new Audio('assets/bg-music.mp3');
-        bgMusic.loop = true;
-        const playBgm = () => {
-          bgMusic.play().catch(() => {});
-          document.removeEventListener('click', playBgm);
-          document.removeEventListener('touchstart', playBgm);
-        };
-        playBgm();
-        document.addEventListener('click', playBgm, { once: true });
-        document.addEventListener('touchstart', playBgm, { once: true });
-      }
+      document.addEventListener('page:before-exit', () => {
+        stopMicrophone();
+        window.removeEventListener('resize', resizeCanvas);
+      }, { once: true });
     })();
   </script>
+  <script src="js/seamless.js"></script>
 </body>
 </html>

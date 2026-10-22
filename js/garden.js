@@ -84,44 +84,10 @@
   /* -------------------------------------------------------------
    * 2. BACKGROUND MUSIC & CRYSTAL CHIME AUDIO
    * ------------------------------------------------------------*/
-  const bgMusic = new Audio('assets/bg-music.mp3');
-  bgMusic.loop = true;
-  let isAudioPlaying = false;
-
   function toggleMusic() {
-    if (isAudioPlaying) {
-      bgMusic.pause();
-      isAudioPlaying = false;
-      soundButton.setAttribute('aria-pressed', 'false');
-      soundButton.textContent = '♫ Bật nhạc';
-      sessionStorage.setItem('birthday_bgm', 'paused');
-    } else {
-      bgMusic.play().then(() => {
-        isAudioPlaying = true;
-        soundButton.setAttribute('aria-pressed', 'true');
-        soundButton.textContent = '♫ Đang phát nhạc ♡';
-        sessionStorage.setItem('birthday_bgm', 'playing');
-      }).catch(err => {
-        console.log('Audio playback waiting for gesture:', err);
-      });
+    if (window.toggleGlobalMusic) {
+      window.toggleGlobalMusic();
     }
-  }
-
-  // Restore music if previously enabled
-  if (sessionStorage.getItem('birthday_bgm') === 'playing') {
-    const playAttempt = () => {
-      if (!isAudioPlaying) {
-        bgMusic.play().then(() => {
-          isAudioPlaying = true;
-          soundButton.setAttribute('aria-pressed', 'true');
-          soundButton.textContent = '♫ Đang phát nhạc ♡';
-        }).catch(() => {});
-      }
-      document.removeEventListener('click', playAttempt);
-      document.removeEventListener('touchstart', playAttempt);
-    };
-    document.addEventListener('click', playAttempt, { once: true });
-    document.addEventListener('touchstart', playAttempt, { once: true });
   }
 
   // Crystal Chime Sound Effects
@@ -956,6 +922,11 @@
   });
 
   window.addEventListener('resize', resizeCanvas);
+
+  document.addEventListener('page:before-exit', () => {
+    cancelAnimationFrame(animationId);
+    window.removeEventListener('resize', resizeCanvas);
+  }, { once: true });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
