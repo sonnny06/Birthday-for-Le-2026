@@ -46,49 +46,66 @@
     </svg>
   </div>
 
+  <!-- Full-Screen Canvas for Twinkling Stars, Interleaved Fireworks & Blooming Flowers -->
   <canvas id="gift-canvas" aria-hidden="true"></canvas>
 
-  <div style="position: absolute; top: max(20px, env(safe-area-inset-top)); right: clamp(16px, 4vw, 42px); z-index: 100;">
+  <!-- Persistent Background Music Toggle -->
+  <div style="position: absolute; top: max(16px, env(safe-area-inset-top)); right: clamp(14px, 3.5vw, 36px); z-index: 100;">
     <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
   </div>
 
-  <header class="top-header">
+  <!-- Top Header (Compact & Elegant to ensure perfect screen fit) -->
+  <header class="top-header" id="top-header">
     <div class="eyebrow">✧ A VINTAGE FAIRYTALE SCRAPBOOK ✧</div>
-    <h1>Gửi cậu một <span>Món quà</span> ♡</h1>
-    <p class="subtitle">Một chiếc hộp nhỏ cất giữ những khoảnh khắc và lời chúc chân thành nhất dành riêng cho cậu.</p>
+    <h1 id="page-title">Gửi cậu một <span>Món quà</span> ♡</h1>
+    <p class="subtitle" id="page-subtitle">Một chiếc hộp nhỏ cất giữ những khoảnh khắc và lời chúc chân thành nhất dành riêng cho cậu.</p>
   </header>
 
-  <main class="scene">
-    <!-- Left Polaroid photos with paper scrapbook mounting corners -->
-    <div class="photos-column left">
-      <button class="polaroid" type="button" data-caption="Một chút bình yên ♡">
+  <!-- Main Fairytale Scene -->
+  <main class="scene" id="gift-scene">
+
+    <!-- Left Column: 3 Polaroid Photos (Hidden initially, appears after unboxing) -->
+    <aside class="photos-column left photos-hidden" id="photos-left" aria-label="Những bức ảnh kỉ niệm bên trái">
+      
+      <!-- Photo 1 -->
+      <button class="polaroid polaroid-item polaroid-1" type="button" data-caption="Một chút bình yên ♡">
         <span class="photo-corner tl" aria-hidden="true"></span>
         <span class="photo-corner tr" aria-hidden="true"></span>
         <span class="photo-corner bl" aria-hidden="true"></span>
         <span class="photo-corner br" aria-hidden="true"></span>
-        <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=600&q=85" alt="Ánh nắng bình minh">
+        <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=600&q=85" alt="Ánh nắng bình minh" loading="lazy">
         <span>Một chút bình yên ♡</span>
       </button>
 
-      <button class="polaroid" type="button" data-caption="Những ngày thật đẹp">
+      <!-- Photo 2 -->
+      <button class="polaroid polaroid-item polaroid-2" type="button" data-caption="Những ngày thật đẹp">
         <span class="photo-corner tl" aria-hidden="true"></span>
         <span class="photo-corner tr" aria-hidden="true"></span>
         <span class="photo-corner bl" aria-hidden="true"></span>
         <span class="photo-corner br" aria-hidden="true"></span>
-        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=85" alt="Hồ nước giữa núi">
+        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=85" alt="Hồ nước giữa núi" loading="lazy">
         <span>Những ngày thật đẹp</span>
       </button>
-    </div>
 
-    <!-- Center 3D Papercraft Gift Box & Interactive TikTok Unboxing Theater -->
+      <!-- Photo 3 -->
+      <button class="polaroid polaroid-item polaroid-3" type="button" data-caption="Nụ cười rạng rỡ ♡">
+        <span class="photo-corner tl" aria-hidden="true"></span>
+        <span class="photo-corner tr" aria-hidden="true"></span>
+        <span class="photo-corner bl" aria-hidden="true"></span>
+        <span class="photo-corner br" aria-hidden="true"></span>
+        <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=85" alt="Hoa cỏ ngập tràn nắng" loading="lazy">
+        <span>Nụ cười rạng rỡ ♡</span>
+      </button>
+
+    </aside>
+
+    <!-- Center Stage: Gift Box initially, transitions to Cute Sealed Envelope -->
     <section class="center-stage" id="gift-section">
       <!-- Ambient Golden Halo -->
       <div class="box-celestial-halo" id="box-halo"></div>
 
-      <!-- Gift Box Theater Wrapper -->
+      <!-- 1. The Interactive 3D Papercraft Gift Box (Visible on Start) -->
       <div class="gift-box-theater" id="gift-theater">
-        
-        <!-- The Interactive 3D Gift Box -->
         <div class="gift-box-wrapper state-idle" id="gift-box" role="button" aria-label="Chạm để mở hộp quà" tabindex="0">
           
           <!-- Pulsating Warm Amber Inner Seam Glow -->
@@ -106,45 +123,9 @@
             <div class="wax-seal">♡</div>
           </div>
 
-          <!-- Box Base Interior (Dark velvet where letter sits hidden) -->
+          <!-- Box Interior (Dark velvet base) -->
           <div class="box-interior">
             <div class="interior-glow"></div>
-          </div>
-
-          <!-- Rising & 3D Unfolding Origami Letter -->
-          <div class="origami-letter-assembly" id="origami-letter">
-            <div class="letter-radiance-rays"></div>
-
-            <div class="letter-unfold-wrapper" id="letter-unfold-wrapper">
-              <article class="letter-card" id="letter" aria-live="polite">
-                <div class="letter-stamp-badge">
-                  <span>💌</span>
-                  <span>SPECIAL DELIVERY FOR YOU</span>
-                </div>
-                <div class="letter-decor">✧　♡　✧</div>
-                <h2>Chúc mừng sinh nhật cậu!</h2>
-                <p>
-                  Hôm nay là một ngày thật đặc biệt, vì thế giới đã có thêm một người vô cùng đáng quý và dịu dàng.
-                </p>
-                <p>
-                  Mong tuổi mới sẽ thật bao dung và êm đềm với cậu, mang đến thật nhiều niềm vui, những cơ hội mới và những điều khiến cậu luôn mỉm cười mỗi sớm mai thức dậy.
-                </p>
-                <p>
-                  Dù hành trình phía trước có ra sao, mong cậu hãy luôn tin vào chính mình và nhớ rằng cậu luôn xứng đáng với những điều ngọt ngào nhất trần đời.
-                </p>
-                <p class="letter-signature">
-                  Chúc cậu một tuổi mới thật an yên và hạnh phúc ♡
-                </p>
-                <div class="letter-decor" style="margin-top: 18px;">Happy Birthday to You ✧</div>
-
-                <!-- Interactive Celebration Button inside revealed letter -->
-                <div class="letter-actions">
-                  <button class="celebrate-btn" id="replay-confetti-btn" type="button">
-                    ✨ Tung pháo hoa chúc mừng
-                  </button>
-                </div>
-              </article>
-            </div>
           </div>
 
           <!-- Front Craft Paper Wall of Box Base -->
@@ -155,33 +136,71 @@
         </div>
       </div>
 
+      <!-- 2. The Adorable Sealed Envelope (Hidden on Start, Appears after Gift Box Opens) -->
+      <div class="sealed-envelope-container envelope-hidden" id="envelope-container">
+        <div class="sealed-envelope" id="sealed-envelope" role="button" aria-label="Chạm để mở bức thư bí mật" tabindex="0">
+          <div class="envelope-glow"></div>
+          <div class="envelope-body">
+            <div class="envelope-crease left"></div>
+            <div class="envelope-crease right"></div>
+            <div class="envelope-bottom-flap"></div>
+            <div class="envelope-letter-peek"></div>
+            <div class="envelope-top-flap" id="envelope-flap"></div>
+            <div class="envelope-seal" id="envelope-seal">
+              <span class="seal-icon">♡</span>
+            </div>
+            <div class="envelope-tag">
+              <span>💌</span>
+              <span>For You</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Status Hint -->
       <p class="hint-label" id="gift-hint">
         ✧ Chạm vào hộp quà để mở điều bất ngờ ♡ ✧
       </p>
     </section>
 
-    <!-- Right Polaroid photos with paper scrapbook corners -->
-    <div class="photos-column right">
-      <button class="polaroid" type="button" data-caption="Một góc nhỏ đáng nhớ">
+    <!-- Right Column: 3 Polaroid Photos (Hidden initially, appears after unboxing) -->
+    <aside class="photos-column right photos-hidden" id="photos-right" aria-label="Những bức ảnh kỉ niệm bên phải">
+      
+      <!-- Photo 4 -->
+      <button class="polaroid polaroid-item polaroid-4" type="button" data-caption="Một góc nhỏ đáng nhớ">
         <span class="photo-corner tl" aria-hidden="true"></span>
         <span class="photo-corner tr" aria-hidden="true"></span>
         <span class="photo-corner bl" aria-hidden="true"></span>
         <span class="photo-corner br" aria-hidden="true"></span>
-        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=85" alt="Phong cảnh thiên nhiên">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=85" alt="Phong cảnh bình yên" loading="lazy">
         <span>Một góc nhỏ đáng nhớ</span>
       </button>
 
-      <button class="polaroid" type="button" data-caption="Cứ luôn tỏa sáng nhé">
+      <!-- Photo 5 -->
+      <button class="polaroid polaroid-item polaroid-5" type="button" data-caption="Cứ luôn tỏa sáng nhé">
         <span class="photo-corner tl" aria-hidden="true"></span>
         <span class="photo-corner tr" aria-hidden="true"></span>
         <span class="photo-corner bl" aria-hidden="true"></span>
         <span class="photo-corner br" aria-hidden="true"></span>
-        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=85" alt="Những bông hoa">
+        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=85" alt="Những bông hoa ngập sắc" loading="lazy">
         <span>Cứ luôn tỏa sáng nhé</span>
       </button>
-    </div>
+
+      <!-- Photo 6 -->
+      <button class="polaroid polaroid-item polaroid-6" type="button" data-caption="Tuổi mới ngập tràn yêu thương">
+        <span class="photo-corner tl" aria-hidden="true"></span>
+        <span class="photo-corner tr" aria-hidden="true"></span>
+        <span class="photo-corner bl" aria-hidden="true"></span>
+        <span class="photo-corner br" aria-hidden="true"></span>
+        <img src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=600&q=85" alt="Khu rừng ấm áp" loading="lazy">
+        <span>Tuổi mới ngập tràn yêu thương</span>
+      </button>
+
+    </aside>
+
   </main>
 
+  <!-- Bottom Navigation Buttons -->
   <div class="back-action-container">
     <a class="nav-pill-btn" href="cake.html">
       <span aria-hidden="true">←</span> Quay lại chiếc bánh sinh nhật
@@ -191,7 +210,50 @@
     </a>
   </div>
 
-  <!-- Museum Mat Paper Lightbox Viewer for Polaroid -->
+  <!-- The Heartfelt Vintage Parchment Letter Modal (Opens when Envelope is clicked) -->
+  <div class="letter-modal-backdrop" id="letter-modal" role="dialog" aria-modal="true" aria-labelledby="letter-title">
+    <div class="letter-modal-content">
+      <button class="close-letter-btn" id="close-letter-btn" aria-label="Gấp thư lại" type="button">×</button>
+      
+      <article class="letter-card" id="letter" aria-live="polite">
+        <div class="letter-stamp-badge">
+          <span>💌</span>
+          <span>SPECIAL DELIVERY FOR YOU</span>
+        </div>
+        <div class="letter-decor">✧　♡　✧</div>
+        <h2 id="letter-title">Chúc mừng sinh nhật cậu!</h2>
+        
+        <div class="letter-body-text">
+          <p>
+            Hôm nay là một ngày thật đặc biệt, vì thế giới đã có thêm một người vô cùng đáng quý và dịu dàng.
+          </p>
+          <p>
+            Mong tuổi mới sẽ thật bao dung và êm đềm với cậu, mang đến thật nhiều niềm vui, những cơ hội mới và những điều khiến cậu luôn mỉm cười mỗi sớm mai thức dậy.
+          </p>
+          <p>
+            Dù hành trình phía trước có ra sao, mong cậu hãy luôn tin vào chính mình và nhớ rằng cậu luôn xứng đáng với những điều ngọt ngào nhất trần đời.
+          </p>
+        </div>
+
+        <p class="letter-signature">
+          Chúc cậu một tuổi mới thật an yên và hạnh phúc ♡
+        </p>
+        <div class="letter-decor" style="margin-top: 14px;">Happy Birthday to You ✧</div>
+
+        <!-- Interactive Celebration Actions inside Letter -->
+        <div class="letter-actions">
+          <button class="celebrate-btn" id="replay-confetti-btn" type="button">
+            ✨ Bắn pháo hoa & rải hoa
+          </button>
+          <button class="fold-letter-btn" id="fold-letter-btn" type="button">
+            💌 Gấp thư lại
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Scrapbook Polaroid Lightbox Viewer -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Xem ảnh Polaroid">
     <button class="close-lightbox" id="close-lightbox" aria-label="Đóng ảnh" type="button">×</button>
     <img id="large-image" src="" alt="">
@@ -201,25 +263,38 @@
     (() => {
       'use strict';
 
+      /* DOM Elements */
       const giftSection = document.getElementById('gift-section');
+      const giftTheater = document.getElementById('gift-theater');
       const giftBox = document.getElementById('gift-box');
+      const envelopeContainer = document.getElementById('envelope-container');
+      const sealedEnvelope = document.getElementById('sealed-envelope');
       const hint = document.getElementById('gift-hint');
+      const photosLeft = document.getElementById('photos-left');
+      const photosRight = document.getElementById('photos-right');
+      const letterModal = document.getElementById('letter-modal');
+      const closeLetterBtn = document.getElementById('close-letter-btn');
+      const foldLetterBtn = document.getElementById('fold-letter-btn');
+      const replayBtn = document.getElementById('replay-confetti-btn');
       const canvas = document.getElementById('gift-canvas');
       const lightbox = document.getElementById('lightbox');
       const largeImage = document.getElementById('large-image');
-      const celebrateBtn = document.getElementById('replay-confetti-btn');
 
       /* -------------------------------------------------------------
-       * 1. BACKGROUND STARS & VIRAL TIKTOK BURST PARTICLE FOUNTAIN
+       * 1. DUAL PARTICLE ENGINE: INTERLEAVED FIREWORKS & BLOOMING FLOWERS
        * ------------------------------------------------------------*/
-      let bCtx = null;
+      let ctx = null;
       let width = 0, height = 0;
-      let giftAnimId = null;
+      let animId = null;
+
       const stars = [];
-      const burstParticles = [];
+      const fireworkSparks = [];
+      const fireworkRockets = [];
+      const flowerBlossoms = [];
+      const fallingPetals = [];
 
       if (canvas) {
-        bCtx = canvas.getContext('2d');
+        ctx = canvas.getContext('2d');
         function resize() {
           width = canvas.width = window.innerWidth;
           height = canvas.height = window.innerHeight;
@@ -227,6 +302,7 @@
         window.addEventListener('resize', resize);
         resize();
 
+        // 45 ambient twinkling stars
         for (let i = 0; i < 45; i++) {
           stars.push({
             x: Math.random() * width,
@@ -237,128 +313,336 @@
           });
         }
 
-        let lastT = 0;
-        function renderCanvas(t) {
-          const delta = Math.min((t - lastT) / 1000, 0.05);
-          lastT = t;
-          const time = t / 1000;
+        let lastTime = performance.now();
+        function loop(now) {
+          const delta = Math.min((now - lastTime) / 1000, 0.05);
+          lastTime = now;
+          const time = now / 1000;
 
-          bCtx.clearRect(0, 0, width, height);
+          ctx.clearRect(0, 0, width, height);
 
-          // Stars
+          // 1. Render ambient stars
           stars.forEach(s => {
             const alpha = 0.25 + 0.75 * Math.pow(Math.sin(time * s.speed + s.phase), 2);
-            bCtx.fillStyle = `rgba(255, 244, 210, ${alpha})`;
-            bCtx.beginPath();
-            bCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            bCtx.fill();
+            ctx.fillStyle = `rgba(255, 244, 210, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
           });
 
-          // Burst Particles (Stars, Origami Hearts & Fluttering Paper Confetti)
-          for (let i = burstParticles.length - 1; i >= 0; i--) {
-            const p = burstParticles[i];
+          // 2. Render and update Firework Rockets
+          for (let i = fireworkRockets.length - 1; i >= 0; i--) {
+            const r = fireworkRockets[i];
+            r.x += r.vx * delta;
+            r.y += r.vy * delta;
+            r.vy += 30 * delta; // slight deceleration
+            r.trailTimer += delta;
+
+            // Rocket spark trail
+            if (r.trailTimer > 0.02) {
+              r.trailTimer = 0;
+              fireworkSparks.push({
+                x: r.x + (Math.random() - 0.5) * 4,
+                y: r.y,
+                vx: (Math.random() - 0.5) * 25,
+                vy: Math.random() * 30,
+                color: r.color,
+                size: 2,
+                age: 0,
+                life: 0.35,
+                drag: 0.96,
+                gravity: 20
+              });
+            }
+
+            // Rocket glowing head
+            ctx.save();
+            ctx.fillStyle = '#fff9e6';
+            ctx.shadowColor = r.color;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(r.x, r.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // Explode at apex
+            if (r.y <= r.targetY || r.vy >= -40) {
+              r.onExplode(r.x, r.y);
+              fireworkRockets.splice(i, 1);
+            }
+          }
+
+          // 3. Render and update Firework Sparks
+          for (let i = fireworkSparks.length - 1; i >= 0; i--) {
+            const p = fireworkSparks[i];
             p.age += delta;
             if (p.age >= p.life) {
-              burstParticles.splice(i, 1);
+              fireworkSparks.splice(i, 1);
               continue;
             }
 
             p.x += p.vx * delta;
             p.y += p.vy * delta;
             p.vy += p.gravity * delta;
-            p.vx *= 0.985;
-            p.rotation += p.rotSpeed * delta;
+            p.vx *= p.drag;
+            p.vy *= p.drag;
 
             const progress = p.age / p.life;
-            const alpha = 1 - Math.pow(progress, 2);
+            const alpha = Math.max(0, 1 - progress);
+            const flicker = 0.7 + 0.3 * Math.sin(p.age * 25);
 
-            bCtx.save();
-            bCtx.globalAlpha = alpha;
-            bCtx.translate(p.x, p.y);
-            bCtx.rotate(p.rotation);
+            ctx.save();
+            ctx.globalAlpha = alpha * flicker;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
 
-            if (p.type === 'heart') {
-              // Draw Origami Paper Heart
-              bCtx.fillStyle = p.color;
-              bCtx.scale(p.size / 10, p.size / 10);
-              bCtx.beginPath();
-              bCtx.moveTo(0, 3);
-              bCtx.bezierCurveTo(-5, -3, -10, 2, 0, 10);
-              bCtx.bezierCurveTo(10, 2, 5, -3, 0, 3);
-              bCtx.fill();
-
-            } else if (p.type === 'confetti') {
-              // Fluttering Paper Confetti Strip
-              const flip = Math.cos(time * p.flutterSpeed + p.phase);
-              bCtx.scale(flip, 1);
-              bCtx.fillStyle = p.color;
-              bCtx.fillRect(-p.size, -p.size * 0.5, p.size * 2, p.size);
-
-            } else {
-              // Golden Sparkle Star
-              const glow = bCtx.createRadialGradient(0, 0, 0, 0, 0, p.size * 2);
-              glow.addColorStop(0, p.color);
-              glow.addColorStop(0.5, 'rgba(255, 216, 117, 0.4)');
-              glow.addColorStop(1, 'rgba(255, 216, 117, 0)');
-              bCtx.fillStyle = glow;
-              bCtx.beginPath();
-              bCtx.arc(0, 0, p.size * 2, 0, Math.PI * 2);
-              bCtx.fill();
+            // Shimmer cross glint for larger sparks
+            if (p.size > 2.5 && alpha > 0.4) {
+              ctx.strokeStyle = p.color;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(p.x - p.size * 2, p.y);
+              ctx.lineTo(p.x + p.size * 2, p.y);
+              ctx.moveTo(p.x, p.y - p.size * 2);
+              ctx.lineTo(p.x, p.y + p.size * 2);
+              ctx.stroke();
             }
-
-            bCtx.restore();
+            ctx.restore();
           }
 
-          giftAnimId = requestAnimationFrame(renderCanvas);
+          // 4. Render and update 3D Blooming 5-Petal Flowers
+          for (let i = flowerBlossoms.length - 1; i >= 0; i--) {
+            const f = flowerBlossoms[i];
+            f.age += delta;
+            if (f.age >= f.life) {
+              flowerBlossoms.splice(i, 1);
+              continue;
+            }
+
+            f.x += f.vx * delta;
+            f.y += f.vy * delta;
+            f.vy += f.gravity * delta;
+            f.vx *= 0.985;
+            f.rotation += f.rotSpeed * delta;
+
+            const progress = f.age / f.life;
+            const alpha = progress < 0.85 ? 1 : (1 - progress) / 0.15;
+
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, alpha);
+            ctx.translate(f.x, f.y);
+            ctx.rotate(f.rotation);
+
+            // 3D flipping in perspective
+            const flip = Math.cos(time * f.flutterSpeed + f.phase);
+            ctx.scale(flip, 1);
+
+            // Draw beautiful vector 5-petal flower blossom
+            const rPetal = f.size * 0.45;
+            const dCenter = f.size * 0.48;
+            ctx.fillStyle = f.color;
+            for (let k = 0; k < 5; k++) {
+              const a = (k * 2 * Math.PI) / 5;
+              ctx.beginPath();
+              ctx.arc(Math.cos(a) * dCenter, Math.sin(a) * dCenter, rPetal, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Center golden pollen stamens
+            ctx.fillStyle = '#fff0a8';
+            ctx.beginPath();
+            ctx.arc(0, 0, f.size * 0.28, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#e69830';
+            ctx.beginPath();
+            ctx.arc(0, 0, f.size * 0.12, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+          }
+
+          // 5. Render and update Falling Flower Petals
+          for (let i = fallingPetals.length - 1; i >= 0; i--) {
+            const pet = fallingPetals[i];
+            pet.age += delta;
+            if (pet.age >= pet.life || pet.y > height + 40) {
+              fallingPetals.splice(i, 1);
+              continue;
+            }
+
+            const wind = Math.sin(time * 2.2 + pet.phase) * 35;
+            pet.x += (pet.vx + wind) * delta;
+            pet.y += pet.vy * delta;
+            pet.rotation += pet.rotSpeed * delta;
+
+            const progress = pet.age / pet.life;
+            const alpha = progress < 0.85 ? 1 : (1 - progress) / 0.15;
+
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, alpha);
+            ctx.translate(pet.x, pet.y);
+            ctx.rotate(pet.rotation);
+            ctx.scale(Math.cos(time * pet.flutterSpeed + pet.phase), 1);
+
+            // Draw curved organic petal
+            ctx.fillStyle = pet.color;
+            ctx.beginPath();
+            ctx.moveTo(0, -pet.size);
+            ctx.bezierCurveTo(pet.size * 0.8, -pet.size * 0.5, pet.size * 0.8, pet.size * 0.6, 0, pet.size);
+            ctx.bezierCurveTo(-pet.size * 0.8, pet.size * 0.6, -pet.size * 0.8, -pet.size * 0.5, 0, -pet.size);
+            ctx.fill();
+
+            ctx.restore();
+          }
+
+          animId = requestAnimationFrame(loop);
         }
-        giftAnimId = requestAnimationFrame(renderCanvas);
+        animId = requestAnimationFrame(loop);
       }
 
-      function spawnTikTokGiftBurst() {
-        const rect = giftBox.getBoundingClientRect();
-        const originX = rect.left + rect.width / 2;
-        const originY = rect.top + rect.height * 0.35;
-
-        const colors = [
-          '#ffd875', '#fff4b8', '#f2c7ce', '#dca2ae', '#b86b7e',
-          '#ffffff', '#ffaa42', '#fceedf', '#e64574'
-        ];
-
-        // Spawn 90 high-energy confetti, stars & origami hearts
-        for (let i = 0; i < 90; i++) {
-          const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.2; // upward fan
-          const speed = 120 + Math.random() * 320;
-          const types = ['heart', 'confetti', 'star'];
-          const type = types[Math.floor(Math.random() * types.length)];
-
-          burstParticles.push({
-            type,
-            x: originX + (Math.random() - 0.5) * 40,
+      /* Firework Spark Generator */
+      function spawnFireworkBurst(originX, originY, sparkColors, count = 55) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 70 + Math.random() * 220;
+          fireworkSparks.push({
+            x: originX,
             y: originY,
             vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 50,
-            gravity: 120 + Math.random() * 80,
-            size: type === 'heart' ? (8 + Math.random() * 6) : (type === 'confetti' ? (5 + Math.random() * 5) : (3 + Math.random() * 3)),
-            color: colors[Math.floor(Math.random() * colors.length)],
-            rotation: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 8,
-            flutterSpeed: 4 + Math.random() * 8,
-            phase: Math.random() * Math.PI * 2,
+            vy: Math.sin(angle) * speed,
+            color: sparkColors[Math.floor(Math.random() * sparkColors.length)],
+            size: 1.8 + Math.random() * 2.2,
             age: 0,
-            life: 1.6 + Math.random() * 1.2
+            life: 1.2 + Math.random() * 0.9,
+            drag: 0.972,
+            gravity: 65 + Math.random() * 45
           });
         }
       }
 
+      /* Flower Blossom Generator */
+      function spawnFlowerBurst(originX, originY, count = 35) {
+        const flowerColors = [
+          '#ff9cb2', '#fca5b9', '#f87294', '#ffd1dc', '#ffe2d4',
+          '#ffb7b2', '#ff8499', '#fbe0e6', '#f3b0c3'
+        ];
+
+        for (let i = 0; i < count; i++) {
+          const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.6; // upward bloom fan
+          const speed = 90 + Math.random() * 260;
+          flowerBlossoms.push({
+            x: originX + (Math.random() - 0.5) * 30,
+            y: originY + (Math.random() - 0.5) * 20,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 40,
+            gravity: 75 + Math.random() * 65,
+            size: 12 + Math.random() * 8,
+            color: flowerColors[Math.floor(Math.random() * flowerColors.length)],
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 6,
+            flutterSpeed: 3 + Math.random() * 6,
+            phase: Math.random() * Math.PI * 2,
+            age: 0,
+            life: 2.8 + Math.random() * 1.5
+          });
+        }
+      }
+
+      /* Cascading Petal Shower across Entire Screen */
+      function spawnScreenPetalShower(count = 45) {
+        const petalColors = [
+          '#ffb8c6', '#fec5bb', '#ffd1dc', '#fcd5ce', '#f8ad9d', '#ffe5ec'
+        ];
+
+        for (let i = 0; i < count; i++) {
+          fallingPetals.push({
+            x: Math.random() * width,
+            y: -20 - Math.random() * 120,
+            vx: (Math.random() - 0.5) * 20,
+            vy: 45 + Math.random() * 65,
+            size: 6 + Math.random() * 6,
+            color: petalColors[Math.floor(Math.random() * petalColors.length)],
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 3,
+            flutterSpeed: 2 + Math.random() * 4,
+            phase: Math.random() * Math.PI * 2,
+            age: 0,
+            life: 6.5 + Math.random() * 3.5
+          });
+        }
+      }
+
+      /* Launch a Rising Firework Rocket */
+      function launchRocket(startX, startY, targetY, colors, extraFlowers = true) {
+        fireworkRockets.push({
+          x: startX,
+          y: startY,
+          vx: (Math.random() - 0.5) * 35,
+          vy: - (320 + Math.random() * 120),
+          targetY: targetY,
+          color: colors[0],
+          trailTimer: 0,
+          onExplode: (exX, exY) => {
+            spawnFireworkBurst(exX, exY, colors, 60);
+            if (extraFlowers) {
+              spawnFlowerBurst(exX, exY, 24);
+            }
+            playChime(659.25 + Math.random() * 300, 1.4);
+          }
+        });
+      }
+
+      /* Grand Interleaved Fireworks & Blooming Flowers Cascade */
+      function triggerInterleavedCelebration() {
+        const rect = giftBox.getBoundingClientRect();
+        const originX = rect.left + rect.width / 2;
+        const originY = rect.top + rect.height * 0.4;
+
+        const goldPalette = ['#ffd875', '#fff4b8', '#ffaa42', '#ffffff'];
+        const rosePalette = ['#ff7b90', '#f2c7ce', '#e64574', '#ffd875'];
+        const peachPalette = ['#ffb088', '#ffd1dc', '#fff4b8', '#f87294'];
+
+        // Wave 0 (Immediate): Massive Center Explosion of Sparks + 5-Petal Blossoms
+        spawnFireworkBurst(originX, originY, goldPalette.concat(rosePalette), 75);
+        spawnFlowerBurst(originX, originY, 45);
+        spawnScreenPetalShower(35);
+
+        // Wave 1 (+320ms): Firework Rocket on the Left exploding into Golden & Ruby stars + flowers
+        setTimeout(() => {
+          launchRocket(width * 0.25, height, height * 0.28, rosePalette, true);
+        }, 320);
+
+        // Wave 2 (+680ms): Firework Rocket on the Right exploding into Champagne & Peach stars + flowers
+        setTimeout(() => {
+          launchRocket(width * 0.75, height, height * 0.24, peachPalette, true);
+          spawnScreenPetalShower(30);
+        }, 680);
+
+        // Wave 3 (+1150ms): Center Overhead Double Firework Rocket
+        setTimeout(() => {
+          launchRocket(width * 0.45, height, height * 0.18, goldPalette, true);
+          launchRocket(width * 0.55, height, height * 0.20, rosePalette, true);
+        }, 1150);
+
+        // Wave 4 (+1700ms): Screen-Wide Petal Cascade
+        setTimeout(() => {
+          spawnScreenPetalShower(50);
+          spawnFlowerBurst(width * 0.5, height * 0.35, 30);
+        }, 1700);
+      }
+
       /* -------------------------------------------------------------
-       * 2. CRYSTAL CHIME & ANTICIPATION SOUND EFFECTS (WEB AUDIO API)
+       * 2. CRYSTAL CHIMES & SOUND SYNTHESIZER (WEB AUDIO API)
        * ------------------------------------------------------------*/
       let audioCtx = null;
 
       function getAudioContext() {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return null;
-        if (!audioCtx) audioCtx = new AudioContextClass();
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioClass) return null;
+        if (!audioCtx) audioCtx = new AudioClass();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         return audioCtx;
       }
@@ -375,12 +659,12 @@
           osc.frequency.setValueAtTime(freq, t);
           gain.gain.setValueAtTime(0.0001, t);
           gain.gain.linearRampToValueAtTime(0.2, t + 0.005);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.11);
 
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(t);
-          osc.stop(t + 0.12);
+          osc.stop(t + 0.11);
         } catch (e) {}
       }
 
@@ -395,7 +679,7 @@
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, t);
           gain.gain.setValueAtTime(0.0001, t);
-          gain.gain.linearRampToValueAtTime(0.26, t + 0.006);
+          gain.gain.linearRampToValueAtTime(0.25, t + 0.006);
           gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
 
           osc.connect(gain);
@@ -406,100 +690,149 @@
       }
 
       function playGrandUnboxingFanfare() {
-        // Sparkling G-C-E Major Triad Arpeggio
         playChime(783.99, 2.2); // G5
         setTimeout(() => playChime(1046.50, 2.4), 140); // C6
         setTimeout(() => playChime(1318.51, 2.6), 280); // E6
       }
 
+      function playEnvelopeRustle() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const t = ctx.currentTime;
+          // Gentle warm double chime
+          playChime(880, 1.2);
+          setTimeout(() => playChime(1174.66, 1.6), 110);
+        } catch (e) {}
+      }
+
       /* -------------------------------------------------------------
-       * 3. THE VIRAL TIKTOK UNBOXING ANIMATION SEQUENCE
+       * 3. THE GRAND UNBOXING & ENVELOPE FLOW (STATE MACHINE)
        * ------------------------------------------------------------*/
-      let currentStage = 'idle'; // 'idle' | 'shaking' | 'bursting' | 'revealing' | 'unfolded'
+      let isUnboxed = false;
+      let isUnboxingInProgress = false;
 
-      function triggerUnboxingSequence() {
-        if (currentStage === 'shaking' || currentStage === 'bursting' || currentStage === 'revealing') {
-          return; // Animation in progress
-        }
+      function openGiftBox() {
+        if (isUnboxed || isUnboxingInProgress) return;
+        isUnboxingInProgress = true;
 
-        if (currentStage === 'unfolded') {
-          // If already unfolded, tapping triggers a celebration burst!
-          spawnTikTokGiftBurst();
-          playGrandUnboxingFanfare();
-          return;
-        }
-
-        // STEP 2 (Suspense): Aggressive Shaking for 1.45 seconds
-        currentStage = 'shaking';
+        // Phase 1: Aggressive Suspense Shake for 1.25s
         giftBox.classList.remove('state-idle');
         giftBox.classList.add('state-shaking');
         giftSection.classList.add('shaking');
 
         hint.textContent = '✨ Ôi, điều bất ngờ đang đến... ✨';
 
-        // Fast anticipation chimes
+        // Fast anticipation chime ticks
         playTick(440);
-        setTimeout(() => playTick(554.37), 380);
-        setTimeout(() => playTick(659.25), 760);
-        setTimeout(() => playTick(880), 1100);
+        setTimeout(() => playTick(554.37), 350);
+        setTimeout(() => playTick(659.25), 700);
+        setTimeout(() => playTick(880), 1000);
 
-        // STEP 3 (The Burst): At t = 1.45s, lid flies off & confetti explodes!
+        // Phase 2: Lid Pops off & Grand Fireworks/Flowers Burst
         setTimeout(() => {
-          currentStage = 'bursting';
           giftBox.classList.remove('state-shaking');
           giftSection.classList.remove('shaking');
           giftBox.classList.add('state-bursting');
 
-          spawnTikTokGiftBurst();
+          // Trigger Grand Interleaved Fireworks & Blooming Flowers
+          triggerInterleavedCelebration();
           playGrandUnboxingFanfare();
-          hint.textContent = '🎉 Món quà đã được mở! ♡';
 
-          // STEP 4 (The Reveal): At t = 1.85s, letter rises from glowing interior
+          hint.textContent = '🎉 Món quà đã mở! Cùng ngắm nhìn những kỉ niệm nhé ♡';
+
+          // Phase 3: Transition to Cute Sealed Envelope & Reveal 6 Floating Polaroids
           setTimeout(() => {
-            currentStage = 'revealing';
-            giftBox.classList.add('state-revealing');
+            isUnboxed = true;
+            isUnboxingInProgress = false;
 
-            // STEP 5 (3D Unfolding): At t = 2.65s, letter 3D unfurls smoothly
-            setTimeout(() => {
-              currentStage = 'unfolded';
-              giftBox.classList.remove('state-bursting', 'state-revealing');
-              giftBox.classList.add('state-unfolded');
-              giftSection.classList.add('opened');
-              giftBox.setAttribute('aria-label', 'Hộp quà đã mở');
-              hint.textContent = '✧ Chúc cậu một tuổi mới rực rỡ và an yên ✧';
+            // Fade out and hide Gift Box
+            giftTheater.classList.add('box-hidden');
 
-              // Smoothly scroll letter into comfortable center view
-              setTimeout(() => {
-                document.getElementById('letter').scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center'
-                });
-              }, 300);
+            // Fade in the Adorable Sealed Envelope in the Center
+            envelopeContainer.classList.remove('envelope-hidden');
+            envelopeContainer.classList.add('envelope-revealed');
+            giftSection.classList.add('opened');
 
-            }, 800);
-          }, 400);
+            // Reveal 6 Polaroid Photos (3 Left, 3 Right) with Playful Bobbing
+            photosLeft.classList.remove('photos-hidden');
+            photosLeft.classList.add('photos-revealed');
 
-        }, 1450);
+            photosRight.classList.remove('photos-hidden');
+            photosRight.classList.add('photos-revealed');
+
+            hint.textContent = '✧ Bức thư bí mật dành cho cậu · Chạm phong thư để mở nhé ♡ ✧';
+
+          }, 1800);
+
+        }, 1250);
       }
 
-      giftBox.addEventListener('click', triggerUnboxingSequence);
+      /* Gift Box Click / Keydown */
+      giftBox.addEventListener('click', openGiftBox);
       giftBox.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          triggerUnboxingSequence();
+          openGiftBox();
         }
       });
 
-      if (celebrateBtn) {
-        celebrateBtn.addEventListener('click', e => {
-          e.stopPropagation();
-          spawnTikTokGiftBurst();
-          playGrandUnboxingFanfare();
-        });
+      /* -------------------------------------------------------------
+       * 4. SEATED SEALED ENVELOPE & LETTER MODAL INTERACTION
+       * ------------------------------------------------------------*/
+      function openLetterModal() {
+        sealedEnvelope.classList.add('opened-flap');
+        playEnvelopeRustle();
+
+        setTimeout(() => {
+          letterModal.classList.add('show');
+          // Smooth focus for accessibility
+          document.getElementById('letter').focus();
+        }, 320);
       }
 
+      function closeLetterModal() {
+        letterModal.classList.remove('show');
+        setTimeout(() => {
+          sealedEnvelope.classList.remove('opened-flap');
+        }, 200);
+      }
+
+      sealedEnvelope.addEventListener('click', openLetterModal);
+      sealedEnvelope.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLetterModal();
+        }
+      });
+
+      closeLetterBtn.addEventListener('click', closeLetterModal);
+      foldLetterBtn.addEventListener('click', closeLetterModal);
+
+      letterModal.addEventListener('click', e => {
+        if (e.target === letterModal) {
+          closeLetterModal();
+        }
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          if (letterModal.classList.contains('show')) {
+            closeLetterModal();
+          } else if (lightbox.classList.contains('show')) {
+            closeImage();
+          }
+        }
+      });
+
+      /* Celebrate button inside letter triggers another round of fireworks & flowers */
+      replayBtn.addEventListener('click', () => {
+        triggerInterleavedCelebration();
+        playGrandUnboxingFanfare();
+      });
+
       /* -------------------------------------------------------------
-       * 4. SCRAPBOOK POLAROID LIGHTBOX
+       * 5. SCRAPBOOK POLAROID LIGHTBOX VIEWER
        * ------------------------------------------------------------*/
       document.querySelectorAll('.polaroid').forEach(photo => {
         photo.addEventListener('click', () => {
@@ -520,14 +853,13 @@
       lightbox.addEventListener('click', e => {
         if (e.target === lightbox) closeImage();
       });
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeImage();
-      });
 
+      /* Page unload cleanup */
       document.addEventListener('page:before-exit', () => {
-        if (giftAnimId) cancelAnimationFrame(giftAnimId);
+        if (animId) cancelAnimationFrame(animId);
         window.removeEventListener('resize', resize);
       }, { once: true });
+
     })();
   </script>
   <script src="js/seamless.js"></script>
