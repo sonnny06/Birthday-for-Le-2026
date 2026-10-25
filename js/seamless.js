@@ -20,11 +20,13 @@
     const buttons = document.querySelectorAll('#sound-toggle, .garden-sound-button, .music-toggle-btn');
     buttons.forEach(btn => {
       btn.setAttribute('aria-pressed', String(isPlaying));
-      btn.textContent = isPlaying ? '♫ Đang phát nhạc ♡' : '♫ Nhạc nền';
+      btn.textContent = isPlaying ? '♫ Tắt nhạc nền' : '♫ Bật nhạc nền';
       if (isPlaying) {
         btn.classList.add('playing');
+        btn.setAttribute('title', 'Đang phát nhạc · Chạm để tắt nhạc');
       } else {
         btn.classList.remove('playing');
+        btn.setAttribute('title', 'Đang tắt nhạc · Chạm để bật nhạc');
       }
     });
 
@@ -32,21 +34,49 @@
     sessionStorage.setItem('birthday_bgm_time', String(bgMusic.currentTime));
   }
 
-  function toggleMusic() {
+  let isTogglingAudio = false;
+  function toggleMusic(e) {
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
+    if (isTogglingAudio) return;
+    isTogglingAudio = true;
+    setTimeout(() => { isTogglingAudio = false; }, 220);
+
     if (bgMusic.paused) {
-      bgMusic.play().then(() => {
+      sessionStorage.setItem('birthday_bgm_user_muted', 'false');
+      const playPromise = bgMusic.play();
+      if (playPromise) {
+        playPromise.then(() => {
+          syncMusicButtons();
+        }).catch(err => {
+          console.log('Audio playback waiting for gesture:', err);
+          syncMusicButtons();
+        });
+      } else {
         syncMusicButtons();
-      }).catch(err => {
-        console.log('Audio playback waiting for gesture:', err);
-      });
+      }
     } else {
+      sessionStorage.setItem('birthday_bgm_user_muted', 'true');
       bgMusic.pause();
       syncMusicButtons();
     }
   }
 
+  function ensureMusicPlayingOnGesture() {
+    const userMuted = sessionStorage.getItem('birthday_bgm_user_muted') === 'true';
+    if (!userMuted && bgMusic.paused) {
+      const p = bgMusic.play();
+      if (p) {
+        p.then(() => syncMusicButtons()).catch(() => {});
+      }
+    }
+  }
+
   window.toggleGlobalMusic = toggleMusic;
   window.syncGlobalMusicButtons = syncMusicButtons;
+  window.ensureMusicPlayingOnGesture = ensureMusicPlayingOnGesture;
 
   // Listen to native audio events so state is always 100% synchronized
   bgMusic.addEventListener('play', syncMusicButtons);
@@ -64,7 +94,6 @@
       const playPromise = bgMusic.play();
       if (playPromise) {
         playPromise.then(() => syncMusicButtons()).catch(() => {
-          // If browser policy blocks autoplay on initial visit, resume on first user interaction
           const resumeOnTouch = () => {
             bgMusic.play().then(() => syncMusicButtons()).catch(() => {});
             document.removeEventListener('click', resumeOnTouch);
@@ -106,11 +135,14 @@
     isNavigating = true;
 
     try {
+      // Auto-start music on navigation gesture if user hasn't muted it
+      ensureMusicPlayingOnGesture();
+
       // 1. Notify active page to clean up loops (canvas, mic, timers)
       document.dispatchEvent(new CustomEvent('page:before-exit'));
 
       // 2. Smooth subtle fade-out
-      document.body.style.transition = 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+      document.body.style.transition = 'opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
       document.body.style.opacity = '0';
 
       const response = await fetch(url);
@@ -125,22 +157,19 @@
       document.body.className = newDoc.body.className;
 
       // 4. Synchronize Head Styles and Stylesheets
-      // Remove previously injected page-specific head tags
       document.head.querySelectorAll('[data-seamless-head]').forEach(el => el.remove());
 
-      // Get list of existing stylesheet links in document.head
       const existingLinks = new Set(
         Array.from(document.head.querySelectorAll('link[rel="stylesheet"]'))
           .map(l => l.getAttribute('href'))
           .filter(Boolean)
       );
 
-      // Clone any page-specific <style> or new <link> tags from newDoc.head
       newDoc.head.querySelectorAll('style, link[rel="stylesheet"]').forEach(el => {
         if (el.tagName === 'LINK') {
           const href = el.getAttribute('href');
           if (href && existingLinks.has(href)) {
-            return; // Already present in head
+            return;
           }
         }
         const clone = el.cloneNode(true);
@@ -148,7 +177,13 @@
         document.head.appendChild(clone);
       });
 
-      // 5. Extract script tags from incoming body & head
+      // 5. Extract script tags from incoming head & body
+      const existingScriptSrcs = new Set(
+        Array.from(document.querySelectorAll('script[src]'))
+          .map(s => s.getAttribute('src'))
+          .filter(Boolean)
+      );
+
       const scripts = Array.from(newDoc.querySelectorAll('script'));
       scripts.forEach(s => s.remove());
 
@@ -157,13 +192,19 @@
 
       // 7. Re-execute scripts sequentially
       for (const oldScript of scripts) {
-        if (oldScript.src && oldScript.src.includes('seamless.js')) {
+        const src = oldScript.getAttribute('src');
+        if (src && src.includes('seamless.js')) {
           continue; // Keep the active seamless router running
         }
 
+        // Skip re-loading global libraries like GSAP or Tailwind if already loaded
+        if (src && (src.includes('gsap') || src.includes('tailwindcss')) && existingScriptSrcs.has(src)) {
+          continue;
+        }
+
         const newScript = document.createElement('script');
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
+        if (src) {
+          newScript.src = src;
           newScript.async = false;
           await new Promise(resolve => {
             newScript.onload = resolve;
@@ -192,7 +233,7 @@
         setTimeout(() => {
           document.body.style.transition = '';
           isNavigating = false;
-        }, 220);
+        }, 240);
       });
 
     } catch (err) {
@@ -201,6 +242,8 @@
       window.location.href = url;
     }
   }
+
+  window.navigateSeamless = loadPage;
 
   function bindInternalLinks() {
     document.querySelectorAll('a[href]').forEach(link => {

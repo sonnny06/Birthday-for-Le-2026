@@ -286,6 +286,8 @@ body::after {
   pointer-events: none;
   z-index: 2;
   overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .portal-svg-layer {
@@ -316,6 +318,7 @@ body::after {
 .paper-lantern {
   transform-origin: top center;
   animation: lanternSway 4.5s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 .paper-lantern.delay-1 {
@@ -522,7 +525,14 @@ body.garden-page {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: max(20px, env(safe-area-inset-top)) clamp(16px, 4vw, 42px) max(20px, env(safe-area-inset-bottom));
+  padding: max(18px, env(safe-area-inset-top)) clamp(16px, 4vw, 42px) max(18px, env(safe-area-inset-bottom));
+}
+
+.garden-top-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
 }
 
 .garden-header {
@@ -541,17 +551,52 @@ body.garden-page {
 }
 
 .garden-floating-intro {
-  margin: 8px auto 0;
+  margin: 4px auto 0;
   text-align: center;
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
 
+/* Ornate 3D Paper Cartouche Crest for the Garden Title */
+.garden-title-cartouche {
+  display: inline-block;
+  padding: 12px 34px 14px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(35, 19, 54, 0.72) 0%, rgba(22, 12, 36, 0.56) 100%);
+  border: 1px solid rgba(255, 216, 117, 0.38);
+  box-shadow:
+    0 12px 32px rgba(8, 3, 18, 0.65),
+    0 0 28px rgba(255, 216, 117, 0.14),
+    inset 0 1px 1px rgba(255, 245, 220, 0.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: relative;
+}
+
+.garden-title-cartouche::before,
+.garden-title-cartouche::after {
+  content: "❖";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 216, 117, 0.65);
+  font-size: 12px;
+  text-shadow: 0 0 8px rgba(255, 216, 117, 0.6);
+}
+
+.garden-title-cartouche::before {
+  left: 12px;
+}
+
+.garden-title-cartouche::after {
+  right: 12px;
+}
+
 .garden-eyebrow {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--glow-gold);
   font-family: var(--font-sans);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -561,10 +606,10 @@ body.garden-page {
 .garden-floating-intro h1 {
   color: var(--paper-cream);
   font-family: var(--font-serif);
-  font-size: clamp(26px, 4.2vw, 44px);
+  font-size: clamp(24px, 3.6vw, 40px);
   font-weight: 500;
-  line-height: 1.2;
-  text-shadow: 0 4px 16px rgba(10, 5, 20, 0.8), 0 0 30px rgba(242, 199, 206, 0.25);
+  line-height: 1.18;
+  text-shadow: 0 4px 16px rgba(10, 5, 20, 0.85), 0 0 30px rgba(242, 199, 206, 0.3);
 }
 
 .garden-floating-intro h1 span {
@@ -573,11 +618,28 @@ body.garden-page {
   font-size: 1.2em;
 }
 
+.garden-title-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px auto 4px;
+  color: var(--glow-gold);
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.garden-title-divider .divider-wing {
+  width: 54px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 216, 117, 0.75), transparent);
+}
+
 .garden-hint {
-  margin-top: 8px;
+  margin-top: 2px;
   color: var(--paper-kraft);
   font-family: var(--font-cursive);
-  font-size: 16px;
+  font-size: 15.5px;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 10px rgba(10, 5, 20, 0.75);
 }
@@ -2305,15 +2367,132 @@ body.gift-page-body {
   display: flex;
 }
 
-.lightbox img {
-  max-width: min(90vw, 640px);
-  max-height: 80vh;
-  object-fit: contain;
+.lightbox-polaroid-frame {
+  position: relative;
   background: var(--paper-parchment);
-  padding: 12px 12px 50px;
-  border-radius: 6px;
-  border: 2px solid rgba(255, 216, 117, 0.4);
+  padding: 14px 14px 20px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 216, 117, 0.45);
   box-shadow: 0 28px 75px rgba(10, 5, 20, 0.85);
+  text-align: center;
+  max-width: min(92vw, 640px);
+}
+
+.lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #23121e;
+}
+
+.lightbox-caption {
+  margin-top: 12px;
+  font-family: var(--font-cursive);
+  font-size: 22px;
+  font-weight: 600;
+  color: #4a2839;
+}
+
+/* Garden Wish Progress Pill & Wax Seal */
+.wish-counter-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(36, 20, 52, 0.82);
+  border: 1px solid rgba(255, 216, 117, 0.45);
+  color: var(--glow-gold-light);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(10, 5, 20, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.wish-wax-seal {
+  width: 30px;
+  height: 30px;
+  margin: -36px auto 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffe6b5 0%, #d8ae68 65%, #9b6f2b 100%);
+  border: 1px dashed rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 10px rgba(10, 5, 20, 0.45);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: #5c3c0c;
+  font-weight: 700;
+}
+
+/* Cake Front Gold Foil Plaque & Breath Meter */
+.cake-front-plaque {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff1c9 0%, #e0b467 55%, #b38332 100%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(10, 5, 20, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.85);
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #523208;
+  z-index: 4;
+  white-space: nowrap;
+}
+
+.cake-gold-pearls {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  right: 10px;
+  height: 6px;
+  border-bottom: 3px dotted rgba(255, 224, 150, 0.75);
+}
+
+.breath-meter-wrap {
+  max-width: 280px;
+  margin: 0 auto 14px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(34, 20, 52, 0.78);
+  border: 1px solid rgba(255, 216, 117, 0.35);
+  box-shadow: 0 8px 22px rgba(10, 5, 20, 0.5);
+}
+
+.breath-meter-wrap[hidden] {
+  display: none !important;
+}
+
+.breath-meter-label {
+  font-size: 11.5px;
+  color: var(--paper-kraft);
+  margin-bottom: 6px;
+}
+
+.breath-meter-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15, 8, 26, 0.75);
+  overflow: hidden;
+  border: 1px solid rgba(242, 199, 206, 0.25);
+}
+
+.breath-meter-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #dca2ae, #ffd875, #fff4b8);
+  box-shadow: 0 0 12px rgba(255, 216, 117, 0.8);
+  transition: width 0.08s ease;
 }
 
 .close-lightbox {
@@ -2403,7 +2582,13 @@ body.gift-page-body {
     font-size: 11px;
   }
   .garden-floating-intro h1 {
-    font-size: 24px;
+    font-size: 22px;
+  }
+  .garden-title-cartouche {
+    padding: 10px 22px 12px;
+  }
+  .garden-hint {
+    font-size: 13.5px;
   }
   .floating-wish-bubble {
     width: calc(100vw - 28px);

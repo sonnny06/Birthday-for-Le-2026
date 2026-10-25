@@ -56,8 +56,8 @@
 
   <!-- Top Header (Compact & Elegant to ensure perfect screen fit) -->
   <header class="top-header" id="top-header">
-    <div class="eyebrow">✧ A VINTAGE FAIRYTALE SCRAPBOOK ✧</div>
-    <h1 id="page-title">Gửi cậu một <span>Món quà</span> ♡</h1>
+    <div class="eyebrow">✧ CHƯƠNG IV · A VINTAGE FAIRYTALE SCRAPBOOK ✧</div>
+    <h1 id="page-title">Gửi <span>V.SON</span> một Món quà ♡</h1>
     <p class="subtitle" id="page-subtitle">Một chiếc hộp nhỏ cất giữ những khoảnh khắc và lời chúc chân thành nhất dành riêng cho cậu.</p>
   </header>
 
@@ -218,10 +218,10 @@
       <article class="letter-card" id="letter" aria-live="polite">
         <div class="letter-stamp-badge">
           <span>💌</span>
-          <span>SPECIAL DELIVERY FOR YOU</span>
+          <span>SPECIAL DELIVERY FOR V.SON</span>
         </div>
         <div class="letter-decor">✧　♡　✧</div>
-        <h2 id="letter-title">Chúc mừng sinh nhật cậu!</h2>
+        <h2 id="letter-title">Chúc mừng sinh nhật V.SON!</h2>
         
         <div class="letter-body-text">
           <p>
@@ -256,7 +256,10 @@
   <!-- Scrapbook Polaroid Lightbox Viewer -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Xem ảnh Polaroid">
     <button class="close-lightbox" id="close-lightbox" aria-label="Đóng ảnh" type="button">×</button>
-    <img id="large-image" src="" alt="">
+    <div class="lightbox-polaroid-frame">
+      <img id="large-image" src="" alt="">
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
   </div>
 
   <script>
@@ -716,6 +719,10 @@
         if (isUnboxed || isUnboxingInProgress) return;
         isUnboxingInProgress = true;
 
+        if (window.ensureMusicPlayingOnGesture) {
+          window.ensureMusicPlayingOnGesture();
+        }
+
         // Phase 1: Aggressive Suspense Shake for 1.25s
         giftBox.classList.remove('state-idle');
         giftBox.classList.add('state-shaking');
@@ -834,11 +841,15 @@
       /* -------------------------------------------------------------
        * 5. SCRAPBOOK POLAROID LIGHTBOX VIEWER
        * ------------------------------------------------------------*/
+      const lightboxCaption = document.getElementById('lightbox-caption');
       document.querySelectorAll('.polaroid').forEach(photo => {
         photo.addEventListener('click', () => {
           const image = photo.querySelector('img');
           largeImage.src = image.src;
           largeImage.alt = photo.dataset.caption || image.alt;
+          if (lightboxCaption) {
+            lightboxCaption.textContent = photo.dataset.caption || '';
+          }
           lightbox.classList.add('show');
           playChime(659.25);
         });
@@ -847,6 +858,7 @@
       function closeImage() {
         lightbox.classList.remove('show');
         largeImage.src = '';
+        if (lightboxCaption) lightboxCaption.textContent = '';
       }
 
       document.getElementById('close-lightbox').addEventListener('click', closeImage);

@@ -46,63 +46,251 @@
   <link rel="stylesheet" href="css/style.css">
 
   <style>
-    /* Layer drop-shadows & paper depth */
-    .paper-shadow-deep {
-      filter: drop-shadow(0 14px 28px rgba(8, 4, 16, 0.8)) drop-shadow(0 2px 6px rgba(8, 4, 16, 0.6));
+    /* Fallback & Core Styles for Instant Zero-FOUC Rendering */
+    body.archway-body {
+      height: 100vh;
+      height: 100svh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: #120b22;
+      color: #fdf8f2;
+      position: relative;
+      user-select: none;
+      font-family: var(--font-sans);
     }
-    .paper-shadow-layer2 {
-      filter: drop-shadow(0 8px 18px rgba(10, 5, 20, 0.65));
+
+    .archway-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      will-change: transform;
     }
-    .rose-shadow {
-      filter: drop-shadow(0 12px 24px rgba(60, 8, 20, 0.75)) drop-shadow(0 2px 4px rgba(10, 5, 20, 0.4));
+
+    #layer-1 {
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 35%, rgba(92, 42, 98, 0.48) 0%, transparent 62%),
+        linear-gradient(180deg, #0c0617 0%, #1a122e 52%, #2d1c44 100%);
+    }
+
+    #layer-2 {
+      z-index: 20;
+      pointer-events: none;
+      filter: drop-shadow(0 10px 22px rgba(8, 4, 16, 0.72));
+    }
+
+    #layer-3 {
+      z-index: 30;
+      pointer-events: none;
+      filter: drop-shadow(0 16px 34px rgba(5, 2, 12, 0.9)) drop-shadow(0 3px 8px rgba(8, 4, 16, 0.75));
+    }
+
+    /* Centerpiece & Rose Medallion */
+    .archway-centerpiece {
+      position: relative;
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 640px;
+      margin: 0 auto;
+      pointer-events: auto;
+    }
+
+    #rose-glow {
+      position: absolute;
+      top: 96px;
+      left: 50%;
+      width: 310px;
+      height: 310px;
+      margin-left: -155px;
+      margin-top: -155px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 62, 108, 0.52) 0%, rgba(255, 216, 117, 0.32) 42%, rgba(255, 170, 66, 0) 72%);
+      filter: blur(26px);
+      pointer-events: none;
+    }
+
+    .rose-medallion-frame {
+      position: relative;
+      width: 196px;
+      height: 196px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      cursor: pointer;
+      filter: drop-shadow(0 14px 28px rgba(45, 5, 18, 0.8)) drop-shadow(0 3px 6px rgba(10, 5, 20, 0.5));
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .rose-medallion-frame:hover {
+      transform: scale(1.06) translateY(-3px);
+    }
+
+    .rose-filigree-ring {
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(255, 216, 117, 0.55);
+      box-shadow: 0 0 28px rgba(255, 216, 117, 0.22), inset 0 0 22px rgba(255, 216, 117, 0.15);
+      animation: slowRingSpin 36s linear infinite;
+      pointer-events: none;
+    }
+
+    .rose-filigree-ring-inner {
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(242, 199, 206, 0.3);
+      pointer-events: none;
     }
 
     /* Lantern swinging and glow dynamics */
     .lantern-unit {
+      position: absolute;
+      top: 0;
       transform-origin: top center;
+      pointer-events: auto;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     .lantern-glow-mesh {
-      box-shadow: 0 0 24px 8px rgba(255, 216, 117, 0.65), 0 0 55px 18px rgba(255, 170, 66, 0.3);
+      box-shadow: 0 0 26px 10px rgba(255, 216, 117, 0.7), 0 0 60px 22px rgba(255, 170, 66, 0.35);
       transition: box-shadow 0.4s ease, transform 0.4s ease;
     }
+
     .lantern-unit:hover .lantern-glow-mesh {
-      box-shadow: 0 0 36px 14px rgba(255, 216, 117, 0.95), 0 0 75px 28px rgba(255, 170, 66, 0.55);
+      box-shadow: 0 0 42px 16px rgba(255, 216, 117, 1), 0 0 85px 32px rgba(255, 170, 66, 0.65);
     }
 
     /* Text glow */
     .text-shadow-gold {
-      text-shadow: 0 0 16px rgba(255, 216, 117, 0.55), 0 0 32px rgba(255, 170, 66, 0.3);
+      text-shadow: 0 0 16px rgba(255, 216, 117, 0.6), 0 0 32px rgba(255, 170, 66, 0.35);
     }
+
     .text-shadow-rose {
-      text-shadow: 0 0 18px rgba(242, 199, 206, 0.6), 0 0 35px rgba(220, 162, 174, 0.35);
+      text-shadow: 0 0 20px rgba(242, 199, 206, 0.65), 0 4px 18px rgba(10, 5, 20, 0.8);
     }
 
     /* Glowing Explore Button */
     .btn-explore-glow {
-      box-shadow: 0 0 24px rgba(255, 216, 117, 0.45), 0 8px 30px rgba(10, 5, 20, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 15px 42px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(220, 162, 174, 0.38) 0%, rgba(138, 36, 75, 0.88) 55%, rgba(80, 19, 43, 0.95) 100%);
+      border: 1.5px solid #ffd875;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow:
+        0 0 26px rgba(255, 216, 117, 0.48),
+        0 10px 32px rgba(10, 5, 20, 0.75),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65);
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
     }
+
+    .btn-explore-glow::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 244, 184, 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: buttonShimmer 4.5s infinite;
+    }
+
+    @keyframes buttonShimmer {
+      0%, 60% { left: -100%; }
+      100% { left: 160%; }
+    }
+
     .btn-explore-glow:hover {
-      box-shadow: 0 0 36px rgba(255, 216, 117, 0.8), 0 14px 40px rgba(10, 5, 20, 0.85), inset 0 1px 3px rgba(255, 255, 255, 0.9);
+      box-shadow:
+        0 0 42px rgba(255, 216, 117, 0.85),
+        0 14px 42px rgba(10, 5, 20, 0.85),
+        inset 0 1px 3px rgba(255, 255, 255, 0.9);
       transform: translateY(-3px) scale(1.04);
+      border-color: #fff4b8;
     }
+
     .btn-explore-glow:active {
       transform: translateY(1px) scale(0.98);
+    }
+
+    /* Storybook Chapter Stepper */
+    .storybook-stepper {
+      position: fixed;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 45;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(20, 12, 36, 0.72);
+      border: 1px solid rgba(255, 216, 117, 0.28);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(5, 2, 12, 0.6);
+      font-size: 11px;
+      color: var(--paper-kraft);
+      letter-spacing: 0.08em;
+    }
+
+    .step-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(242, 199, 206, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .step-dot.active {
+      width: 20px;
+      border-radius: 999px;
+      background: #ffd875;
+      box-shadow: 0 0 10px #ffd875;
     }
   </style>
 </head>
 
-<body class="h-screen w-screen overflow-hidden bg-[#120b22] text-[#fdf8f2] relative select-none font-sans">
+<body class="archway-body h-screen w-screen overflow-hidden bg-[#120b22] text-[#fdf8f2] relative select-none font-sans">
 
   <!-- SVG Filter Library for 3D Cutout Shadows & Glows -->
-  <svg class="paper-filters absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+  <svg class="paper-filters absolute w-0 h-0 pointer-events-none" aria-hidden="true" style="position:absolute;width:0;height:0;">
     <defs>
       <filter id="paper-cut-shadow" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="3" dy="8" stdDeviation="10" flood-color="#0a0514" flood-opacity="0.65" />
-        <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#0a0514" flood-opacity="0.45" />
+        <feDropShadow dx="3" dy="8" stdDeviation="10" flood-color="#0a0514" flood-opacity="0.68" />
+        <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#0a0514" flood-opacity="0.48" />
       </filter>
       <filter id="paper-petal-shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="1" dy="4" stdDeviation="4" flood-color="#3b0816" flood-opacity="0.6" />
+        <feDropShadow dx="1" dy="4" stdDeviation="4" flood-color="#320512" flood-opacity="0.65" />
       </filter>
       <filter id="lantern-soft-glow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="10" result="blur" />
@@ -118,97 +306,117 @@
   <div class="shadowbox-vignette"></div>
 
   <!-- Persistent Background Music Toggle Button -->
-  <div class="fixed top-4 right-4 z-50">
+  <div style="position: fixed; top: max(18px, env(safe-area-inset-top)); right: clamp(16px, 3.5vw, 36px); z-index: 50;">
     <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
   </div>
 
   <!-- ============================================================
        LAYER 1 (Z-INDEX 10): STARRY NIGHT BACKGROUND & CENTERPIECE
        ============================================================ -->
-  <div id="layer-1" class="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none bg-gradient-to-b from-[#0e071a] via-[#1a122e] to-[#2d1c44] overflow-hidden">
+  <div id="layer-1" class="archway-layer">
     
-    <!-- Canvas for Twinkling Stars & Interactive Gravitating Fireflies -->
+    <!-- Distant Papercut Horizon Hills & Crescent Moon Silhouette -->
+    <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1440 900" preserveAspectRatio="none" style="opacity: 0.72;">
+      <!-- Distant Misty Mountains -->
+      <path d="M0,900 L0,650 Q240,580 520,630 Q840,680 1120,600 Q1300,560 1440,610 L1440,900 Z" fill="#1e1233" />
+      <path d="M0,900 L0,720 Q360,670 720,700 Q1080,730 1440,680 L1440,900 Z" fill="#26163c" />
+    </svg>
+
+    <!-- Canvas for Twinkling Stars, Interactive Gravitating Fireflies & Rose Petals -->
     <canvas id="fireflies-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
 
     <!-- Centerpiece Container (Paper-cut Red Rose, Pulsing Glow, Typography & Button) -->
-    <div class="relative z-10 flex flex-col items-center justify-center text-center px-4 max-w-xl mx-auto pointer-events-auto">
+    <div class="archway-centerpiece">
 
       <!-- Pulsing Heartbeat Center Glow -->
-      <div id="rose-glow" class="absolute top-[85px] w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-radial from-[#ff3366]/40 via-[#ffd875]/25 to-transparent blur-3xl pointer-events-none transform -translate-y-1/2"></div>
+      <div id="rose-glow"></div>
 
-      <!-- 3D Paper-Cut Red Rose Assembly -->
-      <div id="paper-rose" class="relative w-44 h-44 sm:w-52 sm:h-52 my-1 rose-shadow cursor-pointer transition-transform duration-500 hover:scale-105" title="Đóa hoa hồng giấy diệu kỳ">
-        <svg viewBox="0 0 200 200" class="w-full h-full">
-          <!-- Backing papercraft leaves -->
+      <!-- 3D Paper-Cut Red Rose Medallion -->
+      <div id="paper-rose" class="rose-medallion-frame" role="button" tabindex="0" aria-label="Chạm vào đóa hoa hồng giấy 3D để bung cánh hoa" title="Chạm nhẹ vào đóa hoa hồng ♡">
+        <div class="rose-filigree-ring"></div>
+        <div class="rose-filigree-ring-inner"></div>
+
+        <svg viewBox="0 0 220 220" class="w-44 h-44 sm:w-48 sm:h-48 relative z-10">
+          <!-- Backing papercraft leaves with veins -->
           <g filter="url(#paper-cut-shadow)">
-            <!-- Left Leaf -->
-            <path d="M50,110 C20,90 15,130 35,150 C50,165 75,145 70,125 Z" fill="#243d32" stroke="#375d4d" stroke-width="1.2" />
-            <path d="M42,120 Q55,135 60,140" stroke="#4e826b" stroke-width="1" stroke-dasharray="2 2" fill="none" />
-            <!-- Right Leaf -->
-            <path d="M150,110 C180,90 185,130 165,150 C150,165 125,145 130,125 Z" fill="#243d32" stroke="#375d4d" stroke-width="1.2" />
-            <path d="M158,120 Q145,135 140,140" stroke="#4e826b" stroke-width="1" stroke-dasharray="2 2" fill="none" />
+            <!-- Left Leaf Trio -->
+            <path d="M52,115 C16,92 10,136 34,158 C52,174 82,152 74,128 Z" fill="#1f3a2e" stroke="#3b6954" stroke-width="1.2" />
+            <path d="M40,126 Q56,138 66,144" stroke="#64a688" stroke-width="1.1" stroke-dasharray="2 2" fill="none" />
+            <path d="M64,68 C34,42 22,78 42,98 C56,112 78,94 72,78 Z" fill="#284a3c" stroke="#467a63" stroke-width="1" />
+
+            <!-- Right Leaf Trio -->
+            <path d="M168,115 C204,92 210,136 186,158 C168,174 138,152 146,128 Z" fill="#1f3a2e" stroke="#3b6954" stroke-width="1.2" />
+            <path d="M180,126 Q164,138 154,144" stroke="#64a688" stroke-width="1.1" stroke-dasharray="2 2" fill="none" />
+            <path d="M156,68 C186,42 198,78 178,98 C164,112 142,94 148,78 Z" fill="#284a3c" stroke="#467a63" stroke-width="1" />
           </g>
 
-          <!-- Outer Rose Petals (Tier 1: Deepest Velvet Maroon) -->
+          <!-- Tier 1: Outer Scalloped Velvet Maroon Petals -->
           <g filter="url(#paper-petal-shadow)">
-            <path d="M100,20 C60,20 30,55 35,100 C40,145 75,180 100,180 C125,180 160,145 165,100 C170,55 140,20 100,20 Z" fill="#580d21" />
+            <path d="M110,24 C78,18 46,42 42,76 C36,112 52,156 84,176 C102,186 118,186 136,176 C168,156 184,112 178,76 C174,42 142,18 110,24 Z" fill="#4c091b" stroke="rgba(255,190,205,0.22)" stroke-width="0.8" />
+            <path d="M110,28 C68,34 34,74 48,122 C60,162 96,184 110,184 C124,184 160,162 172,122 C186,74 152,34 110,28 Z" fill="#630d25" />
           </g>
 
-          <!-- Middle Rose Petals (Tier 2: Deep Crimson) -->
+          <!-- Tier 2: Deep Crimson Layered Whorl -->
           <g filter="url(#paper-petal-shadow)">
-            <path d="M100,32 C70,32 45,60 50,100 C55,138 80,168 100,168 C120,168 145,138 150,100 C155,60 130,32 100,32 Z" fill="#881337" />
+            <path d="M110,38 C76,36 52,66 56,104 C60,144 86,170 110,170 C134,170 160,144 164,104 C168,66 144,36 110,38 Z" fill="#881337" stroke="rgba(255,210,220,0.28)" stroke-width="0.8" />
+            <!-- Left & Right Sculpted Outer Folds -->
+            <path d="M62,74 C48,102 62,142 94,160 C82,134 76,102 62,74 Z" fill="#9f1239" />
+            <path d="M158,74 C172,102 158,142 126,160 C138,134 144,102 158,74 Z" fill="#9f1239" />
           </g>
 
-          <!-- Inner Rose Petals (Tier 3: Rich Ruby Red) -->
+          <!-- Tier 3: Rich Ruby Red Cupped Petals -->
           <g filter="url(#paper-petal-shadow)">
-            <path d="M100,45 C78,45 58,68 62,100 C66,130 85,155 100,155 C115,155 134,130 138,100 C142,68 122,45 100,45 Z" fill="#be123c" />
+            <path d="M110,50 C84,50 64,74 68,106 C72,136 92,158 110,158 C128,158 148,136 152,106 C156,74 136,50 110,50 Z" fill="#be123c" stroke="rgba(255,225,232,0.35)" stroke-width="0.9" />
           </g>
 
-          <!-- Petal Whorls (Tier 4: Vibrant Scarlet) -->
+          <!-- Tier 4: Vibrant Scarlet Interlocking Spiral Petals -->
           <g filter="url(#paper-petal-shadow)">
-            <!-- Left folded petal -->
-            <path d="M100,60 C75,70 70,110 85,130 C100,145 110,135 100,115 C95,100 90,80 100,60 Z" fill="#e11d48" />
-            <!-- Right folded petal -->
-            <path d="M100,60 C125,70 130,110 115,130 C100,145 90,135 100,115 C105,100 110,80 100,60 Z" fill="#f43f5e" />
+            <path d="M110,62 C82,72 76,114 94,136 C110,152 124,140 112,118 C104,102 98,84 110,62 Z" fill="#e11d48" />
+            <path d="M110,62 C138,72 144,114 126,136 C110,152 96,140 108,118 C116,102 122,84 110,62 Z" fill="#f43f5e" />
+            <path d="M84,88 C86,66 134,66 136,88 C138,114 110,134 110,134 C110,134 82,114 84,88 Z" fill="#dc2626" opacity="0.92" />
           </g>
 
-          <!-- Core Rose Bud (Tier 5: Soft Glowing Rosebud) -->
+          <!-- Tier 5: Inner Glowing Rosebud Spiral & Golden Dewdrop -->
           <g filter="url(#paper-petal-shadow)">
-            <ellipse cx="100" cy="100" rx="18" ry="22" fill="#fb7185" />
-            <path d="M94,92 Q100,85 106,92 Q108,105 100,112 Q92,105 94,92 Z" fill="#ffe4e6" opacity="0.9" />
-            <circle cx="100" cy="98" r="3.5" fill="#ffd875" />
+            <ellipse cx="110" cy="104" rx="20" ry="24" fill="#fb7185" stroke="rgba(255,240,245,0.5)" stroke-width="0.8" />
+            <path d="M102,94 Q110,84 118,94 Q122,110 110,118 Q98,110 102,94 Z" fill="#ffe4e6" opacity="0.95" />
+            <!-- Golden Stamen Heart -->
+            <circle cx="110" cy="102" r="4" fill="#ffd875" />
+            <!-- Crystal Dewdrop on Petal -->
+            <circle cx="134" cy="122" r="3.2" fill="#fffdf5" opacity="0.9" />
+            <circle cx="133" cy="121" r="1.2" fill="#ffffff" />
           </g>
         </svg>
       </div>
 
       <!-- Eyebrow Ribbon -->
-      <div class="text-xs uppercase tracking-[0.35em] text-[#ffd875] font-sans font-semibold mb-2 text-shadow-gold">
-        ✧ THE ENCHANTED ARCHWAY ✧
+      <div class="text-[11px] uppercase tracking-[0.34em] text-[#ffd875] font-sans font-semibold mb-2 text-shadow-gold">
+        ✧ CHƯƠNG I · THE ENCHANTED ARCHWAY ✧
       </div>
 
       <!-- Typography Reading 'Happy Birthday V.SON' -->
-      <h1 id="hero-title" class="font-serif text-3xl sm:text-5xl md:text-6xl text-[#fdf8f2] tracking-wide font-normal leading-tight drop-shadow-[0_4px_16px_rgba(10,5,20,0.85)]">
+      <h1 id="hero-title" class="font-serif text-3xl sm:text-5xl md:text-6xl text-[#fdf8f2] tracking-wide font-normal leading-tight drop-shadow-[0_4px_18px_rgba(10,5,20,0.9)]">
         Happy Birthday 
         <span class="font-cursive italic text-[#f2c7ce] text-4xl sm:text-6xl md:text-7xl block sm:inline mt-1 sm:mt-0 text-shadow-rose">V.SON</span>
       </h1>
 
       <!-- Elegant Fairytale Note -->
-      <p class="font-sans text-xs sm:text-sm md:text-base text-[#edd9be]/90 max-w-md mt-3 leading-relaxed tracking-wide drop-shadow">
-        Một cánh cổng diệu kỳ từ những trang giấy cổ tích đang hé mở, dẫn lối cậu bước vào khu vườn của những điều ngọt ngào nhất.
+      <p class="font-sans text-xs sm:text-sm md:text-[15px] text-[#edd9be]/90 max-w-md mt-3 leading-relaxed tracking-wide">
+        Giữa màn đêm đom đóm phép thuật, cánh cổng giấy cổ tích đang hé mở để dẫn lối cậu bước vào khu vườn của những điều ước ngọt ngào nhất.
       </p>
 
       <!-- Interactive Glowing Button: 'Khám phá' -->
       <div class="mt-6 sm:mt-7">
-        <button id="btn-explore" class="btn-explore-glow group relative inline-flex items-center gap-3 px-8 sm:px-10 py-3.5 rounded-full bg-gradient-to-r from-[#dca2ae]/30 via-[#8a244b]/80 to-[#50132b]/90 border border-[#ffd875] text-[#ffffff] font-sans font-semibold text-sm sm:text-base tracking-wider uppercase cursor-pointer" type="button">
-          <span class="relative z-10 flex items-center gap-2">
+        <button id="btn-explore" class="btn-explore-glow group" type="button">
+          <span class="relative z-10 flex items-center gap-2.5">
             <span>Khám phá</span>
             <span class="text-[#ffd875] text-lg transition-transform duration-300 group-hover:translate-x-1.5">✨</span>
           </span>
         </button>
       </div>
 
-      <p class="mt-4 font-cursive text-xs sm:text-sm text-[#edd9be]/70">
-        Chạm nhẹ vào nút để bước qua cánh cổng ♡
+      <p class="mt-3.5 font-cursive text-sm text-[#edd9be]/75">
+        Chạm nhẹ vào hoa hồng hoặc nhấn nút để bước qua vòm cổng ♡
       </p>
     </div>
 
@@ -217,116 +425,107 @@
   <!-- ============================================================
        LAYER 2 (Z-INDEX 20): HANGING PAPER VINES & 4 SWINGING LANTERNS
        ============================================================ -->
-  <div id="layer-2" class="absolute inset-0 z-20 pointer-events-none overflow-hidden paper-shadow-layer2">
+  <div id="layer-2" class="archway-layer">
     
-    <!-- SVG Hanging Paper Vines Drape -->
-    <svg class="absolute top-0 left-0 w-full h-[320px] pointer-events-none" viewBox="0 0 1440 320" preserveAspectRatio="none">
-      <!-- Hanging Paper Vines & Leaves -->
-      <g fill="#3d234a" opacity="0.95">
-        <!-- Far Left Vine -->
-        <path d="M60,0 Q90,90 70,160 Q55,210 65,260 Q50,220 55,160 Q70,90 50,0 Z" />
-        <!-- Left Leaf Clusters -->
-        <path d="M65,90 C85,80 95,100 80,115 C65,110 62,95 65,90 Z" fill="#52325c" />
-        <path d="M55,140 C35,130 25,150 40,165 C55,160 52,145 55,140 Z" fill="#6d4275" />
-        <path d="M68,200 C88,190 98,210 83,225 C68,220 65,205 68,200 Z" fill="#52325c" />
+    <!-- SVG Hanging Paper Vines & Botanical Leaf Drapes -->
+    <svg class="absolute top-0 left-0 w-full h-[350px] pointer-events-none" viewBox="0 0 1440 350" preserveAspectRatio="none">
+      <g fill="#3d234a" opacity="0.96">
+        <!-- Far Left Hanging Vine -->
+        <path d="M72,0 Q102,95 80,175 Q62,235 76,290 Q58,245 64,175 Q82,95 60,0 Z" />
+        <path d="M76,95 C100,84 112,106 94,122 C76,116 72,100 76,95 Z" fill="#52325c" />
+        <path d="M64,150 C40,138 28,160 46,176 C64,170 60,156 64,150 Z" fill="#6d4275" />
+        <path d="M78,215 C102,204 112,226 94,242 C78,236 74,220 78,215 Z" fill="#52325c" />
+        <path d="M70,265 C50,256 42,276 58,290 C70,284 68,270 70,265 Z" fill="#dca2ae" opacity="0.65" />
 
-        <!-- Mid-Left Vine -->
-        <path d="M380,0 Q410,70 395,140 Q380,180 390,210 Q375,170 385,130 Q400,70 370,0 Z" />
-        <path d="M395,70 C415,60 425,80 410,95 C395,90 392,75 395,70 Z" fill="#52325c" />
-        <path d="M385,120 C365,110 355,130 370,145 C385,140 382,125 385,120 Z" fill="#6d4275" />
+        <!-- Inner Left Hanging Vine -->
+        <path d="M390,0 Q420,75 404,150 Q388,195 398,235 Q382,190 392,140 Q408,75 378,0 Z" />
+        <path d="M404,75 C426,64 438,86 420,102 C404,96 400,80 404,75 Z" fill="#52325c" />
+        <path d="M392,130 C370,118 358,140 376,156 C392,150 388,136 392,130 Z" fill="#6d4275" />
+        <path d="M398,190 C416,182 424,200 410,214 C398,208 395,195 398,190 Z" fill="#dca2ae" opacity="0.6" />
 
-        <!-- Mid-Right Vine -->
-        <path d="M1060,0 Q1030,70 1045,140 Q1060,180 1050,210 Q1065,170 1055,130 Q1040,70 1070,0 Z" />
-        <path d="M1045,70 C1025,60 1015,80 1030,95 C1045,90 1048,75 1045,70 Z" fill="#52325c" />
-        <path d="M1055,120 C1075,110 1085,130 1070,145 C1055,140 1058,125 1055,120 Z" fill="#6d4275" />
+        <!-- Inner Right Hanging Vine -->
+        <path d="M1050,0 Q1020,75 1036,150 Q1052,195 1042,235 Q1058,190 1048,140 Q1032,75 1062,0 Z" />
+        <path d="M1036,75 C1014,64 1002,86 1020,102 C1036,96 1040,80 1036,75 Z" fill="#52325c" />
+        <path d="M1048,130 C1070,118 1082,140 1064,156 C1048,150 1052,136 1048,130 Z" fill="#6d4275" />
+        <path d="M1042,190 C1024,182 1016,200 1030,214 C1042,208 1045,195 1042,190 Z" fill="#dca2ae" opacity="0.6" />
 
-        <!-- Far Right Vine -->
-        <path d="M1380,0 Q1350,90 1370,160 Q1385,210 1375,260 Q1390,220 1385,160 Q1370,90 1390,0 Z" />
-        <path d="M1375,90 C1355,80 1345,100 1360,115 C1375,110 1378,95 1375,90 Z" fill="#52325c" />
-        <path d="M1385,140 C1405,130 1415,150 1400,165 C1385,160 1388,145 1385,140 Z" fill="#6d4275" />
-        <path d="M1372,200 C1352,190 1342,210 1357,225 C1372,220 1375,205 1372,200 Z" fill="#52325c" />
+        <!-- Far Right Hanging Vine -->
+        <path d="M1368,0 Q1338,95 1360,175 Q1378,235 1364,290 Q1382,245 1376,175 Q1358,95 1380,0 Z" />
+        <path d="M1364,95 C1340,84 1328,106 1346,122 C1364,116 1368,100 1364,95 Z" fill="#52325c" />
+        <path d="M1376,150 C1400,138 1412,160 1394,176 C1376,170 1380,156 1376,150 Z" fill="#6d4275" />
+        <path d="M1362,215 C1338,204 1328,226 1346,242 C1362,236 1366,220 1362,215 Z" fill="#52325c" />
+        <path d="M1370,265 C1390,256 1398,276 1382,290 C1370,284 1372,270 1370,265 Z" fill="#dca2ae" opacity="0.65" />
       </g>
     </svg>
 
-    <!-- 4 SWINGING PAPER LANTERNS (Interactive Hover Physics) -->
+    <!-- 4 SWINGING PAPER LANTERNS (Interactive Hover Physics & Wind Chimes) -->
     
     <!-- Lantern 1: Left Outer Branch -->
-    <div id="lantern-1" class="lantern-unit absolute left-[12%] sm:left-[15%] top-0 pointer-events-auto cursor-pointer flex flex-col items-center">
-      <!-- Hanging Paper Chain / String -->
-      <div class="w-[1.5px] h-20 sm:h-28 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/70"></div>
-      
-      <!-- Lantern Paper Body -->
+    <div id="lantern-1" class="lantern-unit left-[11%] sm:left-[15%]" title="Chạm nhẹ vào lồng đèn phép thuật ✨">
+      <div class="w-[1.5px] h-20 sm:h-28 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/80"></div>
       <div class="relative w-12 sm:w-14 h-16 sm:h-20 flex flex-col items-center">
-        <!-- Lantern Roof -->
         <div class="w-14 sm:w-16 h-4 bg-[#26132f] rounded-t-md border-b border-[#ffd875] shadow-md flex items-center justify-center">
           <div class="w-2.5 h-2.5 rounded-full bg-[#ffd875] -mt-3 shadow-[0_0_8px_#ffd875]"></div>
         </div>
-        <!-- Lantern Chamber -->
-        <div class="relative w-11 sm:w-13 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/60 flex items-center justify-center overflow-hidden">
-          <!-- Warm Glowing Light Core -->
+        <div class="relative w-11 sm:w-13 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/70 flex items-center justify-center overflow-hidden">
           <div class="lantern-glow-mesh absolute w-6 h-6 rounded-full bg-[#ffd875] opacity-90"></div>
-          <div class="relative z-10 w-2 h-4 rounded-full bg-[#fffbee] shadow-[0_0_12px_#fff]"></div>
-          <!-- Paper Lattice Bars -->
+          <div class="relative z-10 w-2.5 h-4 rounded-full bg-[#fffbee] shadow-[0_0_12px_#fff]"></div>
           <div class="absolute inset-0 border-t border-b border-[#ffd875]/40 pointer-events-none"></div>
         </div>
-        <!-- Lantern Base & Tassel -->
-        <div class="w-12 sm:w-14 h-2.5 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/50 flex justify-center">
-          <div class="w-1 h-6 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
+        <div class="w-12 sm:w-14 h-2.5 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/60 flex justify-center">
+          <div class="w-1 h-7 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
         </div>
       </div>
     </div>
 
     <!-- Lantern 2: Left Inner Branch -->
-    <div id="lantern-2" class="lantern-unit absolute left-[26%] sm:left-[28%] top-0 pointer-events-auto cursor-pointer flex flex-col items-center">
-      <div class="w-[1.5px] h-12 sm:h-16 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/70"></div>
-      
+    <div id="lantern-2" class="lantern-unit left-[25%] sm:left-[28%]" title="Chạm nhẹ vào lồng đèn phép thuật ✨">
+      <div class="w-[1.5px] h-12 sm:h-16 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/80"></div>
       <div class="relative w-11 sm:w-13 h-15 sm:h-18 flex flex-col items-center">
         <div class="w-13 sm:w-15 h-3.5 bg-[#26132f] rounded-t-md border-b border-[#ffd875] flex items-center justify-center">
           <div class="w-2 h-2 rounded-full bg-[#ffd875] -mt-2.5 shadow-[0_0_8px_#ffd875]"></div>
         </div>
-        <div class="relative w-10 sm:w-12 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/60 flex items-center justify-center overflow-hidden">
+        <div class="relative w-10 sm:w-12 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/70 flex items-center justify-center overflow-hidden">
           <div class="lantern-glow-mesh absolute w-5.5 h-5.5 rounded-full bg-[#ffd875] opacity-90"></div>
           <div class="relative z-10 w-2 h-3.5 rounded-full bg-[#fffbee] shadow-[0_0_10px_#fff]"></div>
         </div>
-        <div class="w-11 sm:w-13 h-2 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/50 flex justify-center">
+        <div class="w-11 sm:w-13 h-2 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/60 flex justify-center">
           <div class="w-1 h-5 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
         </div>
       </div>
     </div>
 
     <!-- Lantern 3: Right Inner Branch -->
-    <div id="lantern-3" class="lantern-unit absolute right-[26%] sm:right-[28%] top-0 pointer-events-auto cursor-pointer flex flex-col items-center">
-      <div class="w-[1.5px] h-12 sm:h-16 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/70"></div>
-      
+    <div id="lantern-3" class="lantern-unit right-[25%] sm:right-[28%]" title="Chạm nhẹ vào lồng đèn phép thuật ✨">
+      <div class="w-[1.5px] h-12 sm:h-16 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/80"></div>
       <div class="relative w-11 sm:w-13 h-15 sm:h-18 flex flex-col items-center">
         <div class="w-13 sm:w-15 h-3.5 bg-[#26132f] rounded-t-md border-b border-[#ffd875] flex items-center justify-center">
           <div class="w-2 h-2 rounded-full bg-[#ffd875] -mt-2.5 shadow-[0_0_8px_#ffd875]"></div>
         </div>
-        <div class="relative w-10 sm:w-12 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/60 flex items-center justify-center overflow-hidden">
+        <div class="relative w-10 sm:w-12 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/70 flex items-center justify-center overflow-hidden">
           <div class="lantern-glow-mesh absolute w-5.5 h-5.5 rounded-full bg-[#ffd875] opacity-90"></div>
           <div class="relative z-10 w-2 h-3.5 rounded-full bg-[#fffbee] shadow-[0_0_10px_#fff]"></div>
         </div>
-        <div class="w-11 sm:w-13 h-2 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/50 flex justify-center">
+        <div class="w-11 sm:w-13 h-2 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/60 flex justify-center">
           <div class="w-1 h-5 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
         </div>
       </div>
     </div>
 
     <!-- Lantern 4: Right Outer Branch -->
-    <div id="lantern-4" class="lantern-unit absolute right-[12%] sm:right-[15%] top-0 pointer-events-auto cursor-pointer flex flex-col items-center">
-      <div class="w-[1.5px] h-20 sm:h-28 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/70"></div>
-      
+    <div id="lantern-4" class="lantern-unit right-[11%] sm:right-[15%]" title="Chạm nhẹ vào lồng đèn phép thuật ✨">
+      <div class="w-[1.5px] h-20 sm:h-28 bg-gradient-to-b from-[#ffd875]/30 to-[#ffd875]/80"></div>
       <div class="relative w-12 sm:w-14 h-16 sm:h-20 flex flex-col items-center">
         <div class="w-14 sm:w-16 h-4 bg-[#26132f] rounded-t-md border-b border-[#ffd875] shadow-md flex items-center justify-center">
           <div class="w-2.5 h-2.5 rounded-full bg-[#ffd875] -mt-3 shadow-[0_0_8px_#ffd875]"></div>
         </div>
-        <div class="relative w-11 sm:w-13 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/60 flex items-center justify-center overflow-hidden">
+        <div class="relative w-11 sm:w-13 flex-1 bg-gradient-to-b from-[#3d1a33]/90 to-[#220d20]/95 border-x border-[#ffd875]/70 flex items-center justify-center overflow-hidden">
           <div class="lantern-glow-mesh absolute w-6 h-6 rounded-full bg-[#ffd875] opacity-90"></div>
-          <div class="relative z-10 w-2 h-4 rounded-full bg-[#fffbee] shadow-[0_0_12px_#fff]"></div>
+          <div class="relative z-10 w-2.5 h-4 rounded-full bg-[#fffbee] shadow-[0_0_12px_#fff]"></div>
           <div class="absolute inset-0 border-t border-b border-[#ffd875]/40 pointer-events-none"></div>
         </div>
-        <div class="w-12 sm:w-14 h-2.5 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/50 flex justify-center">
-          <div class="w-1 h-6 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
+        <div class="w-12 sm:w-14 h-2.5 bg-[#26132f] rounded-b-md border-t border-[#ffd875]/60 flex justify-center">
+          <div class="w-1 h-7 bg-gradient-to-b from-[#ffd875] to-[#dca2ae] rounded-full mt-1"></div>
         </div>
       </div>
     </div>
@@ -337,71 +536,84 @@
        LAYER 3 (Z-INDEX 30): ANCIENT TREE ROOTS & BRANCHES ARCHWAY
        Dark Purple (#2d1c44) with Deep Cut Paper Drop-Shadows
        ============================================================ -->
-  <div id="layer-3" class="absolute inset-0 z-30 pointer-events-none overflow-hidden paper-shadow-deep">
+  <div id="layer-3" class="archway-layer">
     <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="none">
       
-      <!-- Back Contour of Layer 3: Dark silhouette base for multi-layered thickness -->
-      <path d="M0,0 L1440,0 L1440,140 
-               C1320,130 1200,90 1080,140 
-               C980,180 920,240 850,220 
-               C780,200 700,210 650,240 
-               C580,270 480,200 400,160 
-               C300,120 160,160 0,130 Z" 
-            fill="#1e1230" opacity="0.9" />
+      <!-- Sub-layer A: Recessed Dark Plum Paper Backing -->
+      <path d="M0,0 L1440,0 L1440,145 
+               C1310,135 1200,90 1075,145 
+               C975,185 915,245 845,225 
+               C775,205 700,210 645,240 
+               C575,270 475,200 395,160 
+               C295,120 155,165 0,135 Z" 
+            fill="#1c102e" opacity="0.92" />
 
-      <!-- Left Ancient Tree Trunk & Gnarled Roots (Dark Purple #2d1c44) -->
+      <!-- Sub-layer B: Left Ancient Tree Trunk & Gnarled Roots (#2d1c44) -->
       <path d="M0,0 
-               L340,0 
-               C290,90 220,150 160,220 
-               C120,265 140,340 100,420 
-               C65,490 110,580 80,680 
-               C55,750 120,830 180,900 
+               L350,0 
+               C295,90 225,155 162,225 
+               C118,272 142,345 98,428 
+               C62,498 112,585 78,685 
+               C52,755 125,832 195,900 
                L0,900 Z" 
             fill="#2d1c44" />
 
-      <!-- Left Root Knolls & Branch Tendrils reaching inward -->
-      <path d="M160,220 C220,240 280,210 320,250 C270,270 200,250 140,280 Z" fill="#382154" />
-      <path d="M100,420 C140,430 170,410 190,440 C160,460 120,440 90,470 Z" fill="#382154" />
-      <path d="M80,680 C130,690 180,670 220,720 C170,730 120,710 70,750 Z" fill="#241438" />
+      <!-- Left Inner Bark Ridges & Root Tendrils -->
+      <path d="M162,225 C228,245 290,212 332,254 C278,274 205,252 142,285 Z" fill="#382154" />
+      <path d="M98,428 C145,438 178,415 202,448 C168,468 122,448 88,478 Z" fill="#382154" />
+      <path d="M78,685 C135,695 190,672 232,726 C178,736 122,714 68,756 Z" fill="#241438" />
+      <!-- Left Root Hollow Cutout Detail -->
+      <path d="M24,520 Q52,480 44,565 Q36,620 18,585 Z" fill="#180d29" opacity="0.8" />
 
-      <!-- Right Ancient Tree Trunk & Gnarled Roots (Dark Purple #2d1c44) -->
+      <!-- Sub-layer C: Right Ancient Tree Trunk & Gnarled Roots (#2d1c44) -->
       <path d="M1440,0 
-               L1100,0 
-               C1150,90 1220,150 1280,220 
-               C1320,265 1300,340 1340,420 
-               C1375,490 1330,580 1360,680 
-               C1385,750 1320,830 1260,900 
+               L1090,0 
+               C1145,90 1215,155 1278,225 
+               C1322,272 1298,345 1342,428 
+               C1378,498 1328,585 1362,685 
+               C1388,755 1315,832 1245,900 
                L1440,900 Z" 
             fill="#2d1c44" />
 
-      <!-- Right Root Knolls & Branch Tendrils reaching inward -->
-      <path d="M1280,220 C1220,240 1160,210 1120,250 C1170,270 1240,250 1300,280 Z" fill="#382154" />
-      <path d="M1340,420 C1300,430 1270,410 1250,440 C1280,460 1320,440 1350,470 Z" fill="#382154" />
-      <path d="M1360,680 C1310,690 1260,670 1220,720 C1270,730 1320,710 1370,750 Z" fill="#241438" />
+      <!-- Right Inner Bark Ridges & Root Tendrils -->
+      <path d="M1278,225 C1212,245 1150,212 1108,254 C1162,274 1235,252 1298,285 Z" fill="#382154" />
+      <path d="M1342,428 C1295,438 1262,415 1238,448 C1272,468 1318,448 1352,478 Z" fill="#382154" />
+      <path d="M1362,685 C1305,695 1250,672 1208,726 C1262,736 1318,714 1372,756 Z" fill="#241438" />
+      <!-- Right Root Hollow Cutout Detail -->
+      <path d="M1416,520 Q1388,480 1396,565 Q1404,620 1422,585 Z" fill="#180d29" opacity="0.8" />
 
-      <!-- Top Ancient Archway Canopy Connecting Left and Right -->
+      <!-- Top Interlocking Ancient Archway Canopy -->
       <path d="M0,0 
                L1440,0 
-               L1440,65 
-               C1220,75 1060,40 920,85 
-               C840,110 760,115 720,115 
-               C680,115 600,110 520,85 
-               C380,40 220,75 0,65 Z" 
+               L1440,68 
+               C1220,78 1060,42 918,88 
+               C838,114 760,118 720,118 
+               C680,118 602,114 522,88 
+               C380,42 220,78 0,68 Z" 
             fill="#2d1c44" />
 
-      <!-- Delicate papercut branch fretwork hanging along the arch crown -->
-      <path d="M520,85 Q620,135 720,120 Q820,135 920,85 Q820,105 720,105 Q620,105 520,85 Z" fill="#3d234a" />
+      <!-- Delicate Papercut Branch Fretwork Crown -->
+      <path d="M522,88 Q620,140 720,122 Q820,140 918,88 Q820,108 720,108 Q620,108 522,88 Z" fill="#3d234a" />
 
-      <!-- Bottom Ground Roots & Mossy Earth Framing the Base -->
-      <path d="M0,900 L0,845 Q360,820 720,855 Q1080,820 1440,845 L1440,900 Z" fill="#241438" />
-      <path d="M180,900 Q360,865 720,885 Q1080,865 1260,900 Z" fill="#2d1c44" />
+      <!-- Bottom Ground Roots & Forest Floor Framing the Base -->
+      <path d="M0,900 L0,848 Q360,822 720,858 Q1080,822 1440,848 L1440,900 Z" fill="#241438" />
+      <path d="M160,900 Q360,866 720,888 Q1080,866 1280,900 Z" fill="#2d1c44" />
     </svg>
   </div>
+
+  <!-- Storybook Chapter Progress Indicator -->
+  <nav class="storybook-stepper" aria-label="Tiến trình hành trình sinh nhật">
+    <span class="step-dot active" title="Chương I: Cổng Cổ Tích"></span>
+    <span class="step-dot" title="Chương II: Khu Vườn Hoa"></span>
+    <span class="step-dot" title="Chương III: Bánh Sinh Nhật & Ước Nguyện"></span>
+    <span class="step-dot" title="Chương IV: Món Quà Bí Mật"></span>
+    <span style="margin-left: 4px;">Chương I / IV</span>
+  </nav>
 
   <!-- ============================================================
        FLASH OVERLAY: ZOOM-THROUGH TRANSITION TO RADIANT WHITE
        ============================================================ -->
-  <div id="flash-overlay" class="fixed inset-0 z-50 bg-white pointer-events-none opacity-0"></div>
+  <div id="flash-overlay" class="fixed inset-0 z-50 bg-[#fffaf2] pointer-events-none opacity-0" style="position:fixed;inset:0;z-index:50;background:#fffaf2;pointer-events:none;opacity:0;"></div>
 
   <!-- ============================================================
        CORE JAVASCRIPT: GSAP PARALLAX, FIREFLIES, HOVER PHYSICS & ZOOM
@@ -415,9 +627,36 @@
       const layer2 = document.getElementById('layer-2');
       const layer3 = document.getElementById('layer-3');
       const roseGlow = document.getElementById('rose-glow');
+      const paperRose = document.getElementById('paper-rose');
       const btnExplore = document.getElementById('btn-explore');
       const flashOverlay = document.getElementById('flash-overlay');
       const firefliesCanvas = document.getElementById('fireflies-canvas');
+
+      /* Web Audio Chime Synthesizer */
+      let audioCtx = null;
+      function playNote(freq = 659.25, dur = 1.4, vol = 0.18) {
+        try {
+          const AudioClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioClass) return;
+          if (!audioCtx) audioCtx = new AudioClass();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+
+          const t = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.linearRampToValueAtTime(vol, t + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + dur);
+        } catch (e) {}
+      }
 
       /* Mouse Tracking State */
       const mouse = {
@@ -428,59 +667,68 @@
         isActive: false
       };
 
-      window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-        mouse.normX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-        mouse.normY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+      function updateParallax(clientX, clientY) {
+        mouse.x = clientX;
+        mouse.y = clientY;
+        mouse.normX = (clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+        mouse.normY = (clientY / window.innerHeight - 0.5) * 2; // -1 to 1
         mouse.isActive = true;
+
+        if (typeof gsap === 'undefined') return;
 
         /* -------------------------------------------------------------
          * 1. MOUSE PARALLAX (GSAP): 
          * Layer 3 moves slightly opposite, Layer 2 moderately, Layer 1 stays mostly still
          * ------------------------------------------------------------*/
-        // Layer 3 (Foreground Archway): Moves OPPOSITE to the mouse
         gsap.to(layer3, {
           x: -mouse.normX * 28,
           y: -mouse.normY * 18,
           rotationX: mouse.normY * 2.5,
           rotationY: -mouse.normX * 2.5,
           duration: 1.1,
-          ease: "power2.out"
+          ease: 'power2.out',
+          overwrite: 'auto'
         });
 
-        // Layer 2 (Mid-ground Vines & Lanterns): Moves MODERATELY
         gsap.to(layer2, {
           x: mouse.normX * 18,
           y: mouse.normY * 12,
           rotationX: -mouse.normY * 1.8,
           rotationY: mouse.normX * 1.8,
           duration: 1.0,
-          ease: "power2.out"
+          ease: 'power2.out',
+          overwrite: 'auto'
         });
 
-        // Layer 1 (Background Starry Sky & Centerpiece): Stays MOSTLY STILL
         gsap.to(layer1, {
           x: mouse.normX * 6,
           y: mouse.normY * 4,
           duration: 1.3,
-          ease: "power2.out"
+          ease: 'power2.out',
+          overwrite: 'auto'
         });
-      });
+      }
+
+      const onMouseMove = (e) => updateParallax(e.clientX, e.clientY);
+      const onTouchMove = (e) => {
+        if (e.touches && e.touches[0]) {
+          updateParallax(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('touchmove', onTouchMove, { passive: true });
 
       /* -------------------------------------------------------------
        * 2. PULSING CENTER: HEARTBEAT ANIMATION ON ROSE RADIAL GLOW
        * ------------------------------------------------------------*/
-      if (roseGlow) {
+      if (roseGlow && typeof gsap !== 'undefined') {
         const heartbeatTL = gsap.timeline({ repeat: -1, delay: 0.1 });
         heartbeatTL
-          // Lub (first heartbeat)
-          .to(roseGlow, { scale: 1.18, opacity: 0.95, duration: 0.22, ease: "power2.out" })
-          .to(roseGlow, { scale: 1.04, opacity: 0.72, duration: 0.16, ease: "power1.in" })
-          // Dub (second heartbeat, slightly stronger)
-          .to(roseGlow, { scale: 1.25, opacity: 1.0, duration: 0.26, ease: "power2.out" })
-          .to(roseGlow, { scale: 1.0, opacity: 0.65, duration: 0.65, ease: "sine.inOut" })
-          // Rest pause before next beat
+          .to(roseGlow, { scale: 1.18, opacity: 0.95, duration: 0.22, ease: 'power2.out' })
+          .to(roseGlow, { scale: 1.04, opacity: 0.72, duration: 0.16, ease: 'power1.in' })
+          .to(roseGlow, { scale: 1.26, opacity: 1.0, duration: 0.26, ease: 'power2.out' })
+          .to(roseGlow, { scale: 1.0, opacity: 0.65, duration: 0.65, ease: 'sine.inOut' })
           .to({}, { duration: 0.85 });
       }
 
@@ -488,77 +736,111 @@
        * 3. HOVER PHYSICS ON 4 SWINGING PAPER LANTERNS
        * ------------------------------------------------------------*/
       const lanterns = [
-        { id: 'lantern-1', baseAmp: 3.5, baseDur: 2.4, isEven: true },
-        { id: 'lantern-2', baseAmp: -3.0, baseDur: 2.1, isEven: false },
-        { id: 'lantern-3', baseAmp: 3.0, baseDur: 2.2, isEven: true },
-        { id: 'lantern-4', baseAmp: -3.5, baseDur: 2.5, isEven: false }
+        { id: 'lantern-1', baseAmp: 3.5, baseDur: 2.4, isEven: true, note: 659.25 },
+        { id: 'lantern-2', baseAmp: -3.0, baseDur: 2.1, isEven: false, note: 783.99 },
+        { id: 'lantern-3', baseAmp: 3.0, baseDur: 2.2, isEven: true, note: 880.00 },
+        { id: 'lantern-4', baseAmp: -3.5, baseDur: 2.5, isEven: false, note: 1046.50 }
       ];
 
-      lanterns.forEach(cfg => {
-        const el = document.getElementById(cfg.id);
-        if (!el) return;
+      if (typeof gsap !== 'undefined') {
+        lanterns.forEach(cfg => {
+          const el = document.getElementById(cfg.id);
+          if (!el) return;
 
-        const glowMesh = el.querySelector('.lantern-glow-mesh');
+          const glowMesh = el.querySelector('.lantern-glow-mesh');
 
-        // Initial Ambient Gentle Swing
-        let currentSwing = gsap.to(el, {
-          rotation: cfg.baseAmp,
-          duration: cfg.baseDur,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          transformOrigin: "top center"
-        });
-
-        // Hover Physics: Swings faster and glow intensifies
-        el.addEventListener('mouseenter', () => {
-          currentSwing.kill();
-          currentSwing = gsap.to(el, {
-            rotation: cfg.isEven ? 9.5 : -9.5,
-            duration: 0.55,
-            repeat: -1,
-            yoyo: true,
-            ease: "power1.inOut",
-            transformOrigin: "top center"
-          });
-
-          if (glowMesh) {
-            gsap.to(glowMesh, {
-              scale: 1.5,
-              opacity: 1,
-              duration: 0.35,
-              ease: "power2.out"
-            });
-          }
-        });
-
-        // Mouse Leave: Smoothly dampens back to gentle ambient swing
-        el.addEventListener('mouseleave', () => {
-          currentSwing.kill();
-          currentSwing = gsap.to(el, {
+          let currentSwing = gsap.to(el, {
             rotation: cfg.baseAmp,
             duration: cfg.baseDur,
             repeat: -1,
             yoyo: true,
-            ease: "sine.inOut",
-            transformOrigin: "top center"
+            ease: 'sine.inOut',
+            transformOrigin: 'top center'
           });
 
-          if (glowMesh) {
-            gsap.to(glowMesh, {
-              scale: 1,
-              opacity: 0.85,
-              duration: 0.6,
-              ease: "power2.out"
+          el.addEventListener('mouseenter', () => {
+            playNote(cfg.note, 1.1, 0.12);
+            currentSwing.kill();
+            currentSwing = gsap.to(el, {
+              rotation: cfg.isEven ? 9.5 : -9.5,
+              duration: 0.52,
+              repeat: -1,
+              yoyo: true,
+              ease: 'power1.inOut',
+              transformOrigin: 'top center'
             });
-          }
+
+            if (glowMesh) {
+              gsap.to(glowMesh, {
+                scale: 1.55,
+                opacity: 1,
+                duration: 0.35,
+                ease: 'power2.out'
+              });
+            }
+          });
+
+          el.addEventListener('mouseleave', () => {
+            currentSwing.kill();
+            currentSwing = gsap.to(el, {
+              rotation: cfg.baseAmp,
+              duration: cfg.baseDur,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+              transformOrigin: 'top center'
+            });
+
+            if (glowMesh) {
+              gsap.to(glowMesh, {
+                scale: 1,
+                opacity: 0.88,
+                duration: 0.6,
+                ease: 'power2.out'
+              });
+            }
+          });
         });
-      });
+      }
 
       /* -------------------------------------------------------------
-       * 4. INTERACTIVE FIREFLIES CANVAS (30% Gravitate towards Mouse)
+       * 4. INTERACTIVE FIREFLIES & ROSE PETAL BURST CANVAS
+       *    (30% of fireflies gravitate towards user's cursor)
        * ------------------------------------------------------------*/
       let animId = null;
+      const roseBurstPetals = [];
+
+      function spawnRosePetalBurst(originX, originY) {
+        const colors = ['#e11d48', '#f43f5e', '#fb7185', '#ffd875', '#ffe4e6'];
+        for (let i = 0; i < 28; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 50 + Math.random() * 140;
+          roseBurstPetals.push({
+            x: originX,
+            y: originY,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 35,
+            size: 4 + Math.random() * 5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rot: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 6,
+            age: 0,
+            life: 1.5 + Math.random() * 0.9
+          });
+        }
+      }
+
+      if (paperRose) {
+        paperRose.addEventListener('click', () => {
+          const rect = paperRose.getBoundingClientRect();
+          spawnRosePetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          playNote(587.33, 1.2, 0.18);
+          setTimeout(() => playNote(880, 1.5, 0.18), 90);
+          if (typeof gsap !== 'undefined') {
+            gsap.fromTo(paperRose, { scale: 0.92 }, { scale: 1.06, duration: 0.45, ease: 'elastic.out(1, 0.4)' });
+          }
+        });
+      }
 
       if (firefliesCanvas) {
         const fCtx = firefliesCanvas.getContext('2d');
@@ -571,10 +853,9 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const fireflyCount = 55;
+        const fireflyCount = 60;
         const fireflies = [];
-
-        // 30% of fireflies gravitate towards user's cursor
+        // Exactly 30% of fireflies gravitate towards user's cursor
         const gravitatingCount = Math.floor(fireflyCount * 0.30);
 
         for (let i = 0; i < fireflyCount; i++) {
@@ -587,13 +868,11 @@
             r: isGravitating ? (1.8 + Math.random() * 2.2) : (1.2 + Math.random() * 1.8),
             pulsePhase: Math.random() * Math.PI * 2,
             pulseSpeed: 1.8 + Math.random() * 2.4,
-            isGravitating: isGravitating,
-            orbitAngle: Math.random() * Math.PI * 2
+            isGravitating
           });
         }
 
-        // Background twinkling stars
-        const stars = Array.from({ length: 48 }, () => ({
+        const stars = Array.from({ length: 52 }, () => ({
           x: Math.random(),
           y: Math.random(),
           r: 0.8 + Math.random() * 1.6,
@@ -619,29 +898,23 @@
             fCtx.fill();
           });
 
-          // 2. Fireflies (Normal + Gravitating)
+          // 2. Fireflies (70% ambient + 30% gravitating towards mouse)
           fireflies.forEach(f => {
             if (f.isGravitating && mouse.isActive) {
-              // Gravitate gently towards user's cursor
               const dx = mouse.x - f.x;
               const dy = mouse.y - f.y;
               const dist = Math.hypot(dx, dy);
 
-              if (dist > 30) {
-                // Attractive force towards mouse
+              if (dist > 28) {
                 f.vx += (dx / dist) * 0.14;
                 f.vy += (dy / dist) * 0.14;
-
-                // Gentle playful swirl around cursor
-                f.vx += (-dy / dist) * 0.08;
-                f.vy += (dx / dist) * 0.08;
+                f.vx += (-dy / dist) * 0.07;
+                f.vy += (dx / dist) * 0.07;
               }
 
-              // Dampen velocity to prevent erratic oscillation
               f.vx *= 0.94;
               f.vy *= 0.94;
 
-              // Cap speed
               const spd = Math.hypot(f.vx, f.vy);
               if (spd > 3.2) {
                 f.vx = (f.vx / spd) * 3.2;
@@ -651,18 +924,15 @@
               f.x += f.vx;
               f.y += f.vy;
             } else {
-              // Free roaming ambient firefly
               f.x += f.vx * delta * 60;
               f.y += f.vy * delta * 60;
 
-              // Wrap around screen boundaries
               if (f.x < -20) f.x = width + 20;
               if (f.x > width + 20) f.x = -20;
               if (f.y < -20) f.y = height + 20;
               if (f.y > height + 20) f.y = -20;
             }
 
-            // Pulsing warm amber & gold fairy glow
             const pulse = 0.4 + 0.6 * Math.pow(Math.sin(time * f.pulseSpeed + f.pulsePhase), 2);
             const glowR = f.r * 5;
 
@@ -676,21 +946,53 @@
             fCtx.arc(f.x, f.y, glowR, 0, Math.PI * 2);
             fCtx.fill();
 
-            // Core sparkle point
             fCtx.fillStyle = `rgba(255, 255, 240, ${pulse})`;
             fCtx.beginPath();
             fCtx.arc(f.x, f.y, f.r * 0.8, 0, Math.PI * 2);
             fCtx.fill();
           });
 
+          // 3. Interactive Rose Petals Burst
+          for (let i = roseBurstPetals.length - 1; i >= 0; i--) {
+            const p = roseBurstPetals[i];
+            p.age += delta;
+            if (p.age >= p.life) {
+              roseBurstPetals.splice(i, 1);
+              continue;
+            }
+            p.x += p.vx * delta;
+            p.y += p.vy * delta;
+            p.vy += 65 * delta;
+            p.vx *= 0.98;
+            p.rot += p.rotSpeed * delta;
+
+            const alpha = 1 - p.age / p.life;
+            fCtx.save();
+            fCtx.globalAlpha = alpha;
+            fCtx.translate(p.x, p.y);
+            fCtx.rotate(p.rot);
+            fCtx.fillStyle = p.color;
+            fCtx.beginPath();
+            fCtx.ellipse(0, 0, p.size, p.size * 0.65, 0, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.restore();
+          }
+
           animId = requestAnimationFrame(renderFireflies);
         }
 
         animId = requestAnimationFrame(renderFireflies);
+
+        document.addEventListener('page:before-exit', () => {
+          if (animId) cancelAnimationFrame(animId);
+          window.removeEventListener('resize', resizeCanvas);
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('touchmove', onTouchMove);
+        }, { once: true });
       }
 
       /* -------------------------------------------------------------
-       * 5. ZOOM-THROUGH TRANSITION (Walking Through the Arch to White)
+       * 5. ZOOM-THROUGH TRANSITION (Walking Through the Arch to Garden)
        * ------------------------------------------------------------*/
       let isTransitioning = false;
 
@@ -700,82 +1002,78 @@
           if (isTransitioning) return;
           isTransitioning = true;
 
-          // Sound effect chime
-          try {
-            const AudioClass = window.AudioContext || window.webkitAudioContext;
-            if (AudioClass) {
-              const aCtx = new AudioClass();
-              const osc = aCtx.createOscillator();
-              const gain = aCtx.createGain();
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(523.25, aCtx.currentTime); // C5
-              osc.frequency.exponentialRampToValueAtTime(1046.50, aCtx.currentTime + 1.2); // C6
-              gain.gain.setValueAtTime(0.001, aCtx.currentTime);
-              gain.gain.linearRampToValueAtTime(0.3, aCtx.currentTime + 0.1);
-              gain.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + 1.4);
-              osc.connect(gain);
-              gain.connect(aCtx.destination);
-              osc.start();
-              osc.stop(aCtx.currentTime + 1.4);
-            }
-          } catch (err) {}
+          // Ensure background music plays on user's first gesture
+          if (window.ensureMusicPlayingOnGesture) {
+            window.ensureMusicPlayingOnGesture();
+          }
 
-          const tl = gsap.timeline({
-            onComplete: () => {
-              // Seamless route to garden page
+          // Ascending harp arpeggio chime
+          playNote(523.25, 1.2, 0.2); // C5
+          setTimeout(() => playNote(659.25, 1.3, 0.2), 110); // E5
+          setTimeout(() => playNote(783.99, 1.4, 0.2), 220); // G5
+          setTimeout(() => playNote(1046.50, 1.8, 0.24), 340); // C6
+
+          const navigateToGarden = () => {
+            if (window.navigateSeamless) {
+              window.navigateSeamless('garden.html');
+            } else {
               window.location.href = 'garden.html';
             }
+          };
+
+          if (typeof gsap === 'undefined') {
+            navigateToGarden();
+            return;
+          }
+
+          const tl = gsap.timeline({
+            onComplete: navigateToGarden
           });
 
           // 1. Button click compression
-          tl.to(btnExplore, { scale: 0.94, duration: 0.15, ease: "power2.in" })
-            .to(btnExplore, { scale: 1.15, opacity: 0, duration: 0.35, ease: "power2.out" }, "<0.12");
+          tl.to(btnExplore, { scale: 0.94, duration: 0.14, ease: 'power2.in' })
+            .to(btnExplore, { scale: 1.15, opacity: 0, duration: 0.35, ease: 'power2.out' }, '<0.12');
 
-          // 2. Archway (Layer 3) scales up massively (zoom-in), camera passes through opening
+          // 2. Archway (Layer 3) scales up massively (zoom-in), camera walks through opening
           tl.to(layer3, {
             scale: 8.5,
-            opacity: 0.1,
-            transformOrigin: "center center",
-            duration: 1.6,
-            ease: "power3.in"
+            opacity: 0.08,
+            transformOrigin: 'center center',
+            duration: 1.55,
+            ease: 'power3.in'
           }, 0.15);
 
-          // 3. Layer 2 (Vines & Lanterns) pushes outward and zooms past
+          // 3. Layer 2 (Vines & Lanterns) parts outward and zooms past
           tl.to(layer2, {
             scale: 5.2,
             opacity: 0,
-            transformOrigin: "center center",
-            duration: 1.35,
-            ease: "power2.in"
+            transformOrigin: 'center center',
+            duration: 1.3,
+            ease: 'power2.in'
           }, 0.15);
 
           // 4. Layer 1 (Rose & Typography) rushes toward the viewer
           tl.to(layer1, {
-            scale: 2.6,
-            opacity: 0.1,
-            transformOrigin: "center center",
-            duration: 1.35,
-            ease: "power2.in"
+            scale: 2.5,
+            opacity: 0.12,
+            transformOrigin: 'center center',
+            duration: 1.3,
+            ease: 'power2.in'
           }, 0.15);
 
-          // 5. Screen fades to radiant white, simulating entering the portal
+          // 5. Screen fades to warm radiant light, simulating entering the portal
           tl.to(flashOverlay, {
             opacity: 1,
-            duration: 1.15,
-            ease: "power2.inOut"
+            duration: 1.1,
+            ease: 'power2.inOut'
           }, 0.45);
         });
       }
 
-      /* Cleanup on page exit */
-      document.addEventListener('page:before-exit', () => {
-        if (animId) cancelAnimationFrame(animId);
-      }, { once: true });
-
     })();
   </script>
 
-  <!-- Persistent Background Music Controller -->
+  <!-- Persistent Background Music & Seamless SPA Controller -->
   <script src="js/seamless.js"></script>
 </body>
 </html>

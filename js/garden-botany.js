@@ -497,10 +497,14 @@ function drawBotanicalLeaf(ctx, x, y, angle, length, width, type = 'roseLeaf') {
   ctx.translate(x, y);
   ctx.rotate(angle);
 
-  // Soft shadow beneath leaf
-  ctx.shadowColor = 'rgba(35, 45, 38, 0.22)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetY = 4;
+  // Crisp Papercut drop-edge beneath leaf (Zero CPU blur cost)
+  ctx.fillStyle = 'rgba(15, 25, 18, 0.32)';
+  ctx.beginPath();
+  ctx.moveTo(0, 2.5);
+  ctx.bezierCurveTo(length * 0.28, -width + 2.5, length * 0.72, -width * 0.85 + 2.5, length, 2.5);
+  ctx.bezierCurveTo(length * 0.72, width * 0.85 + 2.5, length * 0.28, width + 2.5, 0, 2.5);
+  ctx.closePath();
+  ctx.fill();
 
   ctx.beginPath();
   ctx.moveTo(0, 0);

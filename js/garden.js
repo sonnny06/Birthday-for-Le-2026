@@ -15,6 +15,8 @@
   const soundButton = document.getElementById('sound-toggle');
   const replayButton = document.getElementById('replay-bloom');
   const firefliesButton = document.getElementById('fireflies-toggle');
+  const wishCounterBadge = document.getElementById('wish-counter-badge');
+  const discoveredNotes = new Set();
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
@@ -144,6 +146,11 @@
   const fallingPetals = [];
   const sparkles = [];
   const stars = [];
+  const skyLanterns = [];
+  const butterflies = [];
+  const shootingStars = [];
+  const babyBreathClusters = [];
+  const glowingMushrooms = [];
 
   const PALETTE_KEYS = [
     'sweetBlush',
@@ -157,6 +164,62 @@
   ];
 
   const spriteCache = new Map();
+  const fireflySprites = {};
+
+  let cachedSkyGrad = null;
+  let cachedNebulaGrad = null;
+  let cachedGalaxyGlow = null;
+  let cachedGrassGrad = null;
+  let cachedGrassGradH = 0;
+  let cachedPetalGrad = null;
+  let cachedStemGrad = null;
+
+  function getFireflySprite(hue) {
+    if (fireflySprites[hue]) return fireflySprites[hue];
+    const sCanvas = document.createElement('canvas');
+    const sz = 36;
+    sCanvas.width = sz;
+    sCanvas.height = sz;
+    const sCtx = sCanvas.getContext('2d');
+    const half = sz / 2;
+
+    const glow = sCtx.createRadialGradient(half, half, 0, half, half, half);
+    if (hue === 'gold') {
+      glow.addColorStop(0, 'rgba(255, 238, 140, 1)');
+      glow.addColorStop(0.35, 'rgba(255, 195, 110, 0.55)');
+      glow.addColorStop(1, 'rgba(255, 195, 110, 0)');
+    } else if (hue === 'pink') {
+      glow.addColorStop(0, 'rgba(255, 210, 235, 1)');
+      glow.addColorStop(0.35, 'rgba(241, 145, 185, 0.55)');
+      glow.addColorStop(1, 'rgba(241, 145, 185, 0)');
+    } else {
+      glow.addColorStop(0, 'rgba(180, 255, 215, 1)');
+      glow.addColorStop(0.35, 'rgba(110, 225, 175, 0.55)');
+      glow.addColorStop(1, 'rgba(110, 225, 175, 0)');
+    }
+    sCtx.fillStyle = glow;
+    sCtx.beginPath();
+    sCtx.arc(half, half, half, 0, TAU);
+    sCtx.fill();
+
+    sCtx.fillStyle = '#ffffff';
+    sCtx.beginPath();
+    sCtx.arc(half, half, 2.2, 0, TAU);
+    sCtx.fill();
+
+    fireflySprites[hue] = sCanvas;
+    return sCanvas;
+  }
+
+  function getPetalGrad() {
+    if (!cachedPetalGrad) {
+      cachedPetalGrad = ctx.createLinearGradient(0, -14, 0, 14);
+      cachedPetalGrad.addColorStop(0, '#fff4f8');
+      cachedPetalGrad.addColorStop(0.5, '#f4a5c3');
+      cachedPetalGrad.addColorStop(1, '#d8658d');
+    }
+    return cachedPetalGrad;
+  }
 
   function getRoseSprite(paletteKey, variety, radius) {
     const key = `${paletteKey}_${variety}_${Math.round(radius)}`;
@@ -186,28 +249,105 @@
   }
 
   /* -------------------------------------------------------------
-   * 4. GENERATING THE FULLSCREEN FLOWER GARDEN
+   * 4. GENERATING THE FULLSCREEN ENCHANTED GARDEN & SKY ELEMENTS
    * ------------------------------------------------------------*/
   function initStars() {
     stars.length = 0;
-    const count = 55;
+    const count = 85;
     for (let i = 0; i < count; i++) {
       stars.push({
         x: (i * 97.31 + 17) % 1,
-        y: ((i * 43.19 + 7) % 1) * 0.62, // upper night sky
-        radius: (i % 6 === 0) ? 2.0 : ((i % 2 === 0) ? 1.3 : 0.8),
+        y: ((i * 43.19 + 7) % 1) * 0.64,
+        radius: (i % 7 === 0) ? 2.2 : ((i % 2 === 0) ? 1.4 : 0.9),
         freq: 1.2 + (i % 7) * 0.4,
         phase: i * 1.7,
-        cross: i % 8 === 0
+        cross: i % 6 === 0
       });
     }
   }
 
-  function initFireflies(extraCount = 36) {
+  function initSkyLanterns(count = 9) {
+    for (let i = 0; i < count; i++) {
+      skyLanterns.push({
+        x: width * (0.08 + Math.random() * 0.84),
+        y: height * (0.14 + Math.random() * 0.48),
+        size: 8 + Math.random() * 7,
+        speedY: 5 + Math.random() * 8,
+        swayAmp: 8 + Math.random() * 12,
+        phase: Math.random() * TAU
+      });
+    }
+  }
+
+  function initButterflies() {
+    butterflies.length = 0;
+    const colors = [
+      { top: '#ffd875', bot: '#ffaa42' },
+      { top: '#f2c7ce', bot: '#dca2ae' },
+      { top: '#fff4b8', bot: '#f4a5c3' },
+      { top: '#c4f0de', bot: '#85d6b5' }
+    ];
+    for (let i = 0; i < 7; i++) {
+      const col = colors[i % colors.length];
+      butterflies.push({
+        x: width * (0.1 + Math.random() * 0.8),
+        y: height * (0.42 + Math.random() * 0.36),
+        vx: (Math.random() < 0.5 ? 1 : -1) * (18 + Math.random() * 22),
+        vy: (Math.random() - 0.5) * 10,
+        size: 6.5 + Math.random() * 3.5,
+        flapSpeed: 9 + Math.random() * 5,
+        phase: Math.random() * TAU,
+        topColor: col.top,
+        botColor: col.bot
+      });
+    }
+  }
+
+  function initGardenUndergrowth() {
+    babyBreathClusters.length = 0;
+    glowingMushrooms.length = 0;
+
+    // Tiny white & gold baby's breath floral sprays between the roses
+    const clusterCount = Math.max(18, Math.floor(width / 52));
+    for (let i = 0; i < clusterCount; i++) {
+      const cx = (i + 0.5) * (width / clusterCount) + (Math.random() - 0.5) * 28;
+      const cy = height * (0.64 + Math.random() * 0.28);
+      const florets = [];
+      const fCount = 5 + Math.floor(Math.random() * 5);
+      for (let k = 0; k < fCount; k++) {
+        florets.push({
+          dx: (Math.random() - 0.5) * 34,
+          dy: -Math.random() * 28,
+          r: 2.0 + Math.random() * 1.8,
+          isGold: k % 3 === 0
+        });
+      }
+      babyBreathClusters.push({
+        x: cx,
+        y: cy,
+        phase: Math.random() * TAU,
+        florets
+      });
+    }
+
+    // Glowing fairytale mushrooms along the foreground garden floor
+    const mushCount = Math.max(8, Math.floor(width / 135));
+    for (let i = 0; i < mushCount; i++) {
+      glowingMushrooms.push({
+        x: width * (0.06 + (i / mushCount) * 0.88) + (Math.random() - 0.5) * 35,
+        y: height * (0.87 + Math.random() * 0.09),
+        scale: 0.75 + Math.random() * 0.5,
+        hue: i % 2 === 0 ? 'gold' : 'aqua',
+        phase: Math.random() * TAU
+      });
+    }
+  }
+
+  function initFireflies(extraCount = 42) {
     for (let i = 0; i < extraCount; i++) {
       fireflies.push({
         x: Math.random() * width,
-        y: height * (0.2 + Math.random() * 0.75),
+        y: height * (0.18 + Math.random() * 0.78),
         vx: (Math.random() - 0.5) * 20,
         vy: -8 - Math.random() * 22,
         radius: 1.8 + Math.random() * 2.4,
@@ -221,7 +361,7 @@
 
   function initFallingPetals() {
     fallingPetals.length = 0;
-    const count = 22;
+    const count = 26;
     for (let i = 0; i < count; i++) {
       fallingPetals.push({
         x: Math.random() * width,
@@ -261,22 +401,22 @@
         let yRatio = 0;
 
         if (row === 0) {
-          // Row 0: Back horizon
-          radius = 20 + Math.random() * 6;
-          yRatio = 0.56 + Math.random() * 0.1;
+          // Row 0: Back horizon (lowered slightly so upper sky & title cartouche breathe clearly)
+          radius = 21 + Math.random() * 6;
+          yRatio = 0.58 + Math.random() * 0.08;
         } else if (row === 1) {
           // Row 1: Mid layer
-          radius = 30 + Math.random() * 8;
-          yRatio = 0.67 + Math.random() * 0.1;
+          radius = 31 + Math.random() * 8;
+          yRatio = 0.68 + Math.random() * 0.09;
         } else {
           // Row 2: Foreground (lush, prominent)
           radius = 42 + Math.random() * 11;
-          yRatio = 0.78 + Math.random() * 0.1;
+          yRatio = 0.79 + Math.random() * 0.09;
         }
 
         const x = (i + 0.5) * step + (Math.random() - 0.5) * step * 0.55;
         const y = height * yRatio;
-        const rootY = height + 10; // Rooted naturally at bottom of screen
+        const rootY = height + 10;
 
         const noteObj = BIRTHDAY_NOTES[flowerGlobalIndex % BIRTHDAY_NOTES.length];
         const distFromCenter = Math.abs(x - width * 0.5) / (width * 0.5);
@@ -321,19 +461,32 @@
   }
 
   function resizeCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    dpr = Math.min(window.devicePixelRatio || 1, 2.2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    // Cap DPR at 1.5 to eliminate heavy GPU fill-rate latency on high-res displays
+    dpr = Math.min(window.devicePixelRatio || 1, width > 1400 ? 1.25 : 1.5);
 
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+    // Invalidate cached gradients on window resize
+    cachedSkyGrad = null;
+    cachedNebulaGrad = null;
+    cachedGalaxyGlow = null;
+    cachedGrassGrad = null;
+    cachedPetalGrad = null;
+    cachedStemGrad = null;
+
     initStars();
     initFallingPetals();
+    skyLanterns.length = 0;
+    initSkyLanterns(9);
+    initButterflies();
+    initGardenUndergrowth();
     fireflies.length = 0;
-    initFireflies(36);
+    initFireflies(34);
     createGardenFlowers();
 
     bloomStartTime = performance.now();
@@ -364,94 +517,47 @@
    * 6. RENDERING: FULLSCREEN SKY, MOON, STARS, 3D PAPERCUT HILLS
    * ------------------------------------------------------------*/
   function drawSkyAndMoon(time) {
-    // 1. Deep Midnight Indigo Twilight Sky
-    const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
-    skyGrad.addColorStop(0, '#120b22');
-    skyGrad.addColorStop(0.35, '#1a122e');
-    skyGrad.addColorStop(0.70, '#2d1c44');
-    skyGrad.addColorStop(1, '#1e112a');
-    ctx.fillStyle = skyGrad;
+    // 1. Deep Midnight Indigo Twilight Sky (Cached gradient)
+    if (!cachedSkyGrad) {
+      cachedSkyGrad = ctx.createLinearGradient(0, 0, 0, height);
+      cachedSkyGrad.addColorStop(0, '#100920');
+      cachedSkyGrad.addColorStop(0.32, '#1a122e');
+      cachedSkyGrad.addColorStop(0.68, '#2d1c44');
+      cachedSkyGrad.addColorStop(1, '#1e112a');
+    }
+    ctx.fillStyle = cachedSkyGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Cosmic Rose Aura in the center of the shadowbox
-    const galaxyGlow = ctx.createRadialGradient(
-      width * 0.5, height * 0.52, 30,
-      width * 0.5, height * 0.52, width * 0.65
-    );
-    galaxyGlow.addColorStop(0, 'rgba(220, 162, 174, 0.18)');
-    galaxyGlow.addColorStop(0.55, 'rgba(184, 107, 126, 0.08)');
-    galaxyGlow.addColorStop(1, 'rgba(184, 107, 126, 0)');
-    ctx.fillStyle = galaxyGlow;
-    ctx.fillRect(0, 0, width, height);
-
-    // 3. 3D Layered Papercut Mountain Dunes / Rolling Terraces
+    // 2. Dreamy Diagonal Milky Way / Starlight Nebula Ribbon
     ctx.save();
-    // Layer 1: Distant Mauve Silhouette Ridge with paper drop shadow
-    ctx.fillStyle = '#2d1c44';
-    ctx.shadowColor = 'rgba(10, 5, 20, 0.55)';
-    ctx.shadowBlur = 16;
-    ctx.shadowOffsetY = 6;
+    ctx.translate(width * 0.5, height * 0.25);
+    ctx.rotate(-0.22);
+    if (!cachedNebulaGrad) {
+      cachedNebulaGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, width * 0.55);
+      cachedNebulaGrad.addColorStop(0, 'rgba(242, 199, 206, 0.14)');
+      cachedNebulaGrad.addColorStop(0.45, 'rgba(155, 105, 195, 0.08)');
+      cachedNebulaGrad.addColorStop(1, 'rgba(45, 28, 68, 0)');
+    }
+    ctx.fillStyle = cachedNebulaGrad;
     ctx.beginPath();
-    ctx.moveTo(0, height * 0.58);
-    ctx.bezierCurveTo(width * 0.25, height * 0.52, width * 0.55, height * 0.62, width, height * 0.54);
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
-    ctx.fill();
-
-    // Layer 2: Mid-ground Plum Hill Ridge with paper drop shadow
-    ctx.fillStyle = '#3d234a';
-    ctx.shadowColor = 'rgba(10, 5, 20, 0.65)';
-    ctx.shadowBlur = 18;
-    ctx.shadowOffsetY = 8;
-    ctx.beginPath();
-    ctx.moveTo(0, height * 0.68);
-    ctx.bezierCurveTo(width * 0.35, height * 0.62, width * 0.7, height * 0.72, width, height * 0.64);
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
-    ctx.fill();
-
-    // Layer 3: Foreground Velvety Paper Terrace with drop shadow
-    ctx.fillStyle = '#25152e';
-    ctx.shadowColor = 'rgba(10, 5, 20, 0.75)';
-    ctx.shadowBlur = 22;
-    ctx.shadowOffsetY = 10;
-    ctx.beginPath();
-    ctx.moveTo(0, height * 0.82);
-    ctx.bezierCurveTo(width * 0.45, height * 0.78, width * 0.8, height * 0.84, width, height * 0.79);
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
+    ctx.ellipse(0, 0, width * 0.6, height * 0.16, 0, 0, TAU);
     ctx.fill();
     ctx.restore();
 
-    // 4. Glowing Golden Paper Crescent Moon with Halo
-    const moonX = width * 0.85;
-    const moonY = Math.max(70, height * 0.15);
-    const moonR = Math.min(26, width * 0.04);
+    // Cosmic Rose Aura in the center of the shadowbox
+    if (!cachedGalaxyGlow) {
+      cachedGalaxyGlow = ctx.createRadialGradient(
+        width * 0.5, height * 0.52, 30,
+        width * 0.5, height * 0.52, width * 0.65
+      );
+      cachedGalaxyGlow.addColorStop(0, 'rgba(220, 162, 174, 0.16)');
+      cachedGalaxyGlow.addColorStop(0.55, 'rgba(184, 107, 126, 0.07)');
+      cachedGalaxyGlow.addColorStop(1, 'rgba(184, 107, 126, 0)');
+    }
+    ctx.fillStyle = cachedGalaxyGlow;
+    ctx.fillRect(0, 0, width, height);
 
-    const moonGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.5, moonX, moonY, moonR * 3.8);
-    moonGlow.addColorStop(0, 'rgba(255, 216, 117, 0.35)');
-    moonGlow.addColorStop(0.5, 'rgba(255, 170, 66, 0.1)');
-    moonGlow.addColorStop(1, 'rgba(255, 170, 66, 0)');
-    ctx.fillStyle = moonGlow;
-    ctx.beginPath();
-    ctx.arc(moonX, moonY, moonR * 3.8, 0, TAU);
-    ctx.fill();
-
-    ctx.save();
-    ctx.fillStyle = '#fff4b8';
-    ctx.shadowColor = 'rgba(255, 216, 117, 0.9)';
-    ctx.shadowBlur = 14;
-    ctx.beginPath();
-    ctx.arc(moonX, moonY, moonR, 0, TAU);
-    ctx.fill();
-
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(moonX - moonR * 0.45, moonY - moonR * 0.25, moonR * 0.92, 0, TAU);
-    ctx.fill();
-    ctx.restore();
-
-    // 5. Twinkling Stars
+    // 3. Twinkling Stars (drawn in upper sky before hills)
     stars.forEach(star => {
       const sx = star.x * width;
       const sy = star.y * height;
@@ -467,16 +573,526 @@
       ctx.arc(sx, sy, star.radius, 0, TAU);
       ctx.fill();
 
-      if (star.cross && twinkle > 0.75) {
-        ctx.strokeStyle = `rgba(255, 235, 215, ${twinkle * 0.5})`;
-        ctx.lineWidth = 0.8;
+      if (star.cross && twinkle > 0.72) {
+        ctx.strokeStyle = `rgba(255, 235, 215, ${twinkle * 0.55})`;
+        ctx.lineWidth = 0.85;
         ctx.beginPath();
-        ctx.moveTo(sx - 4, sy); ctx.lineTo(sx + 4, sy);
-        ctx.moveTo(sx, sy - 4); ctx.lineTo(sx, sy + 4);
+        ctx.moveTo(sx - 5, sy); ctx.lineTo(sx + 5, sy);
+        ctx.moveTo(sx, sy - 5); ctx.lineTo(sx, sy + 5);
         ctx.stroke();
       }
       ctx.restore();
     });
+
+    // 4. Clean 3D Layered Paper Crescent Moon with Concentric Paper Halo Rings (NO destination-out hole!)
+    const px = isPointerInside ? ((pointerX / (width || 1)) - 0.5) * 18 : 0;
+    const py = isPointerInside ? ((pointerY / (height || 1)) - 0.5) * 10 : 0;
+
+    const moonX = width * 0.85 - px * 0.25;
+    const moonY = Math.max(92, height * 0.17) - py * 0.2;
+    const moonR = Math.min(30, Math.max(20, width * 0.032));
+
+    // Concentric Paper Halo Discs
+    ctx.save();
+    const moonGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.4, moonX, moonY, moonR * 4.2);
+    moonGlow.addColorStop(0, 'rgba(255, 230, 150, 0.34)');
+    moonGlow.addColorStop(0.45, 'rgba(255, 195, 110, 0.12)');
+    moonGlow.addColorStop(1, 'rgba(255, 170, 66, 0)');
+    ctx.fillStyle = moonGlow;
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, moonR * 4.2, 0, TAU);
+    ctx.fill();
+
+    // Subtle paper ring cutouts around the moon
+    ctx.strokeStyle = 'rgba(255, 244, 184, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, moonR * 1.65, 0, TAU);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, moonR * 2.35, 0, TAU);
+    ctx.stroke();
+
+    // True Geometric Crescent Path (outer arc + inner concave arc)
+    ctx.fillStyle = '#fff4b8';
+    ctx.shadowColor = 'rgba(255, 216, 117, 0.9)';
+    ctx.shadowBlur = 16;
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, moonR, -Math.PI * 0.72, Math.PI * 0.48, false);
+    ctx.bezierCurveTo(
+      moonX + moonR * 0.35, moonY + moonR * 0.35,
+      moonX - moonR * 0.15, moonY - moonR * 0.45,
+      moonX + Math.cos(-Math.PI * 0.72) * moonR,
+      moonY + Math.sin(-Math.PI * 0.72) * moonR
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    // Dangling Star Charm hanging from the upper tip of the crescent moon
+    const tipX = moonX + Math.cos(-Math.PI * 0.72) * moonR;
+    const tipY = moonY + Math.sin(-Math.PI * 0.72) * moonR;
+    const charmSway = Math.sin(time * 1.8) * 2.5;
+    ctx.strokeStyle = 'rgba(255, 244, 184, 0.55)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX + charmSway, tipY + 22);
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffd875';
+    ctx.beginPath();
+    ctx.arc(tipX + charmSway, tipY + 24, 2.5, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+
+    // Soft Layered Paper Clouds near the moon & horizon
+    drawPaperCloud(moonX - moonR * 1.4 + Math.sin(time * 0.3) * 8, moonY + moonR * 0.75, moonR * 1.2, 'rgba(61, 35, 74, 0.68)');
+    drawPaperCloud(width * 0.18 + Math.cos(time * 0.25) * 10, height * 0.22, moonR * 1.35, 'rgba(45, 28, 68, 0.55)');
+
+    // 5. 3D Layered Papercut Mountain Dunes (Crisp Paper Contours - Zero GPU blur lag)
+    ctx.save();
+    // Layer 1: Distant Mauve Silhouette Ridge
+    ctx.fillStyle = '#2d1c44';
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.56 + py * 0.3);
+    ctx.bezierCurveTo(
+      width * 0.25 + px * 0.4, height * 0.50 + py * 0.3,
+      width * 0.55 + px * 0.4, height * 0.60 + py * 0.3,
+      width, height * 0.51 + py * 0.3
+    );
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(12, 6, 22, 0.42)';
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+
+    // Distant Right Ridge: Fairytale Paper Castle / Spire Silhouette
+    const casX = width * 0.82 + px * 0.45;
+    const casY = height * 0.535 + py * 0.3;
+    drawPaperCastleSilhouette(casX, casY, time);
+
+    // Distant Left Ridge: Storybook Cottage + Cypress Trees
+    const cotX = width * 0.18 + px * 0.45;
+    const cotY = height * 0.535 + py * 0.3;
+    drawPaperCottageSilhouette(cotX, cotY, time);
+
+    // Layer 2: Mid-ground Plum Hill Ridge
+    ctx.fillStyle = '#3d234a';
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.67 + py * 0.6);
+    ctx.bezierCurveTo(
+      width * 0.35 + px * 0.8, height * 0.60 + py * 0.6,
+      width * 0.7 + px * 0.8, height * 0.70 + py * 0.6,
+      width, height * 0.62 + py * 0.6
+    );
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(10, 4, 18, 0.52)';
+    ctx.lineWidth = 2.0;
+    ctx.stroke();
+
+    // Mid-ground Left Ridge: Romantic Paper Gazebo (Vọng Lâu Cổ Tích) with Glowing Lantern
+    const gazX = width * 0.11 + px * 0.75;
+    const gazY = height * 0.645 + py * 0.6;
+    drawPaperGazeboSilhouette(gazX, gazY, time);
+
+    // Mid-ground Right Ridge: Layered Paper Blossom Tree & Cypress Silhouettes
+    drawPaperTreeSilhouette(width * 0.89 + px * 0.75, height * 0.635 + py * 0.6, 44, '#331c40');
+    drawPaperTreeSilhouette(width * 0.93 + px * 0.75, height * 0.65 + py * 0.6, 32, '#2a1536');
+
+    // Layer 3: Foreground Velvety Paper Terrace
+    ctx.fillStyle = '#25152e';
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.81);
+    ctx.bezierCurveTo(width * 0.45 + px * 1.1, height * 0.76, width * 0.8 + px * 1.1, height * 0.83, width, height * 0.78);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(8, 3, 14, 0.62)';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPaperCloud(cx, cy, size, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(cx, cy, size * 0.52, Math.PI, TAU);
+    ctx.arc(cx + size * 0.45, cy - size * 0.12, size * 0.62, Math.PI, TAU);
+    ctx.arc(cx + size * 0.95, cy + size * 0.04, size * 0.45, Math.PI, TAU);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawPaperCottageSilhouette(cotX, cotY, time) {
+    ctx.save();
+    ctx.fillStyle = '#241438';
+    ctx.fillRect(cotX - 18, cotY - 18, 36, 22);
+    // Steep Storybook Roof
+    ctx.fillStyle = '#351e4d';
+    ctx.beginPath();
+    ctx.moveTo(cotX - 24, cotY - 16);
+    ctx.lineTo(cotX, cotY - 38);
+    ctx.lineTo(cotX + 24, cotY - 16);
+    ctx.closePath();
+    ctx.fill();
+    // Warm Glowing Paper Windows
+    const winPulse = 0.75 + 0.25 * Math.sin(time * 2.2);
+    ctx.fillStyle = `rgba(255, 216, 117, ${winPulse})`;
+    ctx.fillRect(cotX - 9, cotY - 12, 6, 8);
+    ctx.fillRect(cotX + 3, cotY - 12, 6, 8);
+    ctx.restore();
+
+    drawPaperTreeSilhouette(cotX - 34, cotY + 2, 30, '#231336');
+    drawPaperTreeSilhouette(cotX + 32, cotY + 4, 24, '#2a173f');
+  }
+
+  function drawPaperCastleSilhouette(cx, cy, time) {
+    ctx.save();
+    ctx.fillStyle = '#231336';
+    // Central Keep & Side Turrets
+    ctx.fillRect(cx - 22, cy - 28, 44, 32);
+    ctx.fillRect(cx - 10, cy - 48, 20, 48);
+    ctx.fillRect(cx - 28, cy - 36, 10, 38);
+    ctx.fillRect(cx + 18, cy - 36, 10, 38);
+
+    // Conical Paper Spires
+    ctx.fillStyle = '#351e4d';
+    // Center tall spire
+    ctx.beginPath();
+    ctx.moveTo(cx - 13, cy - 48);
+    ctx.lineTo(cx, cy - 76);
+    ctx.lineTo(cx + 13, cy - 48);
+    ctx.closePath();
+    ctx.fill();
+    // Left spire
+    ctx.beginPath();
+    ctx.moveTo(cx - 31, cy - 36);
+    ctx.lineTo(cx - 23, cy - 56);
+    ctx.lineTo(cx - 15, cy - 36);
+    ctx.closePath();
+    ctx.fill();
+    // Right spire
+    ctx.beginPath();
+    ctx.moveTo(cx + 15, cy - 36);
+    ctx.lineTo(cx + 23, cy - 56);
+    ctx.lineTo(cx + 31, cy - 36);
+    ctx.closePath();
+    ctx.fill();
+
+    // Glowing Arched Castle Windows
+    const pulse = 0.75 + 0.25 * Math.sin(time * 1.9 + 1);
+    ctx.fillStyle = `rgba(255, 224, 130, ${pulse})`;
+    ctx.beginPath();
+    ctx.arc(cx, cy - 34, 3.5, Math.PI, 0);
+    ctx.lineTo(cx + 3.5, cy - 26);
+    ctx.lineTo(cx - 3.5, cy - 26);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillRect(cx - 24.5, cy - 28, 3, 6);
+    ctx.fillRect(cx + 21.5, cy - 28, 3, 6);
+    ctx.restore();
+  }
+
+  function drawPaperGazeboSilhouette(gx, gy, time) {
+    ctx.save();
+    ctx.fillStyle = '#2c1738';
+    // Base platform
+    ctx.fillRect(gx - 22, gy - 4, 44, 6);
+    // Delicate pillars
+    ctx.fillRect(gx - 16, gy - 26, 3, 22);
+    ctx.fillRect(gx - 6, gy - 26, 2.5, 22);
+    ctx.fillRect(gx + 3.5, gy - 26, 2.5, 22);
+    ctx.fillRect(gx + 13, gy - 26, 3, 22);
+
+    // Curved Pagoda/Cupola Dome
+    ctx.fillStyle = '#472857';
+    ctx.beginPath();
+    ctx.moveTo(gx - 26, gy - 25);
+    ctx.quadraticCurveTo(gx, gy - 46, gx + 26, gy - 25);
+    ctx.closePath();
+    ctx.fill();
+
+    // Finial spire
+    ctx.beginPath();
+    ctx.moveTo(gx - 2, gy - 35);
+    ctx.lineTo(gx, gy - 45);
+    ctx.lineTo(gx + 2, gy - 35);
+    ctx.fill();
+
+    // Warm Hanging Lantern inside Gazebo
+    const glow = 0.7 + 0.3 * Math.sin(time * 2.6);
+    ctx.fillStyle = `rgba(255, 220, 125, ${glow})`;
+    ctx.beginPath();
+    ctx.arc(gx, gy - 18, 3.2, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawPaperTreeSilhouette(tx, ty, h, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(tx, ty - h);
+    ctx.bezierCurveTo(tx + h * 0.28, ty - h * 0.6, tx + h * 0.24, ty - h * 0.2, tx, ty);
+    ctx.bezierCurveTo(tx - h * 0.24, ty - h * 0.2, tx - h * 0.28, ty - h * 0.6, tx, ty - h);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Floating Warm Amber Sky Lanterns (Đèn Trời Ước Nguyện)
+  function updateAndDrawSkyLanterns(delta, time) {
+    ctx.save();
+    skyLanterns.forEach(l => {
+      if (!reducedMotion.matches) {
+        l.y -= l.speedY * delta;
+        l.x += Math.sin(time * l.swaySpeed + l.phase) * 0.008 * delta;
+        if (l.y < 0.04) {
+          l.y = 0.52;
+          l.x = 0.08 + Math.random() * 0.84;
+        }
+      }
+
+      const lx = l.x * width + Math.sin(time * l.swaySpeed + l.phase) * 8;
+      const ly = l.y * height;
+      const s = l.size;
+      const swayRot = Math.sin(time * l.swaySpeed + l.phase) * 0.08;
+
+      ctx.save();
+      ctx.translate(lx, ly);
+      ctx.rotate(swayRot);
+
+      // Soft warm radial aura
+      const aura = ctx.createRadialGradient(0, 0, s * 0.2, 0, 0, s * 2.6);
+      aura.addColorStop(0, 'rgba(255, 220, 125, 0.38)');
+      aura.addColorStop(0.5, 'rgba(255, 160, 75, 0.12)');
+      aura.addColorStop(1, 'rgba(255, 160, 75, 0)');
+      ctx.fillStyle = aura;
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 2.6, 0, TAU);
+      ctx.fill();
+
+      // Paper Lantern Body
+      const bodyGrad = ctx.createLinearGradient(0, -s, 0, s);
+      bodyGrad.addColorStop(0, '#ffae52');
+      bodyGrad.addColorStop(0.55, '#ffd875');
+      bodyGrad.addColorStop(1, '#fff6cc');
+      ctx.fillStyle = bodyGrad;
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.55, -s * 0.75);
+      ctx.quadraticCurveTo(0, -s * 1.05, s * 0.55, -s * 0.75);
+      ctx.lineTo(s * 0.42, s * 0.75);
+      ctx.quadraticCurveTo(0, s * 0.9, -s * 0.42, s * 0.75);
+      ctx.closePath();
+      ctx.fill();
+
+      // Inner bright core flame
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, s * 0.25, s * 0.22, 0, TAU);
+      ctx.fill();
+
+      ctx.restore();
+    });
+    ctx.restore();
+  }
+
+  // Occasional Golden Shooting Stars in the upper night sky
+  function updateAndDrawShootingStars(delta, time) {
+    if (reducedMotion.matches) return;
+    if (shootingStars.length < 1 && Math.random() < 0.008) {
+      shootingStars.push({
+        x: width * (0.15 + Math.random() * 0.55),
+        y: height * (0.06 + Math.random() * 0.18),
+        vx: 260 + Math.random() * 120,
+        vy: 90 + Math.random() * 55,
+        age: 0,
+        life: 0.75 + Math.random() * 0.35
+      });
+    }
+
+    if (!shootingStars.length) return;
+    ctx.save();
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const st = shootingStars[i];
+      st.age += delta;
+      if (st.age >= st.life) {
+        shootingStars.splice(i, 1);
+        continue;
+      }
+      st.x += st.vx * delta;
+      st.y += st.vy * delta;
+
+      const prog = st.age / st.life;
+      const alpha = Math.sin(prog * Math.PI);
+      const tailX = st.x - st.vx * 0.16;
+      const tailY = st.y - st.vy * 0.16;
+
+      const grad = ctx.createLinearGradient(st.x, st.y, tailX, tailY);
+      grad.addColorStop(0, `rgba(255, 248, 215, ${alpha})`);
+      grad.addColorStop(0.4, `rgba(255, 216, 117, ${alpha * 0.6})`);
+      grad.addColorStop(1, 'rgba(255, 216, 117, 0)');
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(st.x, st.y);
+      ctx.lineTo(tailX, tailY);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(255, 255, 240, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, 2.2, 0, TAU);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Lush Paper Rose-Bush Mounds, Baby's Breath Sprays & Bioluminescent Mushrooms
+  function drawGardenUndergrowth(time) {
+    ctx.save();
+
+    // 1. Layered Scalloped Paper Bush Silhouettes behind the flower stems
+    const bushRows = [
+      { y: height * 0.83, color: '#1b2d22', edge: 'rgba(8, 4, 16, 0.45)', r: 34, count: 12 },
+      { y: height * 0.90, color: '#15251b', edge: 'rgba(8, 4, 16, 0.52)', r: 42, count: 10 },
+      { y: height * 0.96, color: '#0f1c14', edge: 'rgba(8, 4, 16, 0.60)', r: 48, count: 8 }
+    ];
+    bushRows.forEach((row, rIdx) => {
+      ctx.fillStyle = row.color;
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      ctx.lineTo(0, row.y);
+      for (let i = 0; i <= row.count; i++) {
+        const bx = (i / row.count) * width;
+        const humY = row.y - Math.abs(Math.sin(i * 1.9 + rIdx)) * row.r * 0.55;
+        ctx.arc(bx, humY, row.r, Math.PI, TAU);
+      }
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = row.edge;
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+    });
+
+    // 2. Baby's Breath (Hoa Sao / Hoa Baby Trắng Lấp Lánh) Sprays (Batched stems)
+    babyBreathClusters.forEach(c => {
+      const sway = Math.sin(time * 1.4 + c.phase) * 5;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(72, 108, 70, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      c.florets.forEach(fl => {
+        const fx = c.x + fl.dx + sway * (1 - fl.dy / 35);
+        const fy = c.y + fl.dy;
+        ctx.moveTo(c.x, c.y + 12);
+        ctx.quadraticCurveTo(c.x + fl.dx * 0.5, c.y, fx, fy);
+      });
+      ctx.stroke();
+
+      c.florets.forEach(fl => {
+        const fx = c.x + fl.dx + sway * (1 - fl.dy / 35);
+        const fy = c.y + fl.dy;
+        const pulse = 0.65 + 0.35 * Math.sin(time * 2.5 + fl.phase);
+        ctx.fillStyle = fl.isGold
+          ? `rgba(255, 232, 155, ${pulse})`
+          : `rgba(255, 245, 250, ${pulse * 0.9})`;
+        ctx.beginPath();
+        ctx.arc(fx, fy, fl.r, 0, TAU);
+        ctx.fill();
+      });
+      ctx.restore();
+    });
+
+    // 3. Bioluminescent Fairytale Paper Mushrooms along the garden floor
+    glowingMushrooms.forEach(m => {
+      const sway = Math.sin(time * 1.6 + m.phase) * 1.5;
+      const mx = m.x + sway;
+      const my = m.y;
+      const s = m.scale;
+
+      ctx.save();
+      // Soft ground glow
+      ctx.fillStyle = m.hue === 'gold' ? 'rgba(255, 224, 130, 0.28)' : 'rgba(150, 245, 225, 0.25)';
+      ctx.beginPath();
+      ctx.arc(mx, my - 8 * s, 18 * s, 0, TAU);
+      ctx.fill();
+
+      // Slender curved paper stem
+      ctx.strokeStyle = '#f3e5d8';
+      ctx.lineWidth = 2.6 * s;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(m.x, my + 6 * s);
+      ctx.quadraticCurveTo(m.x - 2 * s, my - 2 * s, mx, my - 10 * s);
+      ctx.stroke();
+
+      // Glowing Paper Cap
+      ctx.fillStyle = m.hue === 'gold' ? '#ffd875' : '#9ef5e1';
+      ctx.beginPath();
+      ctx.arc(mx, my - 9 * s, 8 * s, Math.PI, TAU);
+      ctx.closePath();
+      ctx.fill();
+
+      // Tiny white paper spots on cap
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(mx - 3 * s, my - 12 * s, 1.1 * s, 0, TAU);
+      ctx.arc(mx + 2.5 * s, my - 13 * s, 1.3 * s, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.restore();
+  }
+
+  // Fluttering 3D Origami / Paper Butterflies
+  function updateAndDrawButterflies(delta, time) {
+    ctx.save();
+    butterflies.forEach(b => {
+      if (!reducedMotion.matches) {
+        b.x += b.vx * delta;
+        b.y += b.vy * delta + Math.sin(time * 2.2 + b.phase) * 14 * delta;
+
+        if (b.x < -40) b.x = width + 30;
+        if (b.x > width + 40) b.x = -30;
+        if (b.y < height * 0.35) b.vy = Math.abs(b.vy);
+        if (b.y > height * 0.88) b.vy = -Math.abs(b.vy);
+      }
+
+      const flap = Math.abs(Math.sin(time * b.wingSpeed + b.phase));
+      const dir = b.vx >= 0 ? 1 : -1;
+      const s = b.size;
+
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(dir * 0.18 + Math.sin(time * 2 + b.phase) * 0.1);
+      ctx.scale(dir, 1);
+
+      // Upper Wing
+      ctx.fillStyle = b.hue === 'gold' ? '#ffe596' : '#f7cad6';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-s * 0.9, -s * (1.2 * flap + 0.2), s * 0.8, -s * (1.1 * flap + 0.2), s * 0.2, 0);
+      ctx.fill();
+
+      // Lower Wing
+      ctx.fillStyle = b.hue === 'gold' ? '#ffd066' : '#e59fb2';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-s * 0.7, s * (0.9 * flap + 0.15), s * 0.5, s * (0.8 * flap + 0.15), 0, 0);
+      ctx.fill();
+
+      ctx.restore();
+    });
+    ctx.restore();
   }
 
   // Glowing Dotted Thread Paths connecting flowers across the pop-up map
@@ -485,9 +1101,7 @@
     ctx.save();
     ctx.setLineDash([4, 8]);
     ctx.lineWidth = 1.6;
-    ctx.strokeStyle = 'rgba(255, 216, 117, 0.32)';
-    ctx.shadowColor = 'rgba(255, 216, 117, 0.45)';
-    ctx.shadowBlur = 8;
+    ctx.strokeStyle = 'rgba(255, 216, 117, 0.38)';
 
     const pathFlowers = [...flowers].sort((a, b) => a.index - b.index);
 
@@ -512,27 +1126,29 @@
 
   function drawGardenGroundFoliage(time) {
     ctx.save();
-    const bladeCount = Math.floor(width / 15);
+    const bladeCount = Math.min(68, Math.floor(width / 22));
     const wind = Math.sin(time * 1.2) * 8;
 
+    if (!cachedGrassGrad || cachedGrassGradH !== height) {
+      cachedGrassGrad = ctx.createLinearGradient(0, height, 0, height - 58);
+      cachedGrassGrad.addColorStop(0, 'rgba(15, 28, 18, 0.95)');
+      cachedGrassGrad.addColorStop(0.7, 'rgba(38, 62, 36, 0.68)');
+      cachedGrassGrad.addColorStop(1, 'rgba(68, 102, 64, 0.25)');
+      cachedGrassGradH = height;
+    }
+
+    ctx.fillStyle = cachedGrassGrad;
+    ctx.beginPath();
     for (let i = 0; i <= bladeCount; i++) {
       const bx = (i / bladeCount) * width;
       const bladeH = 34 + Math.sin(i * 1.7) * 16;
       const sway = Math.sin(time * 1.5 + i * 0.4) * 6 + wind * 0.4;
 
-      ctx.beginPath();
       ctx.moveTo(bx - 3, height);
       ctx.quadraticCurveTo(bx + sway * 0.5, height - bladeH * 0.6, bx + sway, height - bladeH);
       ctx.quadraticCurveTo(bx + sway * 0.3, height - bladeH * 0.4, bx + 3, height);
-
-      const grassGrad = ctx.createLinearGradient(bx, height, bx, height - bladeH);
-      grassGrad.addColorStop(0, 'rgba(15, 28, 18, 0.95)');
-      grassGrad.addColorStop(0.7, 'rgba(38, 62, 36, 0.68)');
-      grassGrad.addColorStop(1, 'rgba(68, 102, 64, 0.25)');
-
-      ctx.fillStyle = grassGrad;
-      ctx.fill();
     }
+    ctx.fill();
     ctx.restore();
   }
 
@@ -655,10 +1271,13 @@
     const breath = 1 + Math.sin(time * 1.5 + flower.phase) * 0.012;
     ctx.scale(breath, breath);
 
-    if (flower.hover > 0.05 || flower.index === selectedFlowerIndex) {
-      const glowAlpha = flower.index === selectedFlowerIndex ? 0.45 : flower.hover * 0.35;
+    const isDiscovered = discoveredNotes.has(flower.index % BIRTHDAY_NOTES.length);
+    if (flower.hover > 0.05 || flower.index === selectedFlowerIndex || isDiscovered) {
+      const glowAlpha = flower.index === selectedFlowerIndex
+        ? 0.48
+        : Math.max(flower.hover * 0.38, isDiscovered ? 0.22 : 0);
       const aura = ctx.createRadialGradient(0, 0, flower.radius * 0.4, 0, 0, flower.radius * 1.9);
-      aura.addColorStop(0, `rgba(255, 215, 235, ${glowAlpha})`);
+      aura.addColorStop(0, isDiscovered ? `rgba(255, 226, 145, ${glowAlpha})` : `rgba(255, 215, 235, ${glowAlpha})`);
       aura.addColorStop(0.6, `rgba(241, 165, 193, ${glowAlpha * 0.4})`);
       aura.addColorStop(1, 'rgba(241, 165, 193, 0)');
 
@@ -669,7 +1288,9 @@
 
       ctx.beginPath();
       ctx.arc(0, 0, flower.radius * 1.45, 0, TAU);
-      ctx.strokeStyle = `rgba(255, 230, 245, ${glowAlpha * 1.5})`;
+      ctx.strokeStyle = isDiscovered
+        ? `rgba(255, 216, 117, ${glowAlpha * 1.4})`
+        : `rgba(255, 230, 245, ${glowAlpha * 1.5})`;
       ctx.lineWidth = 1.2;
       ctx.stroke();
     }
@@ -739,34 +1360,12 @@
       }
 
       const pulse = reducedMotion.matches ? 0.75 : 0.35 + 0.65 * Math.pow(Math.sin(time * f.pulseSpeed + f.phase), 2);
-      f.alpha = pulse;
+      ctx.globalAlpha = pulse;
 
-      const r = f.radius;
-      const glow = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, r * 4.2);
-
-      if (f.hue === 'gold') {
-        glow.addColorStop(0, `rgba(255, 238, 140, ${pulse})`);
-        glow.addColorStop(0.35, `rgba(255, 195, 110, ${pulse * 0.5})`);
-        glow.addColorStop(1, 'rgba(255, 195, 110, 0)');
-      } else if (f.hue === 'pink') {
-        glow.addColorStop(0, `rgba(255, 210, 235, ${pulse})`);
-        glow.addColorStop(0.35, `rgba(241, 145, 185, ${pulse * 0.5})`);
-        glow.addColorStop(1, 'rgba(241, 145, 185, 0)');
-      } else {
-        glow.addColorStop(0, `rgba(180, 255, 215, ${pulse})`);
-        glow.addColorStop(0.35, `rgba(110, 225, 175, ${pulse * 0.5})`);
-        glow.addColorStop(1, 'rgba(110, 225, 175, 0)');
-      }
-
-      ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, r * 4.2, 0, TAU);
-      ctx.fill();
-
-      ctx.fillStyle = `rgba(255, 255, 255, ${pulse * 0.95})`;
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, r * 0.85, 0, TAU);
-      ctx.fill();
+      // Ultra-fast blit from pre-rendered sprite canvas (zero gradient GC overhead)
+      const sprite = getFireflySprite(f.hue);
+      const drawSize = f.radius * 7.5;
+      ctx.drawImage(sprite, f.x - drawSize * 0.5, f.y - drawSize * 0.5, drawSize, drawSize);
     });
 
     ctx.restore();
@@ -793,12 +1392,7 @@
       ctx.rotate(p.rotation);
       ctx.scale(0.55 + Math.abs(flutterCos) * 0.45, 1);
 
-      const petalGrad = ctx.createLinearGradient(0, -p.size, 0, p.size);
-      petalGrad.addColorStop(0, '#fff4f8');
-      petalGrad.addColorStop(0.5, '#f4a5c3');
-      petalGrad.addColorStop(1, '#d8658d');
-
-      ctx.fillStyle = petalGrad;
+      ctx.fillStyle = getPetalGrad();
       ctx.beginPath();
       ctx.moveTo(0, -p.size);
       ctx.bezierCurveTo(p.size * 1.25, -p.size * 0.9, p.size * 0.85, p.size * 0.8, 0, p.size);
@@ -856,29 +1450,39 @@
 
     ctx.clearRect(0, 0, width, height);
 
-    // 1. Fullscreen Sky, Moon, Stars, Layered Paper Hills
+    // 1. Fullscreen Sky, Moon, Stars, Castle, Gazebo & Layered Paper Hills
     drawSkyAndMoon(sceneTime);
 
-    // 2. Glowing Dotted Paper Thread Paths
+    // 2. Floating Warm Sky Lanterns & Shooting Stars in Upper Sky
+    updateAndDrawSkyLanterns(delta, sceneTime);
+    updateAndDrawShootingStars(delta, sceneTime);
+
+    // 3. Lush Paper Rose-Bush Mounds, Baby's Breath Sprays & Bioluminescent Mushrooms
+    drawGardenUndergrowth(sceneTime);
+
+    // 4. Glowing Dotted Paper Thread Paths
     drawPaperStorybookPaths();
 
-    // 3. Flowers by depth row with 3D paper lift
+    // 5. Flowers by depth row with 3D paper lift
     flowers.forEach(f => {
       drawSingleFlower(f, sceneTime, elapsedFromBloom);
     });
 
-    // 3. Ground grass & foliage silhouettes
+    // 6. Ground grass & foliage silhouettes
     drawGardenGroundFoliage(sceneTime);
 
-    // 4. Falling rose petals
+    // 7. Fluttering 3D Origami / Paper Butterflies
+    updateAndDrawButterflies(delta, sceneTime);
+
+    // 8. Falling rose petals
     if (!reducedMotion.matches) {
       updateAndDrawFallingPetals(delta, sceneTime);
     }
 
-    // 5. Fireflies
+    // 9. Fireflies
     updateAndDrawFireflies(delta, sceneTime);
 
-    // 6. Interactive sparkle bursts
+    // 10. Interactive sparkle bursts
     updateAndDrawSparkles(delta);
 
     animationId = requestAnimationFrame(drawScene);
@@ -891,6 +1495,19 @@
     selectedFlowerIndex = flower.index;
     wishBadge.textContent = flower.badge;
     wishText.textContent = flower.note;
+
+    const noteIdx = flower.index % BIRTHDAY_NOTES.length;
+    discoveredNotes.add(noteIdx);
+    if (wishCounterBadge) {
+      wishCounterBadge.textContent = `🌷 Đã mở: ${discoveredNotes.size} / ${BIRTHDAY_NOTES.length}`;
+      if (discoveredNotes.size === BIRTHDAY_NOTES.length) {
+        wishCounterBadge.textContent = `✨ Đã mở trọn bộ 12 / 12 điều ước!`;
+      }
+    }
+
+    if (window.ensureMusicPlayingOnGesture) {
+      window.ensureMusicPlayingOnGesture();
+    }
 
     const flowerScreenX = flower.x + flower.offsetX;
     const flowerScreenY = flower.y + flower.offsetY;
@@ -982,7 +1599,18 @@
 
   function addMoreFireflies() {
     initFireflies(16);
+    initSkyLanterns(3);
     playChime(880, 1.2);
+
+    // Also launch a golden shooting star on demand
+    shootingStars.push({
+      x: width * (0.18 + Math.random() * 0.45),
+      y: height * (0.08 + Math.random() * 0.14),
+      vx: 290 + Math.random() * 100,
+      vy: 95 + Math.random() * 45,
+      age: 0,
+      life: 0.9
+    });
 
     for (let i = 0; i < 14; i++) {
       spawnFlowerSparkles(Math.random() * width, height * (0.3 + Math.random() * 0.4), 3);
@@ -1001,7 +1629,7 @@
     hideFloatingWish();
   });
 
-  soundButton.addEventListener('click', toggleMusic);
+  // Sound toggle is handled exclusively by seamless.js to prevent double toggling
   replayButton.addEventListener('click', replayBloom);
   firefliesButton.addEventListener('click', addMoreFireflies);
 
