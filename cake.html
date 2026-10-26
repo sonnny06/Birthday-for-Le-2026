@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1a122e">
-  <meta name="description" content="Chiếc bánh sinh nhật giấy 3D lung linh và ngọn nến ấm áp dành riêng cho V.SON.">
+  <meta name="description" content="Chiếc bánh sinh nhật giấy 3D và ngọn nến phép thuật đang lung linh tỏa sáng dành riêng cho Plee.">
 
-  <title>Make a Wish 🎂 · Happy Birthday P.Lee</title>
+  <title>Make a Wish 🎂 · Happy Birthday Plee</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,149 +15,614 @@
 </head>
 
 <body class="cake-page-body">
-  <!-- Global Reusable SVG Filters for 3D Papercut Depth & Fairy Glows -->
-  <svg class="paper-filters" aria-hidden="true" style="position: absolute; width: 0; height: 0; pointer-events: none;">
-    <defs>
-      <filter id="paper-cut-shadow" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="2" dy="5" stdDeviation="6" flood-color="#0a0514" flood-opacity="0.55" />
-        <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0a0514" flood-opacity="0.45" />
-      </filter>
-      <filter id="paper-glow-filter" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="8" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-  </svg>
-
-  <div class="shadowbox-vignette"></div>
-
-  <!-- Multi-layered Papercut Celestial Sky, Bunting Garlands & Lanterns -->
-  <div class="shadowbox-portal-frame" aria-hidden="true" style="opacity: 0.82;">
-    <svg class="portal-svg-layer" viewBox="0 0 1440 900" preserveAspectRatio="none">
-      <!-- Upper Paper-Cut Arch Boughs & Festive Bunting Flags -->
-      <path d="M-30,0 L260,0 C220,100 150,160 55,200 L-30,240 Z" fill="#2d1c44" filter="url(#paper-cut-shadow)" />
-      <path d="M1470,0 L1180,0 C1220,100 1290,160 1385,200 L1470,240 Z" fill="#2d1c44" filter="url(#paper-cut-shadow)" />
-
-      <!-- Festive Paper Bunting Garland Left -->
-      <path d="M120,0 Q290,115 480,0" fill="none" stroke="rgba(255, 216, 117, 0.45)" stroke-width="1.5" stroke-dasharray="3 3" />
-      <polygon points="185,32 205,38 192,62" fill="#dca2ae" opacity="0.85" />
-      <polygon points="245,48 265,52 254,76" fill="#ffd875" opacity="0.85" />
-      <polygon points="310,54 330,52 322,78" fill="#f2c7ce" opacity="0.85" />
-      <polygon points="375,44 395,38 388,64" fill="#dca2ae" opacity="0.85" />
-
-      <!-- Festive Paper Bunting Garland Right -->
-      <path d="M960,0 Q1150,115 1320,0" fill="none" stroke="rgba(255, 216, 117, 0.45)" stroke-width="1.5" stroke-dasharray="3 3" />
-      <polygon points="1045,38 1065,44 1052,64" fill="#dca2ae" opacity="0.85" />
-      <polygon points="1110,52 1130,54 1118,78" fill="#f2c7ce" opacity="0.85" />
-      <polygon points="1175,52 1195,48 1186,76" fill="#ffd875" opacity="0.85" />
-      <polygon points="1235,38 1255,32 1248,62" fill="#dca2ae" opacity="0.85" />
-
-      <!-- Distant Paper Hills -->
-      <path d="M0,900 L0,740 Q380,690 760,730 Q1140,770 1440,710 L1440,900 Z" fill="#2d1c44" />
-      <path d="M0,900 L0,790 Q340,760 720,780 Q1100,800 1440,760 L1440,900 Z" fill="#352042" />
-      <!-- Drifting Paper Clouds -->
-      <path d="M120,180 Q150,150 190,160 Q230,140 270,165 Q310,155 330,185 Q350,220 310,230 L130,230 Q100,210 120,180 Z" fill="#3d234a" opacity="0.55" style="filter: drop-shadow(0 4px 8px rgba(10,5,20,0.5));" />
-      <path d="M1100,220 Q1130,190 1170,200 Q1210,180 1250,205 Q1290,195 1310,225 Q1330,260 1290,270 L1110,270 Q1080,250 1100,220 Z" fill="#3d234a" opacity="0.55" style="filter: drop-shadow(0 4px 8px rgba(10,5,20,0.5));" />
-    </svg>
-  </div>
-
   <canvas id="cake-canvas" aria-hidden="true"></canvas>
 
-  <main class="cake-page">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; flex-wrap: wrap;">
-      <a class="back-link" href="garden.html">
-        <span aria-hidden="true">←</span> Khu vườn hoa
-      </a>
-      <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
-    </div>
+  <div class="cake-scene-viewport">
+    <!-- 100% PURE VECTOR SVG 3D PAPERCRAFT SCENE (ZERO RASTER IMAGES, CRISP AT ANY RESOLUTION) -->
+    <svg class="cake-vector-scene" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <!-- 3D Papercraft Depth Shadows -->
+        <filter id="paper-shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="1" dy="5" stdDeviation="5" flood-color="#070210" flood-opacity="0.6" />
+        </filter>
+        <filter id="paper-shadow-deep" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#05010c" flood-opacity="0.75" />
+        </filter>
+        <filter id="paper-shadow-soft" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" flood-color="#0a0514" flood-opacity="0.4" />
+        </filter>
+        <filter id="paper-lift" x="-25%" y="-25%" width="150%" height="150%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0a0514" flood-opacity="0.45" />
+        </filter>
+        <filter id="paper-glow-filter" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="10" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="blur-heavy" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="14" />
+        </filter>
 
-    <p class="eyebrow">✧ CHƯƠNG III · MAKE A BIRTHDAY WISH ✧</p>
+        <!-- Linear & Radial Gradients -->
+        <radialGradient id="bg-sky-radial" cx="50%" cy="45%" r="65%">
+          <stop offset="0%" stop-color="#38214d" />
+          <stop offset="40%" stop-color="#24143a" />
+          <stop offset="75%" stop-color="#180c29" />
+          <stop offset="100%" stop-color="#0f061b" />
+        </radialGradient>
 
-    <h1>Make a <span>Wish, V.SON</span> ♡</h1>
+        <radialGradient id="balloon-lavender-grad" cx="35%" cy="32%" r="68%">
+          <stop offset="0%" stop-color="#eed6fd" />
+          <stop offset="45%" stop-color="#bc97d9" />
+          <stop offset="100%" stop-color="#7c5499" />
+        </radialGradient>
 
-    <p class="description">
-      Chiếc bánh sinh nhật giấy 3D và ngọn nến phép thuật đang lung linh tỏa sáng.
-      Hãy nhắm mắt ước một điều thật đẹp rồi thổi tắt nến nhé!
-    </p>
+        <radialGradient id="balloon-peach-grad" cx="35%" cy="32%" r="68%">
+          <stop offset="0%" stop-color="#fff0ea" />
+          <stop offset="45%" stop-color="#f3b8aa" />
+          <stop offset="100%" stop-color="#bf7e6f" />
+        </radialGradient>
 
-    <!-- 3D PAPERCRAFT BIRTHDAY CAKE STAGE -->
-    <div class="cake-stage" aria-label="Bánh sinh nhật giấy 3D và ngọn nến lung linh">
-      <div class="candle-ambient-glow" id="candle-glow"></div>
+        <radialGradient id="balloon-cream-grad" cx="35%" cy="32%" r="68%">
+          <stop offset="0%" stop-color="#fff8e8" />
+          <stop offset="45%" stop-color="#ebd3a7" />
+          <stop offset="100%" stop-color="#b89461" />
+        </radialGradient>
 
-      <div class="cake-wrapper" id="cake-interactive-wrapper" title="Chạm nhẹ vào ngọn nến hoặc thổi vào micro để tắt nến">
-        <!-- Scalloped Paper Cake Stand -->
-        <div class="plate"></div>
+        <!-- Cake Plate Gradients -->
+        <linearGradient id="plate-rim-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#faf7f2" />
+          <stop offset="60%" stop-color="#eddcd0" />
+          <stop offset="100%" stop-color="#cbb49e" />
+        </linearGradient>
+        <radialGradient id="plate-face-grad" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="70%" stop-color="#f7ede2" />
+          <stop offset="100%" stop-color="#e4d0bc" />
+        </radialGradient>
 
-        <!-- Bottom Tier: Textured Pastel Cardstock Body with Gold Ribbon -->
-        <div class="cake-tier">
-          <div class="cake-sponge-line"></div>
-          <div class="cake-gold-pearls"></div>
-        </div>
+        <!-- Sponge Cake Golden Layers -->
+        <linearGradient id="sponge-bottom-cyl" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#b8742b" />
+          <stop offset="25%" stop-color="#e2a45c" />
+          <stop offset="65%" stop-color="#cf8b3f" />
+          <stop offset="100%" stop-color="#99581c" />
+        </linearGradient>
+        <radialGradient id="sponge-bottom-top" cx="50%" cy="45%" r="60%">
+          <stop offset="0%" stop-color="#f7c688" />
+          <stop offset="70%" stop-color="#e09f53" />
+          <stop offset="100%" stop-color="#be7930" />
+        </radialGradient>
 
-        <!-- Top Cream Paper Ellipse -->
-        <div class="cake-top-cream"></div>
+        <linearGradient id="cream-middle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="45%" stop-color="#fbf2e3" />
+          <stop offset="100%" stop-color="#ebd3b6" />
+        </linearGradient>
 
-        <!-- Laser-cut Scalloped Frosting Drips -->
-        <div class="frosting-drips">
-          <svg viewBox="0 0 290 40" preserveAspectRatio="none">
-            <path d="M0,0 L290,0 L290,8 Q270,22 250,8 Q235,32 220,10 Q200,20 185,6 Q165,28 145,12 Q125,24 105,8 Q85,34 65,10 Q45,26 25,6 Q12,18 0,8 Z" />
-          </svg>
-        </div>
+        <linearGradient id="sponge-top-cyl" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#bd782f" />
+          <stop offset="25%" stop-color="#e8ab64" />
+          <stop offset="65%" stop-color="#d49044" />
+          <stop offset="100%" stop-color="#9d5b1e" />
+        </linearGradient>
+        <radialGradient id="sponge-top-surface" cx="50%" cy="42%" r="60%">
+          <stop offset="0%" stop-color="#fcd194" />
+          <stop offset="65%" stop-color="#e6a85c" />
+          <stop offset="100%" stop-color="#c48037" />
+        </radialGradient>
 
-        <!-- Embossed Gold Foil Paper Badge on Cake Front -->
-        <div class="cake-front-plaque">✧ V.SON ✧</div>
+        <!-- Salted Egg Orange Heart Gradients -->
+        <linearGradient id="egg-heart-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffa64d" />
+          <stop offset="50%" stop-color="#ff7a22" />
+          <stop offset="100%" stop-color="#e84a05" />
+        </linearGradient>
+        <linearGradient id="egg-heart-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffb55f" />
+          <stop offset="55%" stop-color="#ff842a" />
+          <stop offset="100%" stop-color="#eb530a" />
+        </linearGradient>
 
-        <!-- Origami Paper Berries -->
-        <div class="berries-group">
-          <div class="berry"></div>
-          <div class="berry" style="transform: scale(0.88);"></div>
-          <div class="berry"></div>
-          <div class="berry" style="transform: scale(0.88);"></div>
-          <div class="berry"></div>
-        </div>
+        <!-- Rolled Paper Candle Striped Pattern -->
+        <pattern id="candle-stripe-pattern" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="16" fill="#ffffff" />
+          <rect x="8" width="8" height="16" fill="#f2a9c4" />
+        </pattern>
 
-        <!-- Striped Rolled Paper Candle & Glowing Flame -->
-        <div class="candle-stem" id="candle-stem" role="button" tabindex="0" aria-label="Chạm vào nến để thổi tắt">
-          <div class="candle-wick"></div>
-          <div class="flame-element" id="flame"></div>
-          <div class="smoke-wisp" id="smoke"></div>
-        </div>
-      </div>
-    </div>
+        <!-- Ambient Candle Halo Radial Glow -->
+        <radialGradient id="candle-halo-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffd875" stop-opacity="0.65" />
+          <stop offset="35%" stop-color="#ff9c38" stop-opacity="0.32" />
+          <stop offset="70%" stop-color="#ff6e20" stop-opacity="0.1" />
+          <stop offset="100%" stop-color="#2d1c44" stop-opacity="0" />
+        </radialGradient>
 
-    <!-- Real-time Microphone Breath / Wind Meter -->
-    <div class="breath-meter-wrap" id="breath-meter-wrap" hidden>
-      <div class="breath-meter-label">🌬️ Độ mạnh hơi thổi:</div>
-      <div class="breath-meter-track">
-        <div class="breath-meter-fill" id="breath-meter-fill"></div>
-      </div>
-    </div>
+        <!-- Paper Rose Petal Shading Gradients -->
+        <linearGradient id="rose-deep" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#a3556f" /><stop offset="100%" stop-color="#702840" />
+        </linearGradient>
+        <linearGradient id="rose-mid" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#d6819a" /><stop offset="100%" stop-color="#a24e68" />
+        </linearGradient>
+        <linearGradient id="rose-soft" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f3b4c4" /><stop offset="100%" stop-color="#c86b85" />
+        </linearGradient>
+        <linearGradient id="rose-center" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fce0e7" /><stop offset="100%" stop-color="#e493a9" />
+        </linearGradient>
 
-    <div class="controls-container">
-      <button class="wish-main-button" id="wish-button" type="button">
-        🌬️ Thổi nến bằng micro
-      </button>
+        <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6ea656" /><stop offset="100%" stop-color="#3f662c" />
+        </linearGradient>
+      </defs>
 
-      <button class="manual-tap-button" id="manual-blow-btn" type="button">
-        🕯️ Hoặc chạm nhẹ vào đây để thổi tắt nến
-      </button>
+      <!-- 1. DEEP PURPLE STARRY NIGHT SKY BACKGROUND -->
+      <rect width="1200" height="675" fill="url(#bg-sky-radial)" />
 
-      <!-- Embossed Paper Invitation Reveal -->
-      <div class="gift-reveal-card" id="gift-reveal" hidden>
-        <a class="gift-link-btn" href="gift.html">
-          <span>🎁 Mở món quà bí mật dành cho P.Lee</span>
-          <span aria-hidden="true">♡</span>
+      <!-- Distant Twinkling Stardust & Sparkle Stars -->
+      <g opacity="0.8">
+        <!-- Golden Diamond Stars -->
+        <polygon points="220,125 222,130 227,132 222,134 220,139 218,134 213,132 218,130" fill="#ffd875" />
+        <polygon points="360,95 361.5,100 366,101.5 361.5,103 360,108 358.5,103 354,101.5 358.5,100" fill="#fff4b8" />
+        <polygon points="840,95 841.5,100 846,101.5 841.5,103 840,108 838.5,103 834,101.5 838.5,100" fill="#fff4b8" />
+        <polygon points="980,125 982,130 987,132 982,134 980,139 978,134 973,132 978,130" fill="#ffd875" />
+        <polygon points="170,230 171.5,234 175,235.5 171.5,237 170,241 168.5,237 165,235.5 168.5,234" fill="#ffd875" />
+        <polygon points="1030,230 1031.5,234 1035,235.5 1031.5,237 1030,241 1028.5,237 1025,235.5 1028.5,234" fill="#ffd875" />
+        <polygon points="600,75 601.5,79 605,80.5 601.5,82 600,86 598.5,82 595,80.5 598.5,79" fill="#ffd875" />
+
+        <!-- Stardust circular specks -->
+        <circle cx="140" cy="90" r="1.8" fill="#fff4b8" />
+        <circle cx="290" cy="160" r="1.5" fill="#ffd875" />
+        <circle cx="420" cy="110" r="2.0" fill="#ffd875" />
+        <circle cx="780" cy="110" r="2.0" fill="#ffd875" />
+        <circle cx="910" cy="160" r="1.5" fill="#ffd875" />
+        <circle cx="1060" cy="90" r="1.8" fill="#fff4b8" />
+        <circle cx="500" cy="140" r="1.6" fill="#ffd875" />
+        <circle cx="700" cy="140" r="1.6" fill="#ffd875" />
+        <circle cx="460" cy="270" r="2.2" fill="#fff4b8" />
+        <circle cx="740" cy="270" r="2.2" fill="#fff4b8" />
+        <circle cx="530" cy="340" r="1.8" fill="#ffd875" />
+        <circle cx="670" cy="340" r="1.8" fill="#ffd875" />
+      </g>
+
+      <!-- 2. DRIFTING PAPERCRAFT CLOUDS -->
+      <path d="M110,165 Q145,135 190,145 Q235,125 280,150 Q320,140 345,170 Q370,210 325,220 L120,220 Q85,200 110,165 Z" fill="#271638" opacity="0.6" filter="url(#paper-shadow-soft)" />
+      <path d="M855,170 Q890,140 935,150 Q980,130 1020,155 Q1065,145 1090,175 Q1115,215 1070,225 L865,225 Q830,205 855,170 Z" fill="#271638" opacity="0.6" filter="url(#paper-shadow-soft)" />
+
+      <!-- 3. FESTIVE PAPER BUNTING GARLANDS (TOP LEFT & TOP RIGHT) -->
+      <!-- Left Garland -->
+      <path d="M80,0 Q245,85 410,0" fill="none" stroke="rgba(255,216,117,0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
+      <polygon points="130,22 152,28 139,52" fill="#dca2ae" filter="url(#paper-shadow-soft)" />
+      <polygon points="190,40 212,44 200,68" fill="#ffd875" filter="url(#paper-shadow-soft)" />
+      <polygon points="255,48 277,47 267,73" fill="#f2c7ce" filter="url(#paper-shadow-soft)" />
+      <polygon points="320,41 342,35 333,61" fill="#ffd875" filter="url(#paper-shadow-soft)" />
+      <polygon points="380,24 402,18 393,44" fill="#dca2ae" filter="url(#paper-shadow-soft)" />
+
+      <!-- Right Garland -->
+      <path d="M790,0 Q955,85 1120,0" fill="none" stroke="rgba(255,216,117,0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
+      <polygon points="798,18 820,24 812,44" fill="#dca2ae" filter="url(#paper-shadow-soft)" />
+      <polygon points="858,35 880,41 872,61" fill="#ffd875" filter="url(#paper-shadow-soft)" />
+      <polygon points="923,47 945,48 936,73" fill="#f2c7ce" filter="url(#paper-shadow-soft)" />
+      <polygon points="988,44 1010,40 1001,68" fill="#ffd875" filter="url(#paper-shadow-soft)" />
+      <polygon points="1048,28 1070,22 1061,52" fill="#dca2ae" filter="url(#paper-shadow-soft)" />
+
+      <!-- Upper Corner Paper Canopy Silhouette Arches -->
+      <path d="M0,0 L160,0 C130,70 85,110 0,140 Z" fill="#1e0f2b" opacity="0.75" filter="url(#paper-shadow)" />
+      <path d="M1200,0 L1040,0 C1070,70 1115,110 1200,140 Z" fill="#1e0f2b" opacity="0.75" filter="url(#paper-shadow)" />
+
+      <!-- 4. PASTEL BALLOONS DEFYING GRAVITY -->
+      <!-- Left Balloon 1 (Lavender, floating at x=280, y=260) -->
+      <g class="balloon-floating-1">
+        <path d="M280,288 C275,315 295,335 282,365 C270,395 290,425 285,455" fill="none" stroke="rgba(220,195,245,0.65)" stroke-width="1.5" />
+        <polygon points="277,284 283,284 280,289" fill="#9d74bd" />
+        <ellipse cx="280" cy="256" rx="22" ry="28" fill="url(#balloon-lavender-grad)" filter="url(#paper-shadow)" />
+        <path d="M270,236 Q266,250 270,265" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+
+      <!-- Left Balloon 2 (Soft Pink, floating at x=340, y=325) -->
+      <g class="balloon-floating-2">
+        <path d="M340,348 C345,370 330,390 338,415 C345,440 335,465 340,490" fill="none" stroke="rgba(255,215,225,0.65)" stroke-width="1.4" />
+        <polygon points="337,344 343,344 340,349" fill="#bf7e6f" />
+        <ellipse cx="340" cy="324" rx="16" ry="20" fill="url(#balloon-peach-grad)" filter="url(#paper-shadow)" />
+        <path d="M333,310 Q330,320 333,330" stroke="rgba(255,255,255,0.45)" stroke-width="2.0" fill="none" stroke-linecap="round" />
+      </g>
+
+      <!-- Right Balloon 1 (Cream Gold, floating at x=920, y=260) -->
+      <g class="balloon-floating-1">
+        <path d="M920,288 C925,315 905,335 918,365 C930,395 910,425 915,455" fill="none" stroke="rgba(255,235,200,0.65)" stroke-width="1.5" />
+        <polygon points="917,284 923,284 920,289" fill="#b89461" />
+        <ellipse cx="920" cy="256" rx="22" ry="28" fill="url(#balloon-cream-grad)" filter="url(#paper-shadow)" />
+        <path d="M910,236 Q906,250 910,265" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+
+      <!-- Right Balloon 2 (Lavender, floating at x=860, y=325) -->
+      <g class="balloon-floating-2">
+        <path d="M860,348 C855,370 870,390 862,415 C855,440 865,465 860,490" fill="none" stroke="rgba(220,195,245,0.65)" stroke-width="1.4" />
+        <polygon points="857,344 863,344 860,349" fill="#9d74bd" />
+        <ellipse cx="860" cy="324" rx="16" ry="20" fill="url(#balloon-lavender-grad)" filter="url(#paper-shadow)" />
+        <path d="M853,310 Q850,320 853,330" stroke="rgba(255,255,255,0.45)" stroke-width="2.0" fill="none" stroke-linecap="round" />
+      </g>
+
+      <!-- 5. LAYERED PAPERCRAFT FLORAL BUSHES (LEFT SIDE) -->
+      <g id="left-floral-bush">
+        <!-- Silhouette Foliage Base -->
+        <path d="M0,675 L0,480 C30,460 70,440 120,455 C160,430 210,445 250,480 C290,460 340,480 370,520 L400,675 Z" fill="#221133" />
+        <path d="M0,675 L0,510 C40,490 90,480 140,510 C180,485 240,495 280,535 C320,520 360,545 380,675 Z" fill="#311848" />
+
+        <!-- Vertical Paper Grass Blades -->
+        <g filter="url(#paper-shadow-soft)">
+          <path d="M40,675 Q45,550 55,490 Q70,560 75,675 Z" fill="#422461" />
+          <path d="M90,675 Q100,530 115,460 Q130,550 140,675 Z" fill="#54307a" />
+          <path d="M160,675 Q175,540 190,480 Q205,560 215,675 Z" fill="#673d91" />
+          <path d="M230,675 Q245,530 260,465 Q275,550 285,675 Z" fill="#54307a" />
+          <path d="M305,675 Q320,560 335,505 Q350,575 360,675 Z" fill="#422461" />
+        </g>
+
+        <!-- Paper Lavender Blossom Florets Left -->
+        <g filter="url(#paper-shadow-soft)">
+          <circle cx="245" cy="445" r="8" fill="#f2c7ce" />
+          <circle cx="258" cy="430" r="7" fill="#dca2ae" />
+          <circle cx="250" cy="415" r="6" fill="#f2c7ce" />
+          <circle cx="262" cy="402" r="5.5" fill="#ffd875" />
+
+          <circle cx="280" cy="470" r="8.5" fill="#dca2ae" />
+          <circle cx="292" cy="454" r="7.5" fill="#f2c7ce" />
+          <circle cx="285" cy="438" r="6.5" fill="#dca2ae" />
+          <circle cx="296" cy="424" r="5.5" fill="#ffd875" />
+        </g>
+
+        <!-- Paper Rose 1: Large Bottom Left (cx=120, cy=585) -->
+        <g transform="translate(120, 585)" filter="url(#paper-shadow)">
+          <path d="M-55,-10 C-65,-40 -25,-60 0,-45 C25,-60 65,-40 55,-10 C65,25 25,55 0,45 C-25,55 -65,25 -55,-10 Z" fill="url(#rose-deep)" />
+          <path d="M-42,-8 C-50,-30 -18,-45 0,-34 C18,-45 50,-30 42,-8 C50,18 18,42 0,34 C-18,42 -50,18 -42,-8 Z" fill="url(#rose-mid)" filter="url(#paper-shadow-soft)" />
+          <path d="M-28,-5 C-34,-20 -12,-30 0,-22 C12,-30 34,-20 28,-5 C34,12 12,28 0,22 C-12,28 -34,12 -28,-5 Z" fill="url(#rose-soft)" filter="url(#paper-shadow-soft)" />
+          <circle cx="0" cy="0" r="12" fill="url(#rose-center)" filter="url(#paper-shadow-soft)" />
+          <path d="M-5,-4 C-2,-9 6,-8 6,-2 C6,4 -2,6 -4,2" fill="none" stroke="#a24e68" stroke-width="1.8" stroke-linecap="round" />
+        </g>
+
+        <!-- Paper Rose 2: Mid Left (cx=210, cy=535) -->
+        <g transform="translate(210, 535)" filter="url(#paper-shadow)">
+          <path d="M-42,-8 C-50,-30 -18,-45 0,-34 C18,-45 50,-30 42,-8 C50,18 18,42 0,34 C-18,42 -50,18 -42,-8 Z" fill="url(#rose-deep)" />
+          <path d="M-30,-6 C-36,-22 -12,-32 0,-24 C12,-32 36,-22 30,-6 C36,14 12,30 0,24 C-12,30 -36,14 -30,-6 Z" fill="url(#rose-mid)" filter="url(#paper-shadow-soft)" />
+          <circle cx="0" cy="0" r="10" fill="url(#rose-center)" filter="url(#paper-shadow-soft)" />
+          <path d="M-4,-3 C-1,-7 5,-6 5,-1 C5,3 -1,5 -3,2" fill="none" stroke="#a24e68" stroke-width="1.5" stroke-linecap="round" />
+        </g>
+
+        <!-- Paper Rose 3: Accent Front Left (cx=315, cy=520) -->
+        <g transform="translate(315, 520)" filter="url(#paper-shadow-soft)">
+          <path d="M-30,-6 C-36,-22 -12,-32 0,-24 C12,-32 36,-22 30,-6 C36,14 12,30 0,24 C-12,30 -36,14 -30,-6 Z" fill="url(#rose-mid)" />
+          <path d="M-20,-4 C-24,-15 -8,-22 0,-16 C8,-22 24,-15 20,-4 C24,10 8,20 0,16 C-8,20 -24,10 -20,-4 Z" fill="url(#rose-soft)" />
+          <circle cx="0" cy="0" r="7" fill="url(#rose-center)" />
+        </g>
+      </g>
+
+      <!-- 6. LAYERED PAPERCRAFT FLORAL BUSHES (RIGHT SIDE) -->
+      <g id="right-floral-bush">
+        <!-- Silhouette Foliage Base -->
+        <path d="M1200,675 L1200,480 C1170,460 1130,440 1080,455 C1040,430 990,445 950,480 C910,460 860,480 830,520 L800,675 Z" fill="#221133" />
+        <path d="M1200,675 L1200,510 C1160,490 1110,480 1060,510 C1020,485 960,495 920,535 C880,520 840,545 820,675 Z" fill="#311848" />
+
+        <!-- Vertical Paper Grass Blades Right -->
+        <g filter="url(#paper-shadow-soft)">
+          <path d="M1160,675 Q1155,550 1145,490 Q1130,560 1125,675 Z" fill="#422461" />
+          <path d="M1110,675 Q1100,530 1085,460 Q1070,550 1060,675 Z" fill="#54307a" />
+          <path d="M1040,675 Q1025,540 1010,480 Q995,560 985,675 Z" fill="#673d91" />
+          <path d="M970,675 Q955,530 940,465 Q925,550 915,675 Z" fill="#54307a" />
+          <path d="M895,675 Q880,560 865,505 Q850,575 840,675 Z" fill="#422461" />
+        </g>
+
+        <!-- Paper Lavender Blossom Florets Right -->
+        <g filter="url(#paper-shadow-soft)">
+          <circle cx="955" cy="445" r="8" fill="#f2c7ce" />
+          <circle cx="942" cy="430" r="7" fill="#dca2ae" />
+          <circle cx="950" cy="415" r="6" fill="#f2c7ce" />
+          <circle cx="938" cy="402" r="5.5" fill="#ffd875" />
+
+          <circle cx="920" cy="470" r="8.5" fill="#dca2ae" />
+          <circle cx="908" cy="454" r="7.5" fill="#f2c7ce" />
+          <circle cx="915" cy="438" r="6.5" fill="#dca2ae" />
+          <circle cx="904" cy="424" r="5.5" fill="#ffd875" />
+        </g>
+
+        <!-- Paper Rose 4: Large Bottom Right (cx=1080, cy=585) -->
+        <g transform="translate(1080, 585)" filter="url(#paper-shadow)">
+          <path d="M-55,-10 C-65,-40 -25,-60 0,-45 C25,-60 65,-40 55,-10 C65,25 25,55 0,45 C-25,55 -65,25 -55,-10 Z" fill="url(#rose-deep)" />
+          <path d="M-42,-8 C-50,-30 -18,-45 0,-34 C18,-45 50,-30 42,-8 C50,18 18,42 0,34 C-18,42 -50,18 -42,-8 Z" fill="url(#rose-mid)" filter="url(#paper-shadow-soft)" />
+          <path d="M-28,-5 C-34,-20 -12,-30 0,-22 C12,-30 34,-20 28,-5 C34,12 12,28 0,22 C-12,28 -34,12 -28,-5 Z" fill="url(#rose-soft)" filter="url(#paper-shadow-soft)" />
+          <circle cx="0" cy="0" r="12" fill="url(#rose-center)" filter="url(#paper-shadow-soft)" />
+          <path d="M-5,-4 C-2,-9 6,-8 6,-2 C6,4 -2,6 -4,2" fill="none" stroke="#a24e68" stroke-width="1.8" stroke-linecap="round" />
+        </g>
+
+        <!-- Paper Rose 5: Mid Right (cx=990, cy=535) -->
+        <g transform="translate(990, 535)" filter="url(#paper-shadow)">
+          <path d="M-42,-8 C-50,-30 -18,-45 0,-34 C18,-45 50,-30 42,-8 C50,18 18,42 0,34 C-18,42 -50,18 -42,-8 Z" fill="url(#rose-deep)" />
+          <path d="M-30,-6 C-36,-22 -12,-32 0,-24 C12,-32 36,-22 30,-6 C36,14 12,30 0,24 C-12,30 -36,14 -30,-6 Z" fill="url(#rose-mid)" filter="url(#paper-shadow-soft)" />
+          <circle cx="0" cy="0" r="10" fill="url(#rose-center)" filter="url(#paper-shadow-soft)" />
+          <path d="M-4,-3 C-1,-7 5,-6 5,-1 C5,3 -1,5 -3,2" fill="none" stroke="#a24e68" stroke-width="1.5" stroke-linecap="round" />
+        </g>
+
+        <!-- Paper Rose 6: Accent Front Right (cx=885, cy=520) -->
+        <g transform="translate(885, 520)" filter="url(#paper-shadow-soft)">
+          <path d="M-30,-6 C-36,-22 -12,-32 0,-24 C12,-32 36,-22 30,-6 C36,14 12,30 0,24 C-12,30 -36,14 -30,-6 Z" fill="url(#rose-mid)" />
+          <path d="M-20,-4 C-24,-15 -8,-22 0,-16 C8,-22 24,-15 20,-4 C24,10 8,20 0,16 C-8,20 -24,10 -20,-4 Z" fill="url(#rose-soft)" />
+          <circle cx="0" cy="0" r="7" fill="url(#rose-center)" />
+        </g>
+      </g>
+
+      <!-- 7. THE 3D PAPERCRAFT SALTED EGG SPONGE CAKE (CENTERED AT X=600, DEFYING GRAVITY) -->
+      <g id="cake-3d-papercraft-group" class="floating-cake-layer">
+        <!-- Stage Ground Shadow (Soft blurred paper shadow on the garden floor) -->
+        <ellipse cx="600" cy="582" rx="190" ry="24" fill="rgba(6,2,14,0.65)" filter="url(#blur-heavy)" />
+
+        <!-- A. Scalloped White Paper Plate -->
+        <g id="paper-plate-group" filter="url(#paper-shadow-deep)">
+          <!-- Plate Base Cylinder -->
+          <ellipse cx="600" cy="552" rx="175" ry="30" fill="url(#plate-rim-grad)" />
+          <ellipse cx="600" cy="548" rx="170" ry="27" fill="url(#plate-face-grad)" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" />
+          <!-- Scalloped Paper Edges -->
+          <g fill="#faf7f2" stroke="rgba(215,195,175,0.45)" stroke-width="0.8">
+            <circle cx="435" cy="550" r="4" /><circle cx="455" cy="558" r="4.5" />
+            <circle cx="480" cy="565" r="5" /><circle cx="510" cy="570" r="5.5" />
+            <circle cx="545" cy="574" r="6" /><circle cx="580" cy="576" r="6" />
+            <circle cx="620" cy="576" r="6" /><circle cx="655" cy="574" r="6" />
+            <circle cx="690" cy="570" r="5.5" /><circle cx="720" cy="565" r="5" />
+            <circle cx="745" cy="558" r="4.5" /><circle cx="765" cy="550" r="4" />
+          </g>
+        </g>
+
+        <!-- B. Bottom Thick Sponge Layer (Tầng bông lan dưới) -->
+        <g id="bottom-sponge-tier" filter="url(#paper-shadow)">
+          <!-- Cylinder Front Face -->
+          <path d="M460,490 C460,530 740,530 740,490 L740,528 C740,568 460,568 460,528 Z" fill="url(#sponge-bottom-cyl)" />
+          <!-- Sponge crumb texture accents (stippled porous paper) -->
+          <g fill="rgba(255,230,180,0.35)">
+            <circle cx="480" cy="515" r="1.5" /><circle cx="510" cy="525" r="2" /><circle cx="540" cy="518" r="1.8" />
+            <circle cx="580" cy="535" r="2.2" /><circle cx="620" cy="530" r="1.8" /><circle cx="660" cy="522" r="2" />
+            <circle cx="700" cy="528" r="1.6" /><circle cx="720" cy="516" r="2" />
+          </g>
+          <!-- Top Ellipse Surface -->
+          <ellipse cx="600" cy="490" rx="140" ry="26" fill="url(#sponge-bottom-top)" />
+        </g>
+
+        <!-- C. Creamy Layer in Between (Lớp kem béo ngậy tách rời 2 tầng) -->
+        <g id="middle-cream-tier" filter="url(#paper-shadow-soft)">
+          <path d="M452,480 Q480,498 515,482 Q550,500 600,483 Q650,501 685,482 Q720,497 748,480 C748,495 720,511 685,497 Q650,515 600,497 Q550,515 515,497 Q480,511 452,495 Z" fill="url(#cream-middle-grad)" />
+          <!-- Cream drop highlights -->
+          <ellipse cx="550" cy="502" rx="6" ry="3" fill="#ffffff" opacity="0.7" />
+          <ellipse cx="650" cy="503" rx="6" ry="3" fill="#ffffff" opacity="0.7" />
+        </g>
+
+        <!-- D. Top Thick Sponge Layer (Tầng bông lan trên lơ lửng) -->
+        <g id="top-sponge-tier" filter="url(#paper-shadow)">
+          <!-- Cylinder Front Face -->
+          <path d="M465,430 C465,466 735,466 735,430 L735,464 C735,500 465,500 465,464 Z" fill="url(#sponge-top-cyl)" />
+          <!-- Top Surface Ellipse -->
+          <ellipse cx="600" cy="430" rx="135" ry="24" fill="url(#sponge-top-surface)" />
+        </g>
+
+        <!-- E. Light and Neat Paper-Textured Meat Floss (Chà bông giấy tơi xốp) -->
+        <g id="meat-floss-topping" filter="url(#paper-shadow-soft)">
+          <!-- Curled paper strands in golden-yellow -->
+          <path d="M490,422 Q505,416 520,424 Q535,430 550,420" stroke="#f5be66" stroke-width="3" stroke-linecap="round" fill="none" />
+          <path d="M530,418 Q545,412 560,422 Q575,428 590,418" stroke="#e8a742" stroke-width="2.5" stroke-linecap="round" fill="none" />
+          <path d="M610,418 Q625,412 640,422 Q655,428 670,418" stroke="#fedb8e" stroke-width="3" stroke-linecap="round" fill="none" />
+          <path d="M650,422 Q665,416 680,425 Q695,430 710,421" stroke="#f5be66" stroke-width="2.5" stroke-linecap="round" fill="none" />
+          <path d="M510,428 Q530,435 555,426 Q580,436 605,428" stroke="#fcd98c" stroke-width="2.5" stroke-linecap="round" fill="none" />
+          <path d="M600,428 Q625,436 650,427 Q675,435 700,428" stroke="#e7a845" stroke-width="2" stroke-linecap="round" fill="none" />
+        </g>
+
+        <!-- F. Floating Orange Heart-Shaped Salted Eggs (Trứng muối hình trái tim sọc chấm) -->
+        <g id="salted-egg-hearts">
+          <!-- Heart 1 (Main Large Heart, Center-Right at x=645, y=412) -->
+          <g transform="translate(645, 412) rotate(12)" filter="url(#paper-shadow)">
+            <path d="M0,-12 C-7,-22 -24,-16 -20,3 C-15,16 0,24 0,24 C0,24 15,16 20,3 C24,-16 7,-22 0,-12 Z" fill="url(#egg-heart-grad-1)" />
+            <!-- White Paper Stripes -->
+            <path d="M-12,-4 Q0,2 14,-1" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" fill="none" />
+            <path d="M-10,6 Q0,11 11,8" stroke="rgba(255,255,255,0.85)" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <!-- White Paper Dots -->
+            <circle cx="-6" cy="-11" r="1.4" fill="#ffffff" opacity="0.9" />
+            <circle cx="6" cy="-11" r="1.4" fill="#ffffff" opacity="0.9" />
+            <circle cx="0" cy="-4" r="1.5" fill="#ffffff" opacity="0.9" />
+            <circle cx="0" cy="15" r="1.2" fill="#ffffff" opacity="0.9" />
+          </g>
+
+          <!-- Heart 2 (Center-Left Heart at x=555, y=414) -->
+          <g transform="translate(555, 414) rotate(-14)" filter="url(#paper-shadow)">
+            <path d="M0,-11 C-6,-20 -21,-15 -18,2 C-14,14 0,22 0,22 C0,22 14,14 18,2 C21,-15 6,-20 0,-11 Z" fill="url(#egg-heart-grad-2)" />
+            <path d="M-10,-3 Q0,3 12,-1" stroke="rgba(255,255,255,0.85)" stroke-width="1.8" stroke-linecap="round" fill="none" />
+            <path d="M-8,6 Q0,10 9,7" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" fill="none" />
+            <circle cx="-5" cy="-10" r="1.3" fill="#ffffff" opacity="0.9" />
+            <circle cx="5" cy="-10" r="1.3" fill="#ffffff" opacity="0.9" />
+            <circle cx="0" cy="-3" r="1.4" fill="#ffffff" opacity="0.9" />
+          </g>
+
+          <!-- Heart 3 (Floating Mid-Air Heart, Defying Gravity at x=682, y=390) -->
+          <g transform="translate(682, 390) rotate(22)" filter="url(#paper-lift)" class="floating-egg-heart">
+            <path d="M0,-10 C-6,-18 -19,-14 -16,2 C-12,13 0,20 0,20 C0,20 12,13 16,2 C19,-14 6,-18 0,-10 Z" fill="url(#egg-heart-grad-1)" />
+            <path d="M-9,-3 Q0,2 10,-1" stroke="rgba(255,255,255,0.85)" stroke-width="1.6" stroke-linecap="round" fill="none" />
+            <circle cx="-4" cy="-9" r="1.2" fill="#ffffff" opacity="0.9" />
+            <circle cx="4" cy="-9" r="1.2" fill="#ffffff" opacity="0.9" />
+            <circle cx="0" cy="13" r="1.1" fill="#ffffff" opacity="0.9" />
+          </g>
+
+          <!-- Heart 4 (Small Front Accent Heart at x=618, y=434) -->
+          <g transform="translate(618, 434) rotate(6)" filter="url(#paper-shadow-soft)">
+            <path d="M0,-8 C-4,-14 -15,-11 -12,2 C-9,10 0,16 0,16 C0,16 9,10 12,2 C15,-11 4,-14 0,-8 Z" fill="url(#egg-heart-grad-2)" />
+            <path d="M-6,-2 Q0,2 7,-1" stroke="rgba(255,255,255,0.85)" stroke-width="1.4" stroke-linecap="round" fill="none" />
+            <circle cx="0" cy="-2" r="1.2" fill="#ffffff" opacity="0.9" />
+          </g>
+        </g>
+
+        <!-- G. Green Leaves & Floating White Daisies (Hoa cúc trắng nhụy vàng) -->
+        <g id="daisies-and-leaves">
+          <!-- Green Folded Paper Leaves -->
+          <g filter="url(#paper-shadow-soft)">
+            <!-- Leaf 1 (Left Rim) -->
+            <path d="M510,435 C485,445 470,440 458,454 C474,454 496,446 510,435 Z" fill="url(#leaf-grad)" />
+            <path d="M510,435 L470,450" stroke="rgba(255,255,255,0.35)" stroke-width="1" fill="none" />
+
+            <!-- Leaf 2 (Back Left) -->
+            <path d="M485,416 C468,406 450,410 440,422 C454,424 472,420 485,416 Z" fill="url(#leaf-grad)" />
+
+            <!-- Leaf 3 (Right behind eggs) -->
+            <path d="M685,420 C705,412 725,416 738,428 C724,430 702,424 685,420 Z" fill="url(#leaf-grad)" />
+          </g>
+
+          <!-- Daisy 1: Front Left on Cake Edge (cx=508, cy=434) -->
+          <g transform="translate(508, 434)" filter="url(#paper-lift)">
+            <!-- 12 Radiating White Paper Petals -->
+            <ellipse cx="0" cy="-12" rx="3.5" ry="7" fill="#ffffff" />
+            <ellipse cx="6" cy="-10" rx="3.5" ry="7" transform="rotate(30, 0, 0)" fill="#ffffff" />
+            <ellipse cx="10" cy="-6" rx="3.5" ry="7" transform="rotate(60, 0, 0)" fill="#ffffff" />
+            <ellipse cx="12" cy="0" rx="3.5" ry="7" transform="rotate(90, 0, 0)" fill="#ffffff" />
+            <ellipse cx="10" cy="6" rx="3.5" ry="7" transform="rotate(120, 0, 0)" fill="#ffffff" />
+            <ellipse cx="6" cy="10" rx="3.5" ry="7" transform="rotate(150, 0, 0)" fill="#ffffff" />
+            <ellipse cx="0" cy="12" rx="3.5" ry="7" transform="rotate(180, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-6" cy="10" rx="3.5" ry="7" transform="rotate(210, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-10" cy="6" rx="3.5" ry="7" transform="rotate(240, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-12" cy="0" rx="3.5" ry="7" transform="rotate(270, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-10" cy="-6" rx="3.5" ry="7" transform="rotate(300, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-6" cy="-10" rx="3.5" ry="7" transform="rotate(330, 0, 0)" fill="#ffffff" />
+            <!-- Golden Disc Center -->
+            <circle cx="0" cy="0" r="5.5" fill="#ffd043" filter="url(#paper-shadow-soft)" />
+            <circle cx="0" cy="0" r="3.5" fill="#ffb726" />
+          </g>
+
+          <!-- Daisy 2: Left Floating Daisy (cx=475, cy=412) -->
+          <g transform="translate(475, 412) rotate(-15)" filter="url(#paper-lift)" class="floating-daisy">
+            <ellipse cx="0" cy="-9" rx="2.8" ry="5.5" fill="#ffffff" />
+            <ellipse cx="5" cy="-8" rx="2.8" ry="5.5" transform="rotate(45, 0, 0)" fill="#ffffff" />
+            <ellipse cx="9" cy="0" rx="2.8" ry="5.5" transform="rotate(90, 0, 0)" fill="#ffffff" />
+            <ellipse cx="5" cy="8" rx="2.8" ry="5.5" transform="rotate(135, 0, 0)" fill="#ffffff" />
+            <ellipse cx="0" cy="9" rx="2.8" ry="5.5" transform="rotate(180, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-5" cy="8" rx="2.8" ry="5.5" transform="rotate(225, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-9" cy="0" rx="2.8" ry="5.5" transform="rotate(270, 0, 0)" fill="#ffffff" />
+            <ellipse cx="-5" cy="-8" rx="2.8" ry="5.5" transform="rotate(315, 0, 0)" fill="#ffffff" />
+            <circle cx="0" cy="0" r="4.2" fill="#ffd043" />
+          </g>
+
+          <!-- Daisy 3: Small Daisy Accent (cx=535, cy=440) -->
+          <g transform="translate(535, 440) scale(0.75)" filter="url(#paper-shadow-soft)">
+            <circle cx="0" cy="-8" r="3" fill="#ffffff" /><circle cx="6" cy="-6" r="3" fill="#ffffff" />
+            <circle cx="8" cy="0" r="3" fill="#ffffff" /><circle cx="6" cy="6" r="3" fill="#ffffff" />
+            <circle cx="0" cy="8" r="3" fill="#ffffff" /><circle cx="-6" cy="6" r="3" fill="#ffffff" />
+            <circle cx="-8" cy="0" r="3" fill="#ffffff" /><circle cx="-6" cy="-6" r="3" fill="#ffffff" />
+            <circle cx="0" cy="0" r="3.8" fill="#ffd043" />
+          </g>
+        </g>
+
+        <!-- H. Small Yellow Cream Stars (Sao kem vàng) -->
+        <g id="cream-stars" filter="url(#paper-shadow-soft)">
+          <!-- Faceted Yellow Buttercream Stars -->
+          <polygon points="578,414 580,419 585,420 581,424 582,429 578,426 574,429 575,424 571,420 576,419" fill="#ffe79a" />
+          <polygon points="640,430 642,434 646,435 643,438 644,442 640,440 636,442 637,438 634,435 638,434" fill="#ffd454" />
+          <polygon points="694,410 696,414 700,415 697,418 698,422 694,420 690,422 691,418 688,415 692,414" fill="#ffe79a" />
+          <polygon points="525,420 527,424 531,425 528,428 529,432 525,430 521,432 522,428 519,425 523,424" fill="#ffd454" />
+        </g>
+
+        <!-- I. White Name Tag with Text "Plee" -->
+        <g id="name-tag-plee" filter="url(#paper-lift)">
+          <!-- Embossed Card Base -->
+          <rect x="555" y="440" width="90" height="28" rx="4" fill="#ffffff" stroke="rgba(215,195,175,0.7)" stroke-width="1.2" />
+          <!-- Subtle Paper Border Inset -->
+          <rect x="557" y="442" width="86" height="24" rx="2.5" fill="none" stroke="rgba(255,216,117,0.3)" stroke-width="0.8" />
+          <!-- Name Typography -->
+          <text x="600" y="459" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="600" fill="#3d2514" letter-spacing="0.6">Plee</text>
+        </g>
+
+        <!-- J. Glowing Magical Birthday Candle on Top Layer -->
+        <g id="birthday-candle-group">
+          <!-- Rolled Paper Candle Stem (Striped Pink & White) -->
+          <rect x="594" y="358" width="12" height="62" rx="6" fill="url(#candle-stripe-pattern)" stroke="rgba(220,160,180,0.5)" stroke-width="1" filter="url(#paper-shadow)" />
+          <!-- Dark Paper Wick -->
+          <rect x="599" y="346" width="2" height="12" rx="1" fill="#2d1922" />
+
+          <!-- Magical Candle Flame (Pure Vector Animated Flame) -->
+          <g id="svg-flame" class="svg-candle-flame">
+            <!-- Ambient Golden Halo Glow -->
+            <circle id="svg-halo" cx="600" cy="328" r="85" fill="url(#candle-halo-glow)" filter="url(#paper-glow-filter)" />
+
+            <!-- Sparkling Golden Diamond Stars around the Flame -->
+            <polygon points="574,316 576,321 581,323 576,325 574,330 572,325 567,323 572,321" fill="#fff4b8" />
+            <polygon points="628,312 630,317 635,318 630,320 628,325 626,320 621,318 626,317" fill="#ffd875" />
+            <polygon points="588,296 590,301 595,302 590,304 588,309 586,304 581,302 586,301" fill="#fff4b8" />
+            <polygon points="618,290 620,294 624,295 620,296 618,300 616,296 612,295 616,294" fill="#ffd875" />
+
+            <!-- Outer Warm Orange Paper Flame -->
+            <path d="M600,310 C610,326 614,338 600,348 C586,338 590,326 600,310 Z" fill="#ff7033" filter="url(#paper-soft)" />
+            <!-- Middle Golden Yellow Flame -->
+            <path d="M600,317 C607,329 609,337 600,345 C591,337 593,329 600,317 Z" fill="#ffb845" />
+            <!-- Inner Bright White Flame Core -->
+            <path d="M600,324 C604,332 605,337 600,342 C595,337 596,332 600,324 Z" fill="#ffffff" />
+          </g>
+
+          <!-- Delicate Smoke Wisp on Extinguish -->
+          <path id="svg-smoke" class="svg-smoke-wisp" d="M600,345 C595,330 606,315 598,298 C590,280 604,260 596,238" fill="none" stroke="rgba(235,225,230,0.85)" stroke-width="3" stroke-linecap="round" opacity="0" />
+        </g>
+      </g>
+    </svg>
+
+    <!-- INTERACTIVE HTML OVERLAY (Header, Nav, Controls) -->
+    <main class="cake-overlay-ui">
+      <!-- Top Navigation Bar -->
+      <nav class="cake-top-nav" aria-label="Điều hướng và âm thanh">
+        <a class="back-link" href="garden.html">
+          <span aria-hidden="true">←</span> Khu vườn hoa
         </a>
-      </div>
+        <button class="garden-sound-button" id="sound-toggle" type="button" aria-pressed="false">♫ Nhạc nền</button>
+      </nav>
 
-      <p class="wish-display-box" id="wish-message" role="status" aria-live="polite"></p>
-    </div>
+      <!-- Header Content (Empty dark negative space at top) -->
+      <header class="cake-header-content">
+        <p class="eyebrow">✦ CHƯƠNG III · MAKE A BIRTHDAY WISH ✦</p>
+        <h1>Make a <span class="wish-cursive">Wish,</span> <span class="name-plee">PLEE</span> <span class="heart-symbol">♡</span></h1>
+        <p class="description">
+          Chiếc bánh sinh nhật giấy 3D và ngọn nến phép thuật đang lung linh tỏa sáng.<br>
+          Hãy nhắm mắt ước một điều thật đẹp rồi thổi tắt nến nhé!
+        </p>
+      </header>
 
-    <p class="footer">May your new age be filled with magic, warmth & love ♡</p>
-  </main>
+      <!-- Clickable Candle Stem Hotspot for Tapping -->
+      <div class="candle-hit-target" id="candle-stem" role="button" tabindex="0" aria-label="Chạm nhẹ vào nến để thổi tắt hoặc thắp lại" title="Chạm nhẹ vào ngọn nến hoặc dùng nút bên dưới"></div>
+
+      <!-- Bottom Controls Section -->
+      <section class="controls-container">
+        <!-- Real-time Microphone Breath / Wind Meter -->
+        <div class="breath-meter-wrap" id="breath-meter-wrap" hidden>
+          <div class="breath-meter-label">🌬️ Độ mạnh hơi thổi:</div>
+          <div class="breath-meter-track">
+            <div class="breath-meter-fill" id="breath-meter-fill"></div>
+          </div>
+        </div>
+
+        <!-- Action Button Group -->
+        <div class="action-buttons-group">
+          <button class="wish-main-button" id="wish-button" type="button">
+            🎙 Thổi nến bằng micro
+          </button>
+
+          <!-- Embossed Paper Gift Reveal Button -->
+          <div class="gift-reveal-card" id="gift-reveal" hidden>
+            <a class="gift-link-btn" href="gift.html">
+              <span>🎁 Mở món quà bí mật dành cho P.Lee</span>
+              <span aria-hidden="true">♡</span>
+            </a>
+          </div>
+        </div>
+
+        <button class="manual-tap-button" id="manual-blow-btn" type="button">
+          🕯️ Hoặc chạm nhẹ vào đây để thổi tắt nến
+        </button>
+
+        <p class="wish-display-box" id="wish-message" role="status" aria-live="polite"></p>
+
+        <p class="footer">May your new age be filled with magic, warmth & love ♡</p>
+      </section>
+    </main>
+  </div>
 
   <script>
     (() => {
@@ -166,9 +631,9 @@
       const button = document.getElementById('wish-button');
       const manualBtn = document.getElementById('manual-blow-btn');
       const candleStem = document.getElementById('candle-stem');
-      const flame = document.getElementById('flame');
-      const smoke = document.getElementById('smoke');
-      const candleGlow = document.getElementById('candle-glow');
+      const svgFlame = document.getElementById('svg-flame');
+      const svgHalo = document.getElementById('svg-halo');
+      const svgSmoke = document.getElementById('svg-smoke');
       const message = document.getElementById('wish-message');
       const giftReveal = document.getElementById('gift-reveal');
       const breathMeterWrap = document.getElementById('breath-meter-wrap');
@@ -176,7 +641,7 @@
       const canvas = document.getElementById('cake-canvas');
 
       /* -------------------------------------------------------------
-       * 1. CELESTIAL BACKGROUND, WISH STAR & CELEBRATION PARTICLES
+       * 1. CELESTIAL BACKGROUND & CELEBRATION STARDUST (CANVAS)
        * ------------------------------------------------------------*/
       let bCtx = null;
       let width = 0, height = 0;
@@ -193,12 +658,12 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        for (let i = 0; i < 36; i++) {
+        for (let i = 0; i < 40; i++) {
           floatingEmbers.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            r: 1.2 + Math.random() * 2.2,
-            speedY: 8 + Math.random() * 16,
+            r: 1.0 + Math.random() * 2.0,
+            speedY: 6 + Math.random() * 14,
             phase: Math.random() * Math.PI * 2
           });
         }
@@ -211,23 +676,23 @@
 
           bCtx.clearRect(0, 0, width, height);
 
-          // Draw floating golden embers
+          // Floating golden stardust in starry night sky
           floatingEmbers.forEach(e => {
             e.y -= e.speedY * delta;
-            e.x += Math.sin(time * 1.5 + e.phase) * 12 * delta;
+            e.x += Math.sin(time * 1.5 + e.phase) * 10 * delta;
             if (e.y < -20) {
               e.y = height + 20;
               e.x = Math.random() * width;
             }
 
             const pulse = 0.35 + 0.65 * Math.pow(Math.sin(time * 2 + e.phase), 2);
-            bCtx.fillStyle = `rgba(255, 216, 117, ${pulse * 0.78})`;
+            bCtx.fillStyle = `rgba(255, 216, 117, ${pulse * 0.75})`;
             bCtx.beginPath();
             bCtx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
             bCtx.fill();
           });
 
-          // Draw celebration particle burst (when extinguished)
+          // Celebration particle burst on extinguish
           for (let i = sparks.length - 1; i >= 0; i--) {
             const p = sparks[i];
             p.age += delta;
@@ -256,24 +721,25 @@
       }
 
       function spawnCelebrationBurst() {
-        const rect = flame.getBoundingClientRect();
+        const target = candleStem;
+        const rect = target.getBoundingClientRect();
         const originX = rect.left + rect.width / 2;
         const originY = rect.top + rect.height / 2;
 
-        const colors = ['#ffd875', '#fff4b8', '#f2c7ce', '#dca2ae', '#ffffff', '#ffaa42'];
-        for (let i = 0; i < 75; i++) {
+        const colors = ['#ffd875', '#fff4b8', '#f2c7ce', '#dca2ae', '#ffffff', '#ffaa42', '#ffa048'];
+        for (let i = 0; i < 85; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = 50 + Math.random() * 180;
+          const speed = 50 + Math.random() * 200;
           sparks.push({
             x: originX,
             y: originY,
             vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 55,
-            gravity: 40 + Math.random() * 30,
-            r: 1.8 + Math.random() * 3.2,
+            vy: Math.sin(angle) * speed - 50,
+            gravity: 42 + Math.random() * 32,
+            r: 1.8 + Math.random() * 3.4,
             color: colors[Math.floor(Math.random() * colors.length)],
             age: 0,
-            life: 1.5 + Math.random() * 1.1
+            life: 1.6 + Math.random() * 1.2
           });
         }
       }
@@ -297,7 +763,7 @@
           osc.frequency.setValueAtTime(freq, t);
 
           gain.gain.setValueAtTime(0.0001, t);
-          gain.gain.linearRampToValueAtTime(0.22, t + 0.01);
+          gain.gain.linearRampToValueAtTime(0.24, t + 0.015);
           gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
 
           osc.connect(gain);
@@ -354,42 +820,47 @@
 
         button.classList.remove('listening');
         if (breathMeterWrap) breathMeterWrap.hidden = true;
-        flame.style.transform = '';
+        if (svgFlame) svgFlame.style.transform = '';
       }
 
       function extinguishCandle() {
-        if (flame.classList.contains('out')) return;
+        if (svgFlame && svgFlame.classList.contains('out')) return;
 
         if (window.ensureMusicPlayingOnGesture) {
           window.ensureMusicPlayingOnGesture();
         }
 
-        flame.classList.add('out');
-        smoke.classList.add('active');
-        candleGlow.classList.add('dimmed');
+        if (svgFlame) svgFlame.classList.add('out');
+        if (svgHalo) svgHalo.classList.add('dimmed');
+        if (svgSmoke) svgSmoke.classList.add('active');
 
         spawnCelebrationBurst();
         playHappyBirthdayChimePhrase();
 
         stopMicrophone();
 
-        button.textContent = '🕯️ Thắp sáng lại ngọn nến';
-        button.disabled = false;
-        manualBtn.style.display = 'none';
-
-        message.textContent = '✨ Điều ước của P.Lee đã bay lên bầu trời đêm! Chúc mọi điều ước của em đều thành hiện thực ♡';
+        // Switch to Gift Reveal Button mode
+        button.style.display = 'none';
         giftReveal.hidden = false;
+        manualBtn.textContent = '🕯️ Thắp sáng lại ngọn nến';
+        manualBtn.style.display = 'inline-block';
+
+        message.textContent = '✨ Điều ước của Plee đã bay lên bầu trời đêm! Chúc mọi điều ước của em đều thành hiện thực ♡';
       }
 
       function relightCandle() {
-        flame.classList.remove('out');
-        smoke.classList.remove('active');
-        candleGlow.classList.remove('dimmed');
-        button.textContent = '🌬️ Thổi nến bằng micro';
+        if (svgFlame) svgFlame.classList.remove('out');
+        if (svgHalo) svgHalo.classList.remove('dimmed');
+        if (svgSmoke) svgSmoke.classList.remove('active');
+
+        button.style.display = 'inline-flex';
+        button.textContent = '🎙 Thổi nến bằng micro';
         button.disabled = false;
-        manualBtn.style.display = 'inline-block';
-        message.textContent = '';
         giftReveal.hidden = true;
+        manualBtn.textContent = '🕯️ Hoặc chạm nhẹ vào đây để thổi tắt nến';
+        manualBtn.style.display = 'inline-block';
+
+        message.textContent = '';
         playChimeNote(659.25, 0, 1.0);
       }
 
@@ -451,12 +922,12 @@
               breathMeterFill.style.width = `${ratio}%`;
             }
 
-            // Bend the paper flame dynamically with breath intensity
-            if (volume > noiseLevel + 5 && !flame.classList.contains('out')) {
-              const bendDeg = Math.min(28, (volume - noiseLevel) * 0.7);
-              flame.style.transform = `translateX(-50%) rotate(${bendDeg}deg) scale(1.1, 0.82)`;
-            } else if (!flame.classList.contains('out')) {
-              flame.style.transform = '';
+            // Dynamically bend the candle flame with breath intensity
+            if (volume > noiseLevel + 5 && svgFlame && !svgFlame.classList.contains('out')) {
+              const bendDeg = Math.min(26, (volume - noiseLevel) * 0.7);
+              svgFlame.style.transform = `rotate(${bendDeg}deg) scale(1.12, 0.85)`;
+            } else if (svgFlame && !svgFlame.classList.contains('out')) {
+              svgFlame.style.transform = '';
             }
 
             if (volume > dynamicThreshold) {
@@ -476,14 +947,14 @@
         } catch (error) {
           stopMicrophone();
           message.textContent = 'em có thể chạm trực tiếp vào ngọn nến hoặc nút bên dưới để thổi nến nhé.';
-          button.textContent = '🌬️ Thử bật micro lại';
+          button.textContent = '🎙 Thử bật micro lại';
         } finally {
           button.disabled = false;
         }
       }
 
       button.addEventListener('click', async () => {
-        if (flame.classList.contains('out')) {
+        if (svgFlame && svgFlame.classList.contains('out')) {
           relightCandle();
           return;
         }
@@ -496,10 +967,17 @@
         await startMicrophone();
       });
 
-      manualBtn.addEventListener('click', extinguishCandle);
+      manualBtn.addEventListener('click', () => {
+        if (svgFlame && svgFlame.classList.contains('out')) {
+          relightCandle();
+        } else {
+          extinguishCandle();
+        }
+      });
+
       if (candleStem) {
         candleStem.addEventListener('click', () => {
-          if (flame.classList.contains('out')) {
+          if (svgFlame && svgFlame.classList.contains('out')) {
             relightCandle();
           } else {
             extinguishCandle();
