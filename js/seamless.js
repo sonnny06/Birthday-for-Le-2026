@@ -7,7 +7,7 @@
 
   // 1. Singleton Global Audio Instance
   if (!window.__bgMusic) {
-    window.__bgMusic = new Audio('assets/bg-music.mp3');
+    window.__bgMusic = new Audio('assets/JK.mp3');
     window.__bgMusic.loop = true;
     window.__bgMusic.volume = 0.85;
   }
