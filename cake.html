@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#1a122e">
   <meta name="description" content="Chiếc bánh sinh nhật giấy 3D lung linh và ngọn nến ấm áp dành riêng cho V.SON.">
 
-  <title>Make a Wish 🎂 · Happy Birthday V.SON</title>
+  <title>Make a Wish 🎂 · Happy Birthday P.Lee</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,7 +148,7 @@
       <!-- Embossed Paper Invitation Reveal -->
       <div class="gift-reveal-card" id="gift-reveal" hidden>
         <a class="gift-link-btn" href="gift.html">
-          <span>🎁 Mở món quà bí mật dành cho V.SON</span>
+          <span>🎁 Mở món quà bí mật dành cho P.Lee</span>
           <span aria-hidden="true">♡</span>
         </a>
       </div>
@@ -377,7 +377,7 @@
         button.disabled = false;
         manualBtn.style.display = 'none';
 
-        message.textContent = '✨ Điều ước của V.SON đã bay lên bầu trời đêm! Chúc mọi ước nguyện của cậu đều thành hiện thực ♡';
+        message.textContent = '✨ Điều ước của P.Lee đã bay lên bầu trời đêm! Chúc mọi điều ước của em đều thành hiện thực ♡';
         giftReveal.hidden = false;
       }
 
@@ -405,7 +405,7 @@
 
       async function startMicrophone() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          message.textContent = 'Trình duyệt không hỗ trợ micro, cậu chạm vào ngọn nến hoặc nút bên dưới để tắt nến nhé.';
+          message.textContent = 'Trình duyệt không hỗ trợ micro, em chạm vào ngọn nến hoặc nút bên dưới để tắt nến nhé.';
           return;
         }
 
@@ -434,7 +434,7 @@
           isListening = true;
           button.classList.add('listening');
           button.textContent = '🌬️ Hãy thổi vào micro (hoặc bấm lần nữa để tắt nến)';
-          message.textContent = 'Cậu cứ ghé lại gần và thổi một hơi thật dài vào micro nhé...';
+          message.textContent = 'em cứ ghé lại gần và thổi một hơi thật dài vào micro nhé...';
           if (breathMeterWrap) breathMeterWrap.hidden = false;
 
           let noiseLevel = 12;
@@ -475,7 +475,7 @@
 
         } catch (error) {
           stopMicrophone();
-          message.textContent = 'Cậu có thể chạm trực tiếp vào ngọn nến hoặc nút bên dưới để thổi nến nhé.';
+          message.textContent = 'em có thể chạm trực tiếp vào ngọn nến hoặc nút bên dưới để thổi nến nhé.';
           button.textContent = '🌬️ Thử bật micro lại';
         } finally {
           button.disabled = false;

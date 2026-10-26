@@ -35,51 +35,51 @@
   const BIRTHDAY_NOTES = [
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #1 ✧',
-      text: 'Mong tuổi mới mang đến cho cậu thật nhiều niềm vui, sự dịu dàng và những bình yên trong từng khoảnh khắc nhỏ bé mỗi ngày. 🌷'
+      text: 'Yayyyy, chúc mừng sinh nhật cục cưng nhé !'
     },
     {
       badge: '✧ LỜI NHẮN TỪ KHU VƯỜN #2 ✧',
-      text: 'Cảm ơn cậu vì đã xuất hiện và khiến thế giới xung quanh trở nên ngọt ngào, ấm áp và đặc biệt hơn rất nhiều. ♡'
+      text: 'Ô này là để cho em biết tình cảm tui còn nhiều thứ khó nói ♡'
     },
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #3 ✧',
-      text: 'Chúc cho mọi ước mơ trong lòng cậu, dù là nhỏ bé nhất, đều sẽ từng bước đơm hoa kết trái thật rực rỡ nhé! 🌟'
+      text: 'Tuổi mới chúc em sẽ luôn năng lượng và vui vẻ mỗi ngày!🌟'
     },
     {
       badge: '✧ ĐÓA HOA TƯƠI ĐẸP #4 ✧',
-      text: 'Mỗi đóa hoa trong khu vườn đêm nay tượng trưng cho một nụ cười rạng rỡ của cậu. Hôm nay nhớ cười thật nhiều nha! 🌹'
+      text: 'Mỗi đóa hoa trong khu vườn đêm nay tượng trưng cho một nụ cười rạng rỡ của em. Hôm nay nhớ cười thật nhiều nha! 🌹'
     },
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #5 ✧',
-      text: 'Mong cậu luôn có đủ tự tin để theo đuổi những điều mình yêu thích, và luôn được yêu thương, trân trọng một cách trọn vẹn nhất. ✨'
+      text: 'Chúc cô sớm gặp được cục cưng JK sớm nhé✨'
     },
     {
       badge: '✧ LỜI NHẮN TỪ KHU VƯỜN #6 ✧',
-      text: 'Tuổi mới chúc cậu một đời an yên, tâm hồn lúc nào cũng phơi phới như mùa xuân và ngập tràn hạnh phúc giản đơn! 🌸'
+      text: 'Tuổi mới chúc em một đời an yên, tâm hồn lúc nào cũng phơi phới như mùa xuân và ngập tràn hạnh phúc giản đơn! 🌸'
     },
     {
       badge: '✧ ĐÓA HỒNG KIÊU HÃNH #7 ✧',
-      text: 'Cậu như đóa hoa hồng này vậy – vừa dịu dàng, vừa kiên cường và luôn tỏa ra một ánh sáng rất riêng. Cứ tự tin tỏa sáng nhé! 🌺'
+      text: 'mấy đóa hoa này sao mà xinh được bằng Phương Lê này chứ nhỉ🌺'
     },
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #8 ✧',
-      text: 'Chúc cậu một sinh nhật ngập tràn lời chúc tốt lành, bánh ngọt thơm lừng và một năm mới tràn đầy may mắn! 🎂'
+      text: 'hãy luôn ngọt ngào như những miếng bánh kem sắp tới của em nhé 🎂'
     },
     {
       badge: '✧ LỜI NHẮN TỪ KHU VƯỜN #9 ✧',
-      text: 'Mong mỗi sớm mai thức dậy, cậu đều tìm thấy một lý do thật đáng yêu để mỉm cười và thấy yêu đời hơn. ☀️'
+      text: 'Chúc mừng em đã bước sang tuổi mới,cộng đồng u30 rất vui được đón chào em 🌷'
     },
     {
       badge: '✧ ĐIỀU ƯỚC SINH NHẬT #10 ✧',
-      text: 'Dù ngoài kia có bộn bề thế nào, hãy luôn nhớ rằng cậu xứng đáng được nhận những điều ngọt ngào nhất trần đời! 💐'
+      text: 'Sang tuổi mới,mạnh mẽ kiên cường và quyết thắng, không để con rắn nào cắn mình 💐'
     },
     {
       badge: '✧ ĐIỀU ƯỚC BÍ MẬT #11 ✧',
-      text: 'Bông hoa này giữ hộ cậu một điều ước sinh nhật. Bây giờ hãy nhắm mắt lại 3 giây và ước một điều thật đẹp nhé... 🌠'
+      text: 'Gọi em là 27/10/2006 vì nụ cười của em đẹp như ngày hôm đó 🌠'
     },
     {
       badge: '✧ HAPPY BIRTHDAY #12 ✧',
-      text: 'Chúc mừng sinh nhật cậu! Chúc cho nụ cười của cậu sẽ mãi rực rỡ và tỏa hương như cả khu vườn đêm nay. 🎉'
+      text: 'Tuổi mới,thi đâu đỗ đó🎉'
     }
   ];
 
